@@ -7,7 +7,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        landing: resolve(__dirname, 'src/pages/landingPage.html'),
+        dashboard: resolve(__dirname, 'src/pages/dashboard.html'),
         analytics: resolve(__dirname, 'src/pages/analytics.html'),
         salesProfitAnalysis: resolve(
           __dirname,

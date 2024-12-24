@@ -257,6 +257,39 @@ body.no-sidebar .container {
   left: 270px;
 }
 
+/* Exit Button Styling */
+.exit-button {
+  margin-top: 30px;
+  width: 44px;
+  height: 44px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--secondary-color);
+  border-radius: 100%;
+  padding: 10px 0;
+  cursor: pointer;
+  transition: background-color var(--transition-speed),
+    color var(--transition-speed);
+}
+
+.exit-button .btn-exit {
+  font-size: 24px;
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+.exit-button .btn-exit:hover {
+  color: #f4ce14;
+}
+.exit-button:hover {
+  background-color: #222831;
+}
+
 .content {
   flex: 1;
   padding: 20px;
