@@ -1,0 +1,1005 @@
+/* Global Styles */
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  /* box-sizing: border-box; */
+  font-family: 'Poppins', sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  background-color: #eeeeee; /* Light Grayish background */
+  color: #333;
+  /* padding: 20px; */
+}
+
+/* Color Palette */
+:root {
+  --primary-color: #00adb5;
+  --secondary-color: #393e46;
+  --accent-color: #222831;
+  --neutral-light: #eeeeee;
+  --neutral-dark: #000;
+}
+
+/* Gaya untuk layar loading */
+#loadingScreen {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Gaya untuk spinner */
+.spinner {
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid var(--primary-color);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+/* Animasi spinner */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Gaya untuk Persentase Progress */
+.loading-overlay p {
+  font-size: 18px;
+  color: #333;
+  transition: all 0.5s ease-in-out;
+}
+
+/* Navbar Icons */
+header nav {
+  margin-left: 250px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: var(--primary-color);
+  font-size: 18px;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-link:hover {
+  color: var(--accent-color);
+}
+.nav-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.user-icon i {
+  font-size: 30px;
+  color: var(--primary-color);
+  cursor: pointer;
+}
+.plus-icon i {
+  font-size: 40px;
+  color: var(--primary-color);
+  cursor: pointer;
+}
+
+/* Dropdown Menu Styling */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  padding: 10px;
+  z-index: 10;
+  min-width: 150px;
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 8px 12px;
+  color: #333;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.dropdown-menu a:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.user-icon:hover .dropdown-menu {
+  display: block;
+}
+
+/* Icon Plus Alignment */
+.plus-icon {
+  position: absolute;
+  right: 20px;
+}
+
+/* Header */
+#header {
+  text-align: center;
+  font-family: 'Anton', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  margin-bottom: 20px;
+  color: var(--primary-color);
+  width: 100%;
+  display: block;
+  font-size: 30px;
+}
+
+.logo span {
+  color: #f4ce14;
+  font-family: 'Anton', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  margin-top: 40px;
+  color: var(--neutral-dark);
+}
+
+footer p {
+  font-size: 14px;
+}
+
+/* Main Container Adjustments */
+.container {
+  display: flex;
+  margin-left: 250px;
+  padding: 20px;
+  flex-direction: row;
+  max-width: 100%;
+
+  /* max-width: 100vw; */
+}
+/* Style for sidebar and toggle button */
+.sidebar {
+  width: 250px;
+  padding: 20px;
+  background-color: var(--neutral-light);
+  border-right: 1px solid #ddd;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  overflow-y: auto;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+  z-index: 1100;
+  transform: translateX(0);
+  transition: transform 0.3s ease-in-out;
+}
+
+.sidebar.hidden {
+  transform: translateX(-100%);
+}
+
+body.no-sidebar .container {
+  margin-left: 0; /* Hilangkan margin kiri */
+}
+
+#sidebarToggle {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1100;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 18px;
+  cursor: pointer;
+  display: none;
+  transition: left 0.3s ease-in-out;
+}
+
+#sidebarToggle.active {
+  left: 270px;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+  box-sizing: border-box;
+  max-width: 100%;
+  width: calc(100% - 250px);
+}
+
+/* Filters Section */
+.filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Aligns items vertically in the center */
+  margin-bottom: 30px;
+  width: 100%;
+  flex-wrap: wrap;
+  gap: 15px; /* Adds consistent spacing between items */
+}
+
+.filters .filter-item {
+  position: relative;
+  flex: 1; /* Allows each item to take equal space */
+  min-width: 150px; /* Sets a minimum width to prevent shrinking too much on smaller screens */
+  max-width: 220px; /* Sets a maximum width for each filter item */
+}
+
+.filters .dropdown-button {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: white;
+  color: #333;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'Poppins', sans-serif;
+}
+
+.filters .dropdown-button::after {
+  content: '▼';
+  font-size: 12px;
+  margin-left: 5px;
+}
+
+/* Reset Button */
+#resetFilters {
+  background-color: var(--primary-color);
+  width: 100%;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#resetFilters:hover {
+  background-color: #d32f2f;
+  color: #fff;
+}
+
+.filters #filterButton {
+  margin-top: 24px;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: none;
+  background-color: var(--primary-color);
+  color: white;
+  cursor: pointer;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+  transition: background-color 0.3s;
+}
+
+.filters #filterButton:hover {
+  background-color: var(--accent-color);
+}
+
+.selected-filters {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.selected-filters .filter-tag {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.remove-filter {
+  margin-left: 5px;
+  cursor: pointer;
+  color: #fff;
+  font-weight: bold;
+}
+
+.remove-filter:hover {
+  color: #f4ce14;
+}
+
+/* Dropdown content styling */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  width: 100%;
+  max-height: 250px;
+  overflow-y: auto;
+  z-index: 1;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  font-family: 'Poppins', sans-serif;
+}
+
+.dropdown-content .checkbox-container {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+}
+
+.dropdown-content .checkbox-container input[type='checkbox'] {
+  margin-right: 8px;
+}
+
+.dropdown-content .checkbox-container label {
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+}
+
+/* Show dropdown content when .open is added */
+.dropdown.open .dropdown-content {
+  display: block;
+}
+
+/* Ensure the filters still align correctly when some are removed */
+.filters .filter-item:not(:empty) {
+  flex-grow: 1; /* Allow filter items to expand to fill available space */
+}
+
+/* Summary Section */
+.summary-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 20px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.summary-item {
+  text-align: center;
+  flex: 1;
+  padding: 10px;
+  position: relative;
+}
+
+.summary-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 10%;
+  right: 0;
+  height: 80%;
+  width: 1px;
+  background-color: #ddd; /* Color for the divider */
+}
+
+.summary-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--primary-color);
+  margin-bottom: 5px;
+}
+
+.summary-label {
+  font-size: 14px;
+  color: #333;
+}
+
+/* Charts Section */
+.chart-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.chart-wrapper {
+  width: calc(50% - 10px);
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  /* transition: transform 0.3s ease-in-out; */
+}
+
+.chart-wrapper:hover {
+  transform: translateY(-10px);
+}
+
+.chart-container canvas {
+  width: 100%;
+  height: 100%;
+  /* object-fit: contain; */
+  /* padding: 20px; */
+  /* border-radius: 8px;
+    background-color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
+}
+
+/* Tooltip and Interactivity Enhancements */
+.chartjs-tooltip {
+  background-color: var(--primary-color); /* Teal background for the tooltip */
+  color: white; /* White text for contrast */
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.chartjs-tooltip .tooltip-title {
+  font-weight: bold;
+}
+
+/* General Table Styles */
+
+table.display {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+/* Table Header */
+table.display th {
+  background-color: var(--primary-color); /* Primary color for header */
+  color: white; /* White font color */
+  font-weight: bold;
+  padding: 12px 15px;
+  text-align: center;
+  font-size: 16px;
+}
+
+/* Table Cells */
+table.display td {
+  text-align: center;
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd; /* Separator between rows */
+  font-size: 14px;
+}
+
+/* Alternating Row Colors */
+table.display tr:nth-child(even) {
+  background-color: #f9f9f9; /* Background color for even rows */
+}
+
+table.display tr:nth-child(odd) {
+  background-color: #ffffff; /* Background color for odd rows */
+}
+
+/* Hover Effects for Rows */
+table.display tr:hover {
+  background-color: #f1f1f1; /* Background color on hover */
+}
+
+/* Pagination and Search Controls */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  background-color: var(--primary-color); /* Pagination button color */
+  border: none;
+  padding: 8px 16px;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+  background-color: var(
+    --secondary-color
+  ); /* Hover color for pagination buttons */
+}
+
+.dataTables_wrapper .dataTables_length select,
+.dataTables_wrapper .dataTables_filter input {
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_length select {
+  margin-right: 20px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+  margin-left: 20px;
+}
+
+/* Style for Table Wrapper */
+.table-wrapper {
+  margin-top: 20px;
+}
+
+.table-wrapper h2 {
+  font-size: 22px;
+  color: var(--primary-color);
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+/* Map Section */
+#map {
+  width: 100%;
+  height: 400px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.info {
+  padding: 6px 8px;
+  font: 14px/16px Arial, Helvetica, sans-serif;
+  background: white;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  position: absolute;
+}
+
+.info h4 {
+  margin: 0 0 5px;
+  color: #777;
+}
+
+.leaflet-control-scale {
+  z-index: 1001;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+}
+
+.leaflet-control-scale {
+  background: white;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 12px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+.info.legend {
+  line-height: 18px;
+  color: #555;
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+  z-index: 999;
+}
+
+.info.legend i {
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  display: inline-block;
+  margin-right: 8px;
+}
+/* map end */
+
+/* Footer */
+footer {
+  text-align: center;
+  margin-top: 40px;
+  color: var(--neutral-dark);
+}
+
+footer p {
+  font-size: 14px;
+}
+
+/* Manage Dataset */
+.container-md {
+  max-width: 1200px; /* Menetapkan lebar maksimum */
+  margin: 0 auto; /* Memusatkan container */
+  padding: 20px;
+}
+
+/* Memusatkan Judul */
+.main-title {
+  text-align: center;
+  font-size: 32px;
+  color: var(--primary-color);
+  margin-bottom: 40px;
+}
+
+/* Wrapper untuk Upload Forms */
+.upload-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center; /* Memusatkan kolom di dalam wrapper */
+}
+
+/* Upload Section */
+.upload-section {
+  flex: 1 1 45%; /* Menyediakan lebar sekitar 45% untuk setiap kolom */
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 100%;
+}
+
+/* Gaya untuk jumlah data */
+#datasetCount,
+#geojsonSummary {
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.data-count {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #555;
+}
+
+/* Padding dan Margin untuk Section */
+.container-md section {
+  margin-bottom: 40px;
+}
+
+.container-md section h2 {
+  font-size: 20px;
+  color: var(--primary-color);
+  margin-bottom: 15px;
+}
+
+/* Form Styling */
+.container-md section form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.container-md section form input[type='file'] {
+  flex: 1 1 200px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.container-md section form button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--primary-color);
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.container-md section form button:hover {
+  background-color: var(--accent-color);
+}
+
+/* Gaya untuk status upload */
+#uploadDatasetStatus,
+#uploadGeojsonStatus {
+  margin-top: 10px;
+  font-size: 14px;
+  color: green;
+}
+
+/* Gaya untuk Preview Container */
+#previewDatasetTableContainer,
+#previewGeojsonContainer {
+  margin-top: 20px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling pada perangkat iOS */
+}
+/* Membatasi Maksimal Lebar Tabel */
+.table-responsive table.display {
+  max-width: 100%;
+  width: 100%;
+}
+
+/* Menambahkan Word Wrapping untuk Sel Tabel */
+.table-responsive table.display td,
+.table-responsive table.display th {
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+/* Menghindari Overflow pada Sel Tabel */
+.table-responsive table.display td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#previewDatasetTable th,
+#previewDatasetTable td,
+#previewGeojsonTable th,
+#previewGeojsonTable td {
+  padding: 10px;
+  text-align: left;
+}
+
+#previewDatasetTable th,
+#previewGeojsonTable th {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .sidebar.hidden {
+    transform: translateX(-100%);
+  }
+
+  #sidebarToggle {
+    display: block;
+  }
+
+  header nav {
+    margin-left: 30px;
+  }
+
+  .container {
+    flex-direction: column;
+    margin-left: 0;
+    padding: 0;
+  }
+
+  .content {
+    width: 100%;
+  }
+
+  .filters .filter-item {
+    min-width: 100%;
+  }
+
+  .selected-filters {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .summary-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    max-width: 100%;
+  }
+
+  .summary-item {
+    width: auto;
+    padding: 10px;
+  }
+
+  #map {
+    height: 300px; /* Menurunkan tinggi map untuk perangkat kecil */
+    margin-bottom: 20px; /* Mengurangi margin bawah */
+  }
+
+  .info {
+    font-size: 12px; /* Menurunkan ukuran font pada info */
+    padding: 4px 6px; /* Mengurangi padding info */
+  }
+
+  .info h4 {
+    font-size: 12px; /* Menurunkan ukuran font untuk judul info */
+  }
+
+  .info.legend {
+    max-width: 160px;
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .chart-container {
+    flex-direction: column; /* Keeps the charts in one column */
+  }
+
+  .chart-wrapper {
+    width: 100%;
+  }
+
+  .chart-container canvas {
+    max-width: 100%; /* Ensure it takes full width on small screens */
+    height: 200px;
+  }
+  content {
+    padding: 10px;
+  }
+
+  table.display th,
+  table.display td {
+    font-size: 12px; /* Menurunkan ukuran font pada tabel */
+    padding: 8px 10px; /* Menurunkan padding agar lebih ringkas */
+  }
+
+  /* Header Table */
+  .table-wrapper h2 {
+    font-size: 18px; /* Menurunkan ukuran font judul */
+  }
+
+  /* Pagination Buttons */
+  .dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 6px 12px; /* Menurunkan padding pada tombol pagination */
+    font-size: 12px;
+  }
+
+  /* Filter inputs */
+  .dataTables_wrapper .dataTables_length select,
+  .dataTables_wrapper .dataTables_filter input {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+
+  .table-wrapper {
+    overflow-x: auto; /* Membuat tabel dapat di-scroll horizontal */
+  }
+
+  /* Sesuaikan ukuran font dan padding untuk elemen data-count */
+  .data-count {
+    font-size: 12px;
+  }
+
+  /* Pastikan tabel dapat di-scroll horizontal pada layar kecil */
+  /* #previewDatasetTableContainer {
+    overflow-x: auto;
+  } */
+}
+
+@media (max-width: 540px) {
+  .info {
+    font-size: 10px; /* Ukuran font lebih kecil */
+    padding: 3px 5px; /* Padding lebih kecil */
+  }
+
+  .info h4 {
+    font-size: 10px; /* Menurunkan ukuran font judul info */
+  }
+
+  .info.legend {
+    display: none;
+  }
+
+  .filters .filter-item {
+    min-width: 100%;
+  }
+
+  table.display th,
+  table.display td {
+    font-size: 10px; /* Menurunkan ukuran font pada tabel */
+    padding: 6px 8px; /* Mengurangi padding untuk ukuran layar kecil */
+  }
+
+  /* Header Table */
+  .table-wrapper h2 {
+    font-size: 16px; /* Menurunkan ukuran font judul */
+  }
+
+  /* Pagination Buttons */
+  .dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 5px 10px; /* Menurunkan padding tombol pagination */
+    font-size: 10px;
+  }
+
+  /* Filter inputs */
+  .dataTables_wrapper .dataTables_length select,
+  .dataTables_wrapper .dataTables_filter input {
+    padding: 4px 6px;
+    font-size: 10px;
+  }
+
+  .table-wrapper {
+    overflow-x: auto; /* Membuat tabel dapat di-scroll horizontal */
+  }
+
+  /* Adjust table container */
+  .table-wrapper {
+    margin-top: 10px;
+  }
+
+  /* Sesuaikan lebih lanjut jika diperlukan */
+  .data-count {
+    font-size: 10px;
+  }
+  .upload-section {
+    flex: 1 1 100%; /* Mengubah lebar kolom menjadi 100% di layar kecil */
+  }
+
+  .container-md section form {
+    flex-direction: column;
+  }
+
+  .container-md section form input[type='file'],
+  .container-md section form button {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
+  .container-md section form button {
+    width: 100%;
+  }
+
+  /* Menyesuaikan padding pada tabel */
+  .table-responsive table.display th,
+  .table-responsive table.display td {
+    padding: 8px;
+    font-size: 12px;
+  }
+}

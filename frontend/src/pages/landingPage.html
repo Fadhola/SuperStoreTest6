@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Superstore Dataset Landing Page</title>
+    <!-- Link ke styleLan.css untuk gaya khusus landing page -->
+    <link rel="stylesheet" href="../styleLan.css" />
+    <!-- Font Awesome for Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <!-- AOS Library for Animations -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"
+      rel="stylesheet"
+    />
+    <!-- DataTables CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css"
+    />
+  </head>
+  <body class="landing-page">
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+      <div class="loading-content">
+        <div class="spinner"></div>
+        <p id="loadingProgress">0%</p>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+      <nav class="navbar">
+        <div class="navbar-container">
+          <div class="logo">
+            <a href="./landingPage.html">
+              Super
+              <span>Store</span>
+            </a>
+          </div>
+          <ul class="nav-links">
+            <li><a href="./landingPage.html" class="nav-link">Home</a></li>
+            <li><a href="#about" class="nav-link">About</a></li>
+            <li><a href="#features" class="nav-link">Features</a></li>
+            <li><a href="#download" class="nav-link">Download</a></li>
+            <li><a href="#use-cases" class="nav-link">Use Cases</a></li>
+            <li><a href="#contact" class="nav-link">Contact</a></li>
+          </ul>
+          <div class="nav-icons">
+            <!-- Hamburger Menu Icon -->
+            <div class="hamburger" id="hamburger">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div>
+        <!-- Mobile Navigation Menu -->
+        <ul class="mobile-nav-links" id="mobile-nav-links">
+          <li><a href="./landingPage.html" class="nav-link">Home</a></li>
+          <li><a href="#about" class="nav-link">About</a></li>
+          <li><a href="#features" class="nav-link">Features</a></li>
+          <li><a href="#download" class="nav-link">Download</a></li>
+          <li><a href="#use-cases" class="nav-link">Use Cases</a></li>
+          <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content" data-aos="fade-right">
+        <h1>Superstore Dataset</h1>
+        <p>
+          Komprehensif Data Penjualan & Profit untuk Insight Bisnis Strategis
+        </p>
+        <div class="hero-cta">
+          <a href="#download" class="btn-primary">Download Dataset</a>
+          <a href="../../index.html" class="btn-secondary">View Dashboard</a>
+          <a href="/src/pages/manage-dataset.html" class="btn-secondary">
+            Upload Dataset
+          </a>
+        </div>
+      </div>
+      <div class="hero-image" data-aos="fade-left">
+        <img
+          src="/dataset-cover.jpg"
+          alt="Superstore Data Visualization"
+          loading="lazy"
+        />
+      </div>
+    </section>
+
+    <!-- About the Dataset -->
+    <section id="about" class="about-section">
+      <div class="container-md">
+        <h2>About the Dataset</h2>
+        <p>
+          Dataset Superstore berisi catatan rinci tentang penjualan dan profit
+          dari berbagai produk, wilayah, kategori, dan segmen pelanggan. Dataset
+          ini merupakan sumber daya berharga bagi bisnis yang ingin
+          mengoptimalkan strategi mereka dan meningkatkan profitabilitas.
+        </p>
+        <h3>Context</h3>
+        <p>
+          Dengan meningkatnya permintaan dan persaingan yang ketat di pasar,
+          sebuah Superstore Giant mencari wawasan untuk memahami produk,
+          wilayah, kategori, dan segmen pelanggan mana yang harus ditargetkan
+          atau dihindari. Selain itu, terdapat peluang untuk membangun model
+          prediksi untuk penjualan dan profit.
+        </p>
+      </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="statistics-section">
+      <div class="container-md">
+        <h2>Our Achievements</h2>
+        <div class="statistics-content" data-aos="fade-up">
+          <div class="stat-item">
+            <i class="fas fa-users fa-3x"></i>
+            <h3 id="totalCustomers">0</h3>
+            <p>Total Customers</p>
+          </div>
+          <div class="stat-item">
+            <i class="fas fa-box fa-3x"></i>
+            <h3 id="totalProducts">0</h3>
+            <p>Total Products</p>
+          </div>
+          <div class="stat-item">
+            <i class="fas fa-chart-bar fa-3x"></i>
+            <h3>Products Sold per Category</h3>
+            <ul id="productsPerCategoryList">
+              <!-- List items akan diisi oleh JavaScript -->
+            </ul>
+          </div>
+          <!-- Tambahkan statistik lainnya sesuai kebutuhan -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Key Features & Insights -->
+    <section id="features" class="features-section">
+      <div class="container-md">
+        <h2>Key Features & Insights</h2>
+        <div class="features-content">
+          <!-- Sample Data Preview -->
+          <div class="feature-item" data-aos="fade-up">
+            <h3>Sample Data</h3>
+            <div class="table-responsive">
+              <table id="topSellingProductsTable" class="display">
+                <thead>
+                  <tr>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>Total Sales</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Data akan diisi oleh DataTables -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Dashboard Highlights -->
+          <div class="feature-item" data-aos="fade-up">
+            <h3>Dashboard Highlights</h3>
+            <div class="charts-preview">
+              <canvas id="totalSalesChart"></canvas>
+              <canvas id="profitMarginChart"></canvas>
+              <canvas id="salesByCategoryChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Business Insights -->
+        <section class="business-insights" data-aos="fade-up">
+          <div class="container-md">
+            <h3>Business Insights</h3>
+            <ul>
+              <li>
+                <i class="fas fa-chart-line"></i>
+                <p>Top 5 Best-Selling Products by Revenue</p>
+              </li>
+              <li>
+                <i class="fas fa-chart-pie"></i>
+                <p>Profit Distribution Across Different Regions</p>
+              </li>
+              <li>
+                <i class="fas fa-percent"></i>
+                <p>Impact of Discounts on Overall Profitability</p>
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Products Section -->
+        <section id="products" class="products-section">
+          <div class="container-md">
+            <h2>Our Products</h2>
+            <div class="products-carousel">
+              <div class="products-content">
+                <!-- Product Cards akan diisi oleh JavaScript -->
+              </div>
+              <!-- Carousel Controls -->
+              <button class="carousel-control prev" id="productsPrevBtn">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <button class="carousel-control next" id="productsNextBtn">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- Testimonials Carousel -->
+    <section class="testimonials-section">
+      <div class="container-md">
+        <h2>What Our Users Say</h2>
+        <div class="testimonials-carousel" data-aos="fade-up">
+          <div class="testimonial-item">
+            <p>
+              “Dengan menggunakan Superstore Dataset, saya dapat
+              mengidentifikasi area kunci untuk meningkatkan profitabilitas
+              sebesar 15% dalam enam bulan.”
+            </p>
+            <h4>Jane Doe, Data Analyst</h4>
+          </div>
+          <div class="testimonial-item">
+            <p>
+              “Dataset ini sangat membantu dalam membuat keputusan strategis
+              yang berdampak langsung pada peningkatan penjualan.”
+            </p>
+            <h4>John Smith, Business Strategist</h4>
+          </div>
+          <div class="testimonial-item">
+            <p>
+              “Saya suka betapa lengkapnya data yang disediakan, memungkinkan
+              analisis yang mendalam dan akurat.”
+            </p>
+            <h4>Emily Johnson, Market Researcher</h4>
+          </div>
+          <!-- Tambahkan testimonial lainnya jika diperlukan -->
+        </div>
+        <button class="carousel-control prev" id="prevBtn">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="carousel-control next" id="nextBtn">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- Metadata & Data Dictionary -->
+    <section id="metadata" class="metadata-section">
+      <div class="container-md">
+        <h2>Metadata & Data Dictionary</h2>
+        <div class="table-responsive">
+          <table class="display">
+            <thead>
+              <tr>
+                <th>Field</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-label="Field">Row ID</td>
+                <td data-label="Description">Unique ID for each row.</td>
+              </tr>
+              <tr>
+                <td data-label="Field">Order ID</td>
+                <td data-label="Description">
+                  Unique Order ID for each Customer.
+                </td>
+              </tr>
+              <tr>
+                <td data-label="Field">Order Date</td>
+                <td data-label="Description">
+                  Date when the order was placed.
+                </td>
+              </tr>
+              <tr>
+                <td data-label="Field">Ship Date</td>
+                <td data-label="Description">Shipping Date of the Product.</td>
+              </tr>
+              <tr>
+                <td data-label="Field">Ship Mode</td>
+                <td data-label="Description">
+                  Shipping Mode specified by the Customer.
+                </td>
+              </tr>
+              <tr>
+                <td data-label="Field">Customer ID</td>
+                <td data-label="Description">
+                  Unique ID to identify each Customer.
+                </td>
+              </tr>
+              <tr>
+                <td data-label="Field">Customer Name</td>
+                <td data-label="Description">Name of the Customer.</td>
+              </tr>
+              <tr>
+                <td data-label="Field">Segment</td>
+                <td data-label="Description">
+                  The segment where the Customer belongs.
+                </td>
+              </tr>
+              <tr>
+                <td data-label="Field">Country</td>
+                <td data-label="Description">
+                  Country of residence of the Customer.
+                </td>
+              </tr>
+              <tr>
+                <td data-label="Field">City</td>
+                <td data-label="Description">
+                  City of residence of the Customer.
+                </td>
+              </tr>
+              <tr>
+                <td data-label="Field">State</td>
+                <td data-label="Description">
+                  State of residence of the Customer.
+                </td>
+              </tr>
+              <tr>
+                <td data-label="Field">Postal Code</td>
+                <td data-label="Description">Postal Code of every Customer.</td>
+              </tr>
+              <tr>
+                <td data-label="Field">Region</td>
+                <td data-label="Description">
+                  Region where the Customer belongs.
+                </td>
+              </tr>
+              <tr>
+                <td data-label="Field">Product ID</td>
+                <td data-label="Description">Unique ID of the Product.</td>
+              </tr>
+              <tr>
+                <td data-label="Field">Category</td>
+                <td data-label="Description">
+                  Category of the product ordered.
+                </td>
+              </tr>
+              <tr>
+                <td data-label="Field">Sub-Category</td>
+                <td data-label="Description">
+                  Sub-Category of the product ordered.
+                </td>
+              </tr>
+              <tr>
+                <td data-label="Field">Product Name</td>
+                <td data-label="Description">Name of the Product.</td>
+              </tr>
+              <tr>
+                <td data-label="Field">Sales</td>
+                <td data-label="Description">Sales of the Product.</td>
+              </tr>
+              <tr>
+                <td data-label="Field">Quantity</td>
+                <td data-label="Description">Quantity of the Product.</td>
+              </tr>
+              <tr>
+                <td data-label="Field">Discount</td>
+                <td data-label="Description">Discount provided.</td>
+              </tr>
+              <tr>
+                <td data-label="Field">Profit</td>
+                <td data-label="Description">Profit/Loss incurred.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <a href="/src/pages/manage-dataset.html" class="btn-secondary">
+          Download Metadata (CSV)
+        </a>
+      </div>
+    </section>
+
+    <!-- Download & Access -->
+    <section id="download" class="download-section">
+      <div class="container-md">
+        <h2>Download & Access</h2>
+        <div class="download-options" data-aos="fade-up">
+          <a
+            href="/path/to/superstore-dataset.csv"
+            class="btn-primary"
+            download
+          >
+            <i class="fas fa-download"></i>
+            Download Full Dataset (CSV)
+          </a>
+          <a
+            href="/path/to/superstore-sample.csv"
+            class="btn-secondary"
+            download
+          >
+            <i class="fas fa-file-alt"></i>
+            Download Sample Data
+          </a>
+        </div>
+        <div class="access-tools" data-aos="fade-up">
+          <a href="/index.html" class="btn-secondary">
+            <i class="fas fa-tachometer-alt"></i>
+            View Dashboard
+          </a>
+          <a href="/src/pages/manage-dataset.html" class="btn-secondary">
+            <i class="fas fa-upload"></i>
+            Upload New Dataset
+          </a>
+        </div>
+        <p class="usage-policy" data-aos="fade-up">
+          Untuk keperluan pendidikan dan analisis. Harap atribusi kepada pembuat
+          asli dataset.
+        </p>
+      </div>
+    </section>
+
+    <!-- Use Cases & Applications -->
+    <section id="use-cases" class="use-cases-section">
+      <div class="container-md">
+        <h2>Use Cases & Applications</h2>
+        <div class="use-cases-content">
+          <div class="project-suggestions" data-aos="fade-up">
+            <h3>Potential Projects</h3>
+            <ul>
+              <li>
+                Membangun Model Regresi untuk Memprediksi Penjualan atau Profit
+              </li>
+              <li>Menganalisis Performa Penjualan Regional</li>
+              <li>Strategi Segmentasi dan Targeting Pelanggan</li>
+            </ul>
+          </div>
+          <div class="testimonials" data-aos="fade-up">
+            <h3>Testimonials</h3>
+            <blockquote>
+              “Dengan menggunakan Superstore Dataset, saya dapat
+              mengidentifikasi area kunci untuk meningkatkan profitabilitas
+              sebesar 15% dalam enam bulan.” –
+              <em>Jane Doe, Data Analyst</em>
+            </blockquote>
+            <!-- Tambahkan testimonial lainnya jika ada -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call-to-Action Banner -->
+    <section class="cta-banner">
+      <div class="container-md" data-aos="fade-up">
+        <h2>Ready to Dive into Data?</h2>
+        <p>
+          Mulai analisis Anda hari ini dengan dataset Superstore kami yang
+          komprehensif.
+        </p>
+        <a href="#download" class="btn-primary">Get Started</a>
+      </div>
+    </section>
+
+    <!-- Acknowledgements -->
+    <section id="acknowledgements" class="acknowledgements-section">
+      <div class="container-md">
+        <h2>Acknowledgements</h2>
+        <p>
+          Saya tidak memiliki data ini. Saya hanya menemukannya di situs
+          Tableau. Semua kredit diberikan kepada penulis/asli pembuat dataset.
+          Untuk keperluan pendidikan saja.
+        </p>
+        <h3>Licensing Information</h3>
+        <p>
+          Data ini digunakan untuk keperluan analisis dan pendidikan. Harap
+          mengikuti kebijakan penggunaan data yang berlaku.
+        </p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+      <div class="container-md">
+        <p>© 2024 Superstore Analytics Dashboard</p>
+        <div class="footer-links">
+          <a href="/privacy-policy.html">Privacy Policy</a>
+          |
+          <a href="/terms-of-use.html">Terms of Use</a>
+          |
+          <a
+            href="https://twitter.com/yourprofile"
+            target="_blank"
+            aria-label="Twitter"
+          >
+            <i class="fab fa-twitter"></i>
+          </a>
+          |
+          <a
+            href="https://linkedin.com/in/yourprofile"
+            target="_blank"
+            aria-label="LinkedIn"
+          >
+            <i class="fab fa-linkedin"></i>
+          </a>
+        </div>
+        <div class="contact-info">
+          <p>
+            For inquiries, contact
+            <a href="mailto:your-email@example.com">your-email@example.com</a>
+            .
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <!-- Font Awesome JS (Optional) -->
+    <script
+      src="https://kit.fontawesome.com/5b600557da.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- DataTables JS -->
+    <script
+      src="https://cdn.datatables.net/2.1.8/js/jquery.dataTables.min.js"
+      defer
+    ></script>
+    <!-- AOS JS for Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <!-- Custom JS untuk Landing Page -->
+    <script type="module" src="../js/landingPage.js" defer></script>
+    <script>
+      // Initialize AOS
+      AOS.init({
+        duration: 1000,
+        once: true,
+      })
+    </script>
+  </body>
+</html>

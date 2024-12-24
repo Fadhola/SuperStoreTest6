@@ -1,0 +1,123 @@
+<!-- frontend/src/pages/manage-dataset.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Dataset - Superstore Dashboard</title>
+    <link rel="stylesheet" href="/src/style.css" />
+    <!-- CSS DataTables diimpor melalui JavaScript -->
+  </head>
+  <body class="no-sidebar">
+    <header>
+      <nav>
+        <!-- Navigasi Menu -->
+        <div class="nav-links">
+          <a href="/index.html" class="nav-link">Dashboard</a>
+          <a href="/src/pages/analytics.html" class="nav-link">Analytics</a>
+          <a href="/src/pages/manage-dataset.html" class="nav-link">
+            Manage Dataset
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-md">
+      <h1 class="main-title">Manage Dataset</h1>
+
+      <!-- Wrapper untuk Form Upload -->
+      <div class="upload-wrapper">
+        <!-- Form Upload Dataset -->
+        <section class="upload-section">
+          <h2>Upload Dataset (JSON/CSV)</h2>
+          <form id="uploadDatasetForm">
+            <input
+              type="file"
+              id="datasetFileInput"
+              accept=".json, .csv"
+              required
+            />
+            <button type="button" id="previewDatasetButton">
+              Preview Dataset
+            </button>
+            <button type="submit">Upload Dataset</button>
+          </form>
+          <div id="uploadDatasetStatus"></div>
+
+          <div
+            id="uploadDatasetLoading"
+            class="loading-overlay"
+            style="display: none"
+          >
+            <div class="spinner"></div>
+            <p id="uploadDatasetProgress">0%</p>
+          </div>
+
+          <div id="previewDatasetTableContainer" style="display: none">
+            <h3>Preview Dataset</h3>
+            <p id="datasetCount" class="data-count"></p>
+            <div class="table-responsive">
+              <table
+                id="previewDatasetTable"
+                class="display"
+                style="width: 100%"
+              >
+                <thead id="previewDatasetTableHead"></thead>
+                <tbody id="previewDatasetTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- Form Upload GeoJSON -->
+        <section class="upload-section">
+          <h2>Upload GeoJSON</h2>
+          <form id="uploadGeojsonForm">
+            <input
+              type="file"
+              id="geojsonFileInput"
+              accept=".json, .geojson"
+              required
+            />
+            <button type="button" id="previewGeojsonButton">
+              Preview GeoJSON
+            </button>
+            <button type="submit">Upload GeoJSON</button>
+          </form>
+          <div id="uploadGeojsonStatus"></div>
+
+          <div
+            id="uploadGeojsonLoading"
+            class="loading-overlay"
+            style="display: none"
+          >
+            <div class="spinner"></div>
+            <p id="uploadGeojsonProgress">0%</p>
+          </div>
+
+          <div id="previewGeojsonContainer" style="display: none">
+            <h3>Preview GeoJSON</h3>
+            <p id="geojsonSummary"></p>
+            <div class="table-responsive">
+              <table
+                id="previewGeojsonTable"
+                class="display"
+                style="width: 100%"
+              >
+                <thead id="previewGeojsonTableHead"></thead>
+                <tbody id="previewGeojsonTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <p class="poppins-regular">&copy; 2024 Superstore Analytics Dashboard</p>
+    </footer>
+
+    <!-- Main JS Module -->
+    <script type="module" src="/src/js/manage-dataset.js"></script>
+  </body>
+</html>
