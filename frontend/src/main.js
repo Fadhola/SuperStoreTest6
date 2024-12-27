@@ -10,7 +10,12 @@ import {
 import { updateSummary } from './js/summary.js'
 import { createCharts } from './js/charts.js'
 import { initMap } from './js/map.js'
-import { setupUI } from './js/ui.js'
+import {
+  setupUI,
+  setupScrollButtons,
+  setActiveNavLink,
+  enableDragScroll,
+} from './js/ui.js'
 import {
   initProfitMarginTable,
   initCustomerAnalysisTable,
@@ -28,6 +33,15 @@ AOS.init()
 
 // Inisialisasi UI
 setupUI()
+
+// inisialisasi horizontal nav menu Scroll button
+setupScrollButtons()
+
+// Inisialisasi Active Nav Link
+setActiveNavLink()
+
+// Inisialisasi Drag Scroll
+enableDragScroll()
 
 // Main function to load data and initialize dashboard
 async function initDashboard() {

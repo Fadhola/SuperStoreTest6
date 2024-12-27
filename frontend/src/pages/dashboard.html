@@ -1,4 +1,4 @@
-<!-- frontend/index.html -->
+<!-- frontend/src/pages/dashboard.html -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -20,38 +20,87 @@
       <p id="loadingProgress">0%</p>
     </div>
 
+    <!-- Navbar -->
     <header>
-      <nav>
-        <!-- Navigasi Menu -->
-        <div class="nav-links">
-          <a href="/src/pages/dashboard.html" class="nav-link">Dashboard</a>
-          <a href="/src/pages/analytics.html" class="nav-link">Analytics</a>
-          <a href="/src/pages/salesProfitAnalysis.html" class="nav-link">
-            Detailed Sales and Profit Analysis
-          </a>
-          <a href="/src/pages/discountSalesRelationship.html" class="nav-link">
-            Discount and Sales Relationship
-          </a>
-          <a href="/src/pages/customerAnalysis.html" class="nav-link">
-            Customer Analysis
-          </a>
-          <a href="/src/pages/cityRegionPerformance.html" class="nav-link">
-            City or Region Performance
-          </a>
+      <nav class="navbar">
+        <!-- Top Bar: Logo, Sidebar Toggle, and + Icon -->
+        <div class="navbar-top">
+          <!-- Hamburger Toggle Button -->
+          <button
+            id="sidebarToggle"
+            class="hamburger"
+            aria-label="Toggle Sidebar"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <div class="logov">
+            <a href="/src/pages/landingPage.html">
+              Super
+              <span>Store</span>
+            </a>
+          </div>
+          <div class="nav-icons">
+            <!-- Icon Plus untuk Mengelola Dataset -->
+            <div class="nav-item plus-icon">
+              <a href="/src/pages/manage-dataset.html">
+                <i class="fa-solid fa-square-plus"></i>
+              </a>
+            </div>
+          </div>
         </div>
-
-        <!-- Icon Plus untuk Mengelola Dataset -->
-        <div class="nav-item plus-icon">
-          <a href="/src/pages/manage-dataset.html">
-            <i class="fa-solid fa-square-plus"></i>
-          </a>
+        <!-- Bottom Bar: Menu Links dengan Tombol Panah -->
+        <div class="navbar-menu">
+          <!-- Tombol Panah Kiri -->
+          <button class="scroll-button left" aria-label="Scroll Left">
+            <i class="fa fa-chevron-left"></i>
+          </button>
+          <!-- Gradient Overlay Kiri -->
+          <div class="fade-overlay left"></div>
+          <!-- Menu Navigasi -->
+          <ul class="nav-links">
+            <li>
+              <a href="/src/pages/dashboard.html" class="nav-link">Dashboard</a>
+            </li>
+            <li>
+              <a href="/src/pages/salesProfitAnalysis.html" class="nav-link">
+                Detailed Sales and Profit Analysis
+              </a>
+            </li>
+            <li>
+              <a
+                href="/src/pages/discountSalesRelationship.html"
+                class="nav-link"
+              >
+                Discount and Sales Relationship
+              </a>
+            </li>
+            <li>
+              <a href="/src/pages/customerAnalysis.html" class="nav-link">
+                Customer Analysis
+              </a>
+            </li>
+            <li>
+              <a href="/src/pages/cityRegionPerformance.html" class="nav-link">
+                City or Region Performance
+              </a>
+            </li>
+            <!-- Tambahkan menu lain jika diperlukan -->
+          </ul>
+          <!-- Gradient Overlay Kanan -->
+          <div class="fade-overlay right"></div>
+          <!-- Tombol Panah Kanan -->
+          <button class="scroll-button right" aria-label="Scroll Right">
+            <i class="fa fa-chevron-right"></i>
+          </button>
         </div>
       </nav>
     </header>
 
     <main class="container">
       <aside class="sidebar">
-        <a id="header" class="logo">
+        <a id="logo" class="logo">
           Super
           <span>Store</span>
         </a>
@@ -131,7 +180,6 @@
           </a>
         </div>
       </aside>
-      <button id="sidebarToggle">☰</button>
 
       <!-- Main Content -->
       <div class="content">
@@ -240,22 +288,22 @@
             <div class="chart-wrapper">
               <canvas data-aos="zoom-in" id="segmentChart"></canvas>
             </div>
-            <div class="table-wrapper">
-              <table id="topCustomersTable" class="display" style="width: 100%">
-                <thead>
-                  <tr>
-                    <th>Customer ID</th>
-                    <th>Customer Name</th>
-                    <th>Total Sales</th>
-                    <th>Total Orders</th>
-                    <th>Region</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <!-- Data akan diisi oleh JavaScript -->
-                </tbody>
-              </table>
-            </div>
+          </div>
+          <div class="table-wrapper">
+            <table id="topCustomersTable" class="display" style="width: 100%">
+              <thead>
+                <tr>
+                  <th>Customer ID</th>
+                  <th>Customer Name</th>
+                  <th>Total Sales</th>
+                  <th>Total Orders</th>
+                  <th>Region</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Data akan diisi oleh JavaScript -->
+              </tbody>
+            </table>
           </div>
         </section>
 

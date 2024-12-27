@@ -30,9 +30,11 @@ body {
 :root {
   --primary-color: #00adb5;
   --secondary-color: #393e46;
+  --thirdly-color: #f4ce14;
   --accent-color: #222831;
   --neutral-light: #eeeeee;
   --neutral-dark: #000;
+  --transition-speed: 0.3s;
 }
 
 /* Gaya untuk layar loading */
@@ -90,25 +92,96 @@ body {
   transition: all 0.5s ease-in-out;
 }
 
-/* Navbar Icons */
-header nav {
+/* Navbar Styling */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: calc(100% - 250px);
   margin-left: 250px;
+  max-width: 100%;
+  height: 60px;
+  background-color: var(--neutral-light);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1500; /* Pastikan navbar berada di atas sidebar dan konten lainnya */
+}
+
+.navbar-top {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   padding: 10px 20px;
 }
+.logov {
+  display: none;
+}
 
-.nav-links {
+/* Navbar Menu Styling with Scroll Buttons */
+.navbar-menu {
   display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
+  align-items: center;
+  background-color: var(--neutral-light);
+  padding: 0px 20px 20px;
+  position: relative;
+  overflow: hidden; /* Tambahkan untuk menahan gradient overlays */
+}
+
+/* Scroll Buttons */
+.scroll-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  color: var(--primary-color);
+  transition: color 0.3s;
+  z-index: 2; /* Pastikan tombol berada di atas gradient */
+}
+
+.scroll-button:hover {
+  color: var(--accent-color);
+}
+
+.scroll-button.left {
+  margin-right: 10px;
+}
+
+.scroll-button.right {
+  margin-left: 10px;
+}
+
+/* Menu Navigasi */
+.nav-links {
+  list-style: none;
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling pada perangkat iOS */
+  scrollbar-width: none; /* Firefox */
+  flex: 1; /* Agar ul.nav-links mengambil ruang yang tersedia */
+  padding: 0; /* Menghapus padding default */
+  margin: 0; /* Menghapus margin default */
+  cursor: grab; /* Mengubah cursor saat tidak sedang di-drag */
+}
+
+.nav-link.active {
+  color: var(--primary-color); /* Ubah warna teks saat aktif */
+  font-weight: bold; /* Tebalkan teks saat aktif */
+  border-bottom: 2px solid var(--thirdly-color); /* Tambahkan garis bawah */
+  cursor: grabbing;
+}
+
+.nav-links::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.nav-links li {
+  margin-right: 30px; /* Jarak antar menu */
+  white-space: nowrap; /* Mencegah teks terpotong */
 }
 
 .nav-link {
   text-decoration: none;
   color: var(--primary-color);
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
   transition: color 0.3s;
 }
@@ -116,24 +189,52 @@ header nav {
 .nav-link:hover {
   color: var(--accent-color);
 }
-.nav-item {
-  position: relative;
-  display: flex;
-  align-items: center;
+
+/* Fade Overlays */
+.fade-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50px; /* Lebar gradient */
+  pointer-events: none; /* Agar overlay tidak mengganggu interaksi */
+  z-index: 1; /* Di bawah tombol panah */
+  transition: opacity 0.3s ease-in-out;
 }
 
-.user-icon i {
-  font-size: 30px;
-  color: var(--primary-color);
-  cursor: pointer;
+.fade-overlay.left {
+  left: 40px; /* Sesuaikan berdasarkan lebar tombol panah kiri */
+  background: linear-gradient(
+    to right,
+    rgba(238, 238, 238, 1),
+    rgba(238, 238, 238, 0)
+  );
 }
-.plus-icon i {
-  font-size: 40px;
-  color: var(--primary-color);
-  cursor: pointer;
+
+.fade-overlay.right {
+  right: 40px; /* Sesuaikan berdasarkan lebar tombol panah kanan */
+  background: linear-gradient(
+    to left,
+    rgba(238, 238, 238, 1),
+    rgba(238, 238, 238, 0)
+  );
 }
 
 /* Dropdown Menu Styling */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-toggle {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.dropdown-toggle i {
+  margin-left: 5px;
+  transition: transform 0.3s;
+}
+
 .dropdown-menu {
   display: none;
   position: absolute;
@@ -143,36 +244,100 @@ header nav {
   border: 1px solid #ddd;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
-  padding: 10px;
-  z-index: 10;
-  min-width: 150px;
+  padding: 10px 0;
+  list-style: none;
+  min-width: 200px;
 }
 
-.dropdown-menu a {
-  display: block;
-  padding: 8px 12px;
-  color: #333;
+.dropdown-menu .dropdown-item {
+  padding: 8px 20px;
   text-decoration: none;
-  font-size: 14px;
+  color: #333;
+  display: block;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-.dropdown-menu a:hover {
+.dropdown-menu .dropdown-item:hover {
   background-color: var(--primary-color);
   color: white;
 }
 
-.user-icon:hover .dropdown-menu {
+/* Tampilkan dropdown saat hover pada desktop */
+.dropdown:hover .dropdown-menu {
   display: block;
 }
 
-/* Icon Plus Alignment */
-.plus-icon {
-  position: absolute;
-  right: 20px;
+.dropdown.active .dropdown-menu {
+  display: block;
 }
 
-/* Header */
-#header {
+.dropdown.active .dropdown-toggle i {
+  transform: rotate(180deg);
+}
+
+.mobile-nav-links {
+  display: none;
+}
+
+/* Hamburger Menu Styling */
+.hamburger {
+  display: none; /* Tampilkan hanya pada mobile */
+  flex-direction: column;
+  cursor: pointer;
+  gap: 5px;
+  background: none;
+  border: none;
+}
+
+.hamburger span {
+  width: 25px;
+  height: 3px;
+  background-color: var(--primary-color);
+  transition: all 0.3s;
+}
+
+/* Nav Icons */
+.nav-icons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.plus-icon i {
+  font-size: 34px;
+  color: var(--primary-color);
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.plus-icon i:hover {
+  color: var(--accent-color);
+}
+
+/* Dropdown Indikator Panah */
+.dropdown .dropdown-toggle i {
+  transition: transform 0.3s;
+}
+
+.dropdown.active .dropdown-toggle i {
+  transform: rotate(180deg);
+}
+
+.mobile-nav-links {
+  display: none;
+}
+
+/* Mobile Dropdown Indikator Panah */
+.mobile-nav-links .dropdown .dropdown-toggle i {
+  transition: transform 0.3s;
+}
+
+.mobile-nav-links .dropdown.active .dropdown-toggle i {
+  transform: rotate(180deg);
+}
+
+/* Sidebar Header */
+#logo {
   text-align: center;
   font-family: 'Anton', sans-serif;
   font-weight: 400;
@@ -237,24 +402,40 @@ body.no-sidebar .container {
   margin-left: 0; /* Hilangkan margin kiri */
 }
 
+/* Hamburger Toggle Button */
 #sidebarToggle {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  z-index: 1100;
-  background-color: var(--primary-color);
-  color: white;
+  left: 10px;
+  z-index: 3; /* Di atas semua elemen lain */
+  background: none;
   border: none;
-  border-radius: 5px;
-  padding: 10px;
-  font-size: 18px;
   cursor: pointer;
-  display: none;
-  transition: left 0.3s ease-in-out;
+  display: none; /* Sembunyikan secara default */
+  flex-direction: column;
+  justify-content: space-between;
+  width: 25px;
+  height: 20px;
 }
 
-#sidebarToggle.active {
-  left: 270px;
+#sidebarToggle span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background-color: var(--primary-color);
+  border-radius: 3px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Active State untuk Hamburger (jika diperlukan) */
+#sidebarToggle.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+#sidebarToggle.active span:nth-child(2) {
+  opacity: 0;
+}
+
+#sidebarToggle.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
 }
 
 /* Exit Button Styling */
@@ -267,7 +448,7 @@ body.no-sidebar .container {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--secondary-color);
+  background-color: var(--neutral-light);
   border-radius: 100%;
   padding: 10px 0;
   cursor: pointer;
@@ -276,7 +457,7 @@ body.no-sidebar .container {
 }
 
 .exit-button .btn-exit {
-  font-size: 24px;
+  font-size: 34px;
   color: var(--primary-color);
   display: flex;
   align-items: center;
@@ -286,14 +467,15 @@ body.no-sidebar .container {
 .exit-button .btn-exit:hover {
   color: #f4ce14;
 }
-.exit-button:hover {
+/* .exit-button:hover {
   background-color: #222831;
-}
+} */
 
 .content {
   flex: 1;
-  padding: 20px;
+  /* padding: 20px; */
   box-sizing: border-box;
+  margin-top: 72px;
   max-width: 100%;
   width: calc(100% - 250px);
 }
@@ -838,25 +1020,89 @@ footer p {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .navbar {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .navbar-top {
+    justify-content: space-between;
+  }
+
+  .nav-links li {
+    margin-right: 20px;
+  }
+
+  .scroll-button {
+    font-size: 18px;
+  }
+
+  /* Adjust gradient overlays */
+  .fade-overlay.left {
+    left: 40px;
+    width: 30px;
+  }
+
+  .fade-overlay.right {
+    right: 40px;
+    width: 30px;
+  }
+
+  /* .hamburger {
+    display: flex;
+  } */
+  .logov {
+    display: block;
+  }
+  .logov a {
+    text-decoration: none;
+    font-size: 24px;
+    color: var(--primary-color);
+    font-family: 'Anton', sans-serif;
+  }
+
+  .logov span {
+    color: #f4ce14;
+    font-family: 'Anton', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  .sidebar {
+    margin-top: 20px;
+    box-shadow: none;
+  }
+
   .sidebar.hidden {
     transform: translateX(-100%);
   }
 
   #sidebarToggle {
-    display: block;
+    display: flex;
   }
 
-  header nav {
-    margin-left: 30px;
+  .logo {
+    margin-left: 40px; /* Beri jarak antara hamburger dan logo */
+  }
+
+  .exit-button {
+    max-width: 120px;
+    padding: 6px 10px;
+  }
+
+  .exit-button .btn-exit {
+    font-size: 25px;
   }
 
   .container {
     flex-direction: column;
     margin-left: 0;
-    padding: 0;
+    padding: 20px;
+    width: 100%;
   }
 
   .content {
+    /* margin-top: 20px; */
     width: 100%;
   }
 
@@ -957,6 +1203,18 @@ footer p {
 }
 
 @media (max-width: 540px) {
+  /* Main Content Styling */
+  .container {
+    display: flex;
+    margin-top: 60px; /* Sesuaikan dengan tinggi navbar */
+  }
+
+  .content {
+    flex: 1;
+    /* padding: 20px; */
+    box-sizing: border-box;
+    max-width: 100%;
+  }
   .info {
     font-size: 10px; /* Ukuran font lebih kecil */
     padding: 3px 5px; /* Padding lebih kecil */
@@ -1034,5 +1292,25 @@ footer p {
   .table-responsive table.display td {
     padding: 8px;
     font-size: 12px;
+  }
+}
+
+/* Adjustments for Fixed Navbar */
+@media (min-width: 769px) {
+  .container {
+    margin-left: 250px; /* Sesuaikan dengan lebar sidebar */
+  }
+
+  .content {
+    margin-left: 0;
+  }
+
+  #sidebarToggle {
+    display: none; /* Sembunyikan tombol sidebarToggle pada desktop */
+  }
+
+  /* Tampilkan sidebar secara default pada desktop */
+  .sidebar {
+    transform: translateX(0);
   }
 }
