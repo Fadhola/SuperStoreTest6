@@ -35,6 +35,19 @@
             <span></span>
             <span></span>
           </button>
+          <!-- Username Dropdown (Hidden by Default) -->
+          <div class="nav-item dropdown username-display" style="display: none">
+            <a href="#" class="dropdown-toggle nav-link" id="navbarUsername">
+              Hi,
+              <span id="navUsername"></span>
+              <i class="fas fa-caret-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="#" class="dropdown-item" id="logoutButton">Logout</a>
+              </li>
+            </ul>
+          </div>
           <div class="logov">
             <a href="/src/pages/landingPage.html">
               Super
@@ -339,5 +352,6 @@
 
     <!-- Main JS Module -->
     <script type="module" src="/src/main.js"></script>
+    <script type="module" src="/src/js/auth.js"></script>
   </body>
 </html>

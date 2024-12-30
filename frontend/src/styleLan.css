@@ -41,7 +41,7 @@ html {
 /* Navbar Styles */
 header {
   background-color: var(--color-dark);
-  padding: 20px 0;
+  padding: 10px 0;
   position: fixed;
   width: 100%;
   top: 0;
@@ -59,6 +59,9 @@ header {
 }
 
 .logo a {
+  display: flex;
+  align-items: center;
+  height: 50px; /* Atur sesuai kebutuhan */
   color: var(--color-primary);
   font-size: 1.5rem;
   font-weight: bold;
@@ -72,17 +75,25 @@ header {
 .nav-links {
   display: flex;
   gap: 20px;
+  align-items: center;
 }
 
 .nav-links li {
   list-style: none;
+  display: flex;
+  align-items: center;
 }
 
 .nav-links a {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 10px; /* Tambahkan padding horizontal */
   color: var(--color-white);
   text-decoration: none;
   font-size: 1rem;
   transition: color var(--transition-speed);
+  line-height: 50px; /* Sesuaikan dengan tinggi navbar */
 }
 
 .nav-links a:hover {
@@ -93,6 +104,130 @@ header {
   display: flex;
   align-items: center;
   gap: 15px;
+}
+
+/* Styling Khusus untuk Login Nav Link */
+#loginNavLink {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  padding: 3px 16px;
+  border-radius: 5px;
+  transition: background-color var(--transition-speed),
+    transform var(--transition-speed);
+}
+
+#loginNavLink:hover {
+  background-color: var(--color-hover-primary);
+  transform: translateY(-2px);
+}
+
+#loginNavLink:active {
+  transform: translateY(0);
+}
+
+/* Dropdown Menu Styling */
+.navbar .dropdown {
+  position: relative;
+}
+
+.navbar .dropdown-toggle {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--color-white);
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.navbar .dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: var(--color-white);
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  list-style: none;
+  padding: 10px 0;
+  min-width: 150px;
+  z-index: 1000;
+}
+
+/* Styling Khusus untuk Dropdown Items */
+.dropdown.username-display .dropdown-menu .dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 10px 20px; /* Pastikan padding cukup */
+  color: var(--color-gray-dark);
+  text-decoration: none;
+  transition: background-color var(--transition-speed),
+    color var(--transition-speed);
+}
+
+.dropdown.username-display .dropdown-menu .dropdown-item:hover {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+/* Styling Khusus untuk Username Dropdown */
+.dropdown.username-display .dropdown-toggle {
+  background-color: transparent;
+  color: var(--color-white);
+  padding: 8px 16px;
+  border-radius: 5px;
+  transition: background-color var(--transition-speed),
+    transform var(--transition-speed);
+  display: flex;
+  align-items: center;
+}
+
+.dropdown.username-display .dropdown-toggle:hover {
+  background-color: var(--color-primary);
+  transform: translateY(-2px);
+}
+
+.dropdown.username-display .dropdown-toggle:active {
+  transform: translateY(0);
+}
+
+.dropdown.username-display .dropdown-menu {
+  background-color: var(--color-white);
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown.username-display .dropdown-item {
+  color: var(--color-gray-dark);
+  padding: 10px 20px;
+  transition: background-color var(--transition-speed),
+    color var(--transition-speed);
+}
+
+.dropdown.username-display .dropdown-item:hover {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+/* Tampilkan dropdown saat hover pada desktop */
+.navbar .dropdown:hover .dropdown-menu,
+.dropdown.username-display.active .dropdown-menu {
+  display: block;
+}
+
+/* Navbar Dropdown Active State */
+.navbar .dropdown.active .dropdown-menu {
+  display: block;
+}
+
+.mobile-nav-links .dropdown.active .dropdown-menu {
+  display: block;
+}
+
+/* Optional: Rotate caret icon saat dropdown aktif */
+.navbar .dropdown.active .dropdown-toggle i,
+.mobile-nav-links .dropdown.active .dropdown-toggle i {
+  transform: rotate(180deg);
 }
 
 /* Hamburger Menu */
@@ -130,7 +265,7 @@ header {
   align-items: center;
   background-color: var(--color-gray-light);
   position: fixed;
-  top: 78px;
+  top: 90px;
   right: -100%;
   height: 100vh;
   width: 250px;
@@ -1002,6 +1137,19 @@ table.display tbody tr:hover {
     display: none;
   }
 
+  /* Adjust navbar-container padding */
+  .navbar-container {
+    padding: 0 20px;
+  }
+
+  /* Adjust Login Nav Link and Username Dropdown on Mobile */
+  #loginNavLink,
+  .dropdown.username-display .dropdown-toggle {
+    color: var(--color-dark);
+    padding: 10px 20px;
+    font-size: 1rem;
+  }
+
   /* Adjust Hero Section */
   .hero {
     flex-direction: column;
@@ -1070,6 +1218,11 @@ table.display tbody tr:hover {
 }
 
 @media (max-width: 540px) {
+  #loginNavLink,
+  .dropdown.username-display .dropdown-toggle {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
   .about-section h2,
   .features-section h2,
   .statistics-section h2,

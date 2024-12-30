@@ -36,7 +36,13 @@ export async function fetchData() {
   }
 
   try {
+    const token = localStorage.getItem('token') // Ambil token dari localStorage
+    console.log('Token:', token) // Tambahkan log ini untuk memeriksa token
+
     const response = await axios.get('/api/superstore-data', {
+      headers: {
+        Authorization: `Bearer ${token}`, // Sertakan token di header
+      },
       onDownloadProgress: (progressEvent) => {
         if (progressEvent.lengthComputable) {
           const percentCompleted = Math.round(

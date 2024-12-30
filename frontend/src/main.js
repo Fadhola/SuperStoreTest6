@@ -43,10 +43,30 @@ setActiveNavLink()
 // Inisialisasi Drag Scroll
 enableDragScroll()
 
+// Fungsi untuk memeriksa autentikasi
+function isAuthenticated() {
+  const token = localStorage.getItem('token')
+  return !!token
+}
+
+// Redirect ke login jika tidak autentikasi
+if (window.location.pathname === '/src/pages/dashboard.html') {
+  if (!isAuthenticated()) {
+    window.location.href = '/src/pages/login.html'
+  }
+}
+
 // Main function to load data and initialize dashboard
 async function initDashboard() {
   try {
     const data = await fetchData()
+    if (!data || data.length === 0) {
+      alert(
+        'No data received for dashboard initialization. Please upload dataset'
+      )
+      // Tampilkan pesan atau atur UI sesuai kebutuhan
+      return
+    }
     initFilters(data)
     updateSummary(data)
     initMap(data)
@@ -59,51 +79,73 @@ async function initDashboard() {
 }
 
 // Add event listener to the filter button
-document.getElementById('filterButton').addEventListener('click', async () => {
-  try {
-    const data = await fetchData()
-    const filteredData = filterData(data)
-    updateSummary(filteredData)
-    initMap(filteredData)
-    createCharts(filteredData)
-    initProfitMarginTable(filteredData)
-    initCustomerAnalysisTable(filteredData)
-    updateSelectedFilters()
-  } catch (error) {
-    console.error('Error applying filters:', error)
-  }
-})
+const filterButton = document.getElementById('filterButton')
+if (filterButton) {
+  filterButton.addEventListener('click', async () => {
+    try {
+      const token = localStorage.getItem('token')
+      const response = await fetch('/api/superstore-data', {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch data')
+      }
+
+      const data = await response.json()
+      const filteredData = filterData(data)
+      updateSummary(filteredData)
+      initMap(filteredData)
+      createCharts(filteredData)
+      initProfitMarginTable(filteredData)
+      initCustomerAnalysisTable(filteredData)
+      updateSelectedFilters()
+    } catch (error) {
+      console.error('Error applying filters:', error)
+    }
+  })
+}
 
 // Event listener for the reset filters button
-document.getElementById('resetFilters').addEventListener('click', async () => {
-  // Reset all checkboxes
-  document.querySelectorAll('.filter-checkbox').forEach((checkbox) => {
-    checkbox.checked = false
+const resetFiltersButton = document.getElementById('resetFilters')
+if (resetFiltersButton) {
+  resetFiltersButton.addEventListener('click', async () => {
+    // Reset all checkboxes
+    document.querySelectorAll('.filter-checkbox').forEach((checkbox) => {
+      checkbox.checked = false
+    })
+    // Clear selected filters display
+    updateSelectedFilters()
+    // Reapply filters (with empty selections)
+    await initDashboard()
   })
-  // Clear selected filters display
-  updateSelectedFilters()
-  // Reapply filters (with empty selections)
-  const data = await fetchData()
-  updateSummary(data)
-  initMap(data)
-  createCharts(data)
-  initProfitMarginTable(data)
-  initCustomerAnalysisTable(data)
-})
+}
 
 // Event listeners for dropdown buttons
-document
-  .getElementById('yearDropdown')
-  .addEventListener('click', () => toggleDropdown('yearFilter'))
-document
-  .getElementById('cityDropdown')
-  .addEventListener('click', () => toggleDropdown('cityFilter'))
-document
-  .getElementById('stateDropdown')
-  .addEventListener('click', () => toggleDropdown('stateFilter'))
-document
-  .getElementById('categoryDropdown')
-  .addEventListener('click', () => toggleDropdown('categoryFilter'))
+const yearDropdown = document.getElementById('yearDropdown')
+const cityDropdown = document.getElementById('cityDropdown')
+const stateDropdown = document.getElementById('stateDropdown')
+const categoryDropdown = document.getElementById('categoryDropdown')
 
-// Call the initDashboard function
-initDashboard()
+if (yearDropdown) {
+  yearDropdown.addEventListener('click', () => toggleDropdown('yearFilter'))
+}
+if (cityDropdown) {
+  cityDropdown.addEventListener('click', () => toggleDropdown('cityFilter'))
+}
+if (stateDropdown) {
+  stateDropdown.addEventListener('click', () => toggleDropdown('stateFilter'))
+}
+if (categoryDropdown) {
+  categoryDropdown.addEventListener('click', () =>
+    toggleDropdown('categoryFilter')
+  )
+}
+
+// Call the initDashboard function jika berada di dashboard.html
+if (window.location.pathname === '/src/pages/dashboard.html') {
+  initDashboard()
+}

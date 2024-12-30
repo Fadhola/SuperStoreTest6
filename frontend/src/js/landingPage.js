@@ -11,15 +11,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     once: true,
   })
 
-  try {
-    // Mengambil dan menampilkan data produk menggunakan fetchData dari dataLoader.js
-    const data = await fetchData()
-    updateStatistics(data)
-    initTopSellingProductsTable(data)
-    createCharts(data)
-    displayProducts(data)
-  } catch (error) {
-    console.error('Error fetching data:', error)
+  // Cek apakah pengguna sudah login
+  const token = localStorage.getItem('token')
+  if (token) {
+    try {
+      // Mengambil dan menampilkan data produk menggunakan fetchData dari dataLoader.js
+      const data = await fetchData()
+      updateStatistics(data)
+      initTopSellingProductsTable(data)
+      createCharts(data)
+      displayProducts(data)
+    } catch (error) {
+      console.error('Error fetching data:', error)
+      // Mungkin tampilkan pesan atau arahkan ke login
+    }
+  } else {
+    // Tampilkan konten landing page tanpa data yang dilindungi
+    console.log('User not logged in. Skipping data fetch.')
   }
 
   // Mengatur navigasi mobile
@@ -82,8 +90,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   let productIndex = 0
 
   function showProduct(index) {
-    const productWidth =
-      document.querySelector('.product-card').clientWidth + 30 // termasuk margin
+    const productCard = document.querySelector('.product-card')
+    if (!productCard) {
+      console.error('No product cards available to display.')
+      return
+    }
+    const productWidth = productCard.clientWidth + 30 // termasuk margin
     productsCarousel.style.transform = `translateX(-${index * productWidth}px)`
   }
 

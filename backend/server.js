@@ -12,9 +12,18 @@ const morgan = require('morgan')
 const helmet = require('helmet')
 const dayjs = require('dayjs')
 const customParseFormat = require('dayjs/plugin/customParseFormat') // Import plugin
+const dns = require('dns')
+const User = require('./models/User')
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+const { body, validationResult } = require('express-validator')
+const auth = require('./middleware/auth')
 
 // Aktifkan plugin
 dayjs.extend(customParseFormat)
+
+// Set DNS resolver ke Google DNS
+dns.setServers(['8.8.8.8', '1.1.1.1'])
 
 // Load environment variables from .env file
 dotenv.config()
@@ -27,6 +36,122 @@ app.use(cors())
 app.use(bodyParser.json())
 app.use(morgan('dev'))
 app.use(helmet())
+
+// Rute Register
+app.post(
+  '/api/register',
+  [
+    body('username')
+      .isLength({ min: 3, max: 30 })
+      .withMessage('Username harus antara 3 hingga 30 karakter'),
+    body('email').isEmail().withMessage('Email tidak valid'),
+    body('password')
+      .isLength({ min: 6 })
+      .withMessage('Password harus minimal 6 karakter'),
+  ],
+  async (req, res) => {
+    // Validasi Input
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() })
+    }
+
+    // Ekstrak Data
+    const { username, email, password } = req.body
+
+    try {
+      // Cek apakah pengguna sudah ada
+      let user = await User.findOne({ $or: [{ email }, { username }] })
+      if (user) {
+        return res
+          .status(400)
+          .json({ error: 'Username atau email sudah digunakan' })
+      }
+
+      // Buat User Baru
+      user = new User({
+        username,
+        email,
+        password,
+      })
+
+      // Hash Password
+      const salt = await bcrypt.genSalt(10)
+      user.password = await bcrypt.hash(password, salt)
+
+      await user.save()
+
+      // Buat JWT
+      const payload = {
+        id: user.id,
+        username: user.username,
+      }
+
+      const token = jwt.sign(payload, process.env.JWT_SECRET, {
+        expiresIn: '1h',
+      })
+
+      res.json({ token, username: user.username })
+    } catch (error) {
+      console.error('Error during registration:', error)
+      res.status(500).json({ error: 'Server error' })
+    }
+  }
+)
+
+// Rute Login
+app.post(
+  '/api/login',
+  [
+    body('username').not().isEmpty().withMessage('Username diperlukan'),
+    body('password').not().isEmpty().withMessage('Password diperlukan'),
+  ],
+  async (req, res) => {
+    // Validasi Input
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() })
+    }
+
+    // Ekstrak Data
+    const { username, password } = req.body
+
+    try {
+      // Cari User
+      const user = await User.findOne({ username })
+      if (!user) {
+        return res.status(400).json({ error: 'Invalid credentials' })
+      }
+
+      // Cek Password
+      const isMatch = await bcrypt.compare(password, user.password)
+      if (!isMatch) {
+        return res.status(400).json({ error: 'Invalid credentials' })
+      }
+
+      // Buat JWT
+      const payload = {
+        id: user.id,
+        username: user.username,
+      }
+
+      const token = jwt.sign(payload, process.env.JWT_SECRET, {
+        expiresIn: '1h',
+      })
+
+      res.json({ token, username: user.username })
+    } catch (error) {
+      console.error('Error during login:', error)
+      res.status(500).json({ error: 'Server error' })
+    }
+  }
+)
+// Contoh: Rute terproteksi
+app.get('/api/protected', auth, (req, res) => {
+  res.json({
+    message: `Hello, ${req.user.username}! This is a protected route.`,
+  })
+})
 
 // Konfigurasi multer untuk menangani upload file
 const storage = multer.memoryStorage()
@@ -49,9 +174,33 @@ const upload = multer({
 // Koneksi ke MongoDB menggunakan MONGO_URI dari .env
 const mongoURI = process.env.MONGO_URI
 mongoose
-  .connect(mongoURI)
+  .connect(mongoURI, {
+    serverSelectionTimeoutMS: 5000, // Timeout setelah 5 detik
+    // family: 4, // Paksa menggunakan IPv4
+    // Additional options if needed
+  })
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.log('MongoDB connection error:', err))
+
+// Listener untuk connection events
+mongoose.connection.on('connected', () => {
+  console.log('Mongoose connected to MongoDB')
+})
+
+mongoose.connection.on('error', (err) => {
+  console.error('Mongoose connection error:', err)
+})
+
+mongoose.connection.on('disconnected', () => {
+  console.log('Mongoose disconnected from MongoDB')
+})
+
+// Menangani proses termination untuk menutup koneksi secara bersih
+process.on('SIGINT', async () => {
+  await mongoose.connection.close()
+  console.log('Mongoose disconnected on app termination')
+  process.exit(0)
+})
 
 // Definisikan Skema dan Model
 const superstoreSchema = new mongoose.Schema({
@@ -117,7 +266,7 @@ app.get('/', (req, res) => {
 })
 
 // API Endpoint untuk Mendapatkan Data Superstore
-app.get('/api/superstore-data', async (req, res) => {
+app.get('/api/superstore-data', auth, async (req, res) => {
   try {
     const data = await Superstore.find({})
     res.json(data)
@@ -157,167 +306,184 @@ function parseDate(dateString, recordIndex, fieldName) {
 }
 
 // API Endpoint untuk Mengupload Dataset (JSON dan CSV)
-app.post('/api/upload-dataset', upload.single('file'), async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ error: 'No file uploaded' })
-    }
-
-    let parsedData = []
-    if (req.file.mimetype === 'application/json') {
-      parsedData = JSON.parse(req.file.buffer.toString())
-    } else if (req.file.mimetype === 'text/csv') {
-      // Menggunakan csvtojson untuk parsing CSV dengan konfigurasi yang tepat
-      parsedData = await csv({
-        trim: true,
-        ignoreEmpty: true,
-      }).fromString(req.file.buffer.toString())
-    }
-
-    if (!Array.isArray(parsedData)) {
-      return res.status(400).json({ error: 'Data should be an array' })
-    }
-
-    // Periksa apakah semua field yang diperlukan ada
-    const requiredFields = [
-      'Order ID',
-      'Order Date',
-      'Ship Date',
-      'Ship Mode',
-      'Customer ID',
-      'Customer Name',
-      'Segment',
-      'Country',
-      'City',
-      'State',
-      'Postal Code',
-      'Region',
-      'Product ID',
-      'Category',
-      'Sub-Category',
-      'Product Name',
-      'Sales',
-      'Quantity',
-      'Discount',
-      'Profit',
-      'Profit/Quantity',
-    ]
-
-    for (let i = 0; i < parsedData.length; i++) {
-      const item = parsedData[i]
-      const missingFields = requiredFields.filter((field) => !(field in item))
-
-      // Jika ada 'Row ID' di CSV, Anda dapat mengabaikannya atau memastikan bahwa 'Row ID' tidak diperlukan
-      // Misalnya, jika 'Row ID' ada, hapus atau abaikan:
-      if ('Row ID' in item) {
-        delete item['Row ID']
+app.post(
+  '/api/upload-dataset',
+  auth,
+  upload.single('file'),
+  async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded' })
       }
-      if (missingFields.length > 0) {
-        return res.status(400).json({
-          error: `Record ${i + 1} is missing fields: ${missingFields.join(
-            ', '
-          )}`,
-        })
+
+      let parsedData = []
+      if (req.file.mimetype === 'application/json') {
+        parsedData = JSON.parse(req.file.buffer.toString())
+      } else if (req.file.mimetype === 'text/csv') {
+        // Menggunakan csvtojson untuk parsing CSV dengan konfigurasi yang tepat
+        parsedData = await csv({
+          trim: true,
+          ignoreEmpty: true,
+        }).fromString(req.file.buffer.toString())
       }
-    }
 
-    // Map data sesuai skema
-    const mappedData = parsedData.map((item, index) => {
-      console.log(`Processing record ${index + 1}:`, item)
-      // Menggunakan parseDate untuk parsing tanggal
-      const orderDateString = item['Order Date'].trim()
-      const shipDateString = item['Ship Date'].trim()
+      if (!Array.isArray(parsedData)) {
+        return res.status(400).json({ error: 'Data should be an array' })
+      }
 
-      const orderDate = parseDate(orderDateString, index + 1, 'OrderDate')
-      const shipDate = parseDate(shipDateString, index + 1, 'ShipDate')
+      // Periksa apakah semua field yang diperlukan ada
+      const requiredFields = [
+        'Order ID',
+        'Order Date',
+        'Ship Date',
+        'Ship Mode',
+        'Customer ID',
+        'Customer Name',
+        'Segment',
+        'Country',
+        'City',
+        'State',
+        'Postal Code',
+        'Region',
+        'Product ID',
+        'Category',
+        'Sub-Category',
+        'Product Name',
+        'Sales',
+        'Quantity',
+        'Discount',
+        'Profit',
+        'Profit/Quantity',
+      ]
 
-      // Fungsi untuk memeriksa apakah nilai adalah string sebelum menggunakan replace
-      const parseNumber = (value) => {
-        if (typeof value === 'string') {
-          return parseFloat(value.replace(/,/g, '.'))
-        } else if (typeof value === 'number') {
-          return value
-        } else {
-          throw new Error(`Invalid number format: ${value}`)
+      for (let i = 0; i < parsedData.length; i++) {
+        const item = parsedData[i]
+        const missingFields = requiredFields.filter((field) => !(field in item))
+
+        // Jika ada 'Row ID' di CSV, Anda dapat mengabaikannya atau memastikan bahwa 'Row ID' tidak diperlukan
+        // Misalnya, jika 'Row ID' ada, hapus atau abaikan:
+        if ('Row ID' in item) {
+          delete item['Row ID']
+        }
+        if (missingFields.length > 0) {
+          return res.status(400).json({
+            error: `Record ${i + 1} is missing fields: ${missingFields.join(
+              ', '
+            )}`,
+          })
         }
       }
 
-      const mappedItem = {
-        OrderID: item['Order ID'],
-        OrderDate: orderDate,
-        ShipDate: shipDate,
-        ShipMode: item['Ship Mode'],
-        CustomerID: item['Customer ID'],
-        CustomerName: item['Customer Name'],
-        Segment: item['Segment'],
-        Country: item['Country'],
-        City: item['City'],
-        State: item['State'],
-        PostalCode: parseInt(item['Postal Code'], 10),
-        Region: item['Region'],
-        ProductID: item['Product ID'],
-        Category: item['Category'],
-        SubCategory: item['Sub-Category'],
-        ProductName: item['Product Name'],
-        Sales: parseNumber(item['Sales']),
-        Quantity: parseInt(item['Quantity'], 10),
-        Discount: parseNumber(item['Discount']),
-        Profit: parseNumber(item['Profit']),
-        ProfitPerQuantity: parseNumber(item['Profit/Quantity']),
-      }
-      console.log(`Mapped record ${index + 1}:`, mappedItem)
-      return mappedItem
-    })
+      const totalRecords = parsedData.length
+      let processedRecords = 0
 
-    // Validasi setiap item dalam data yang sudah di map
-    for (let item of mappedData) {
-      const { error } = superstoreValidationSchema.validate(item)
-      if (error) {
-        throw new Error(`Validation error: ${error.details[0].message}`)
-      }
-    }
+      // Map data sesuai skema dengan emit progress
+      const mappedData = []
+      for (let i = 0; i < parsedData.length; i++) {
+        const item = parsedData[i]
+        console.log(`Processing record ${i + 1}:`, item)
+        // Menggunakan parseDate untuk parsing tanggal
+        const orderDateString = item['Order Date'].trim()
+        const shipDateString = item['Ship Date'].trim()
 
-    await Superstore.insertMany(mappedData)
-    res.json({ message: 'Dataset uploaded successfully.' })
-  } catch (error) {
-    console.error('Error uploading dataset:', error)
-    if (
-      error.message.startsWith('Validation error') ||
-      error.message.startsWith('Invalid date format')
-    ) {
-      return res.status(400).json({ error: error.message })
+        const orderDate = parseDate(orderDateString, i + 1, 'OrderDate')
+        const shipDate = parseDate(shipDateString, i + 1, 'ShipDate')
+
+        // Fungsi untuk memeriksa apakah nilai adalah string sebelum menggunakan replace
+        const parseNumber = (value) => {
+          if (typeof value === 'string') {
+            return parseFloat(value.replace(/,/g, '.'))
+          } else if (typeof value === 'number') {
+            return value
+          } else {
+            throw new Error(`Invalid number format: ${value}`)
+          }
+        }
+
+        const mappedItem = {
+          OrderID: item['Order ID'],
+          OrderDate: orderDate,
+          ShipDate: shipDate,
+          ShipMode: item['Ship Mode'],
+          CustomerID: item['Customer ID'],
+          CustomerName: item['Customer Name'],
+          Segment: item['Segment'],
+          Country: item['Country'],
+          City: item['City'],
+          State: item['State'],
+          PostalCode: parseInt(item['Postal Code'], 10),
+          Region: item['Region'],
+          ProductID: item['Product ID'],
+          Category: item['Category'],
+          SubCategory: item['Sub-Category'],
+          ProductName: item['Product Name'],
+          Sales: parseNumber(item['Sales']),
+          Quantity: parseInt(item['Quantity'], 10),
+          Discount: parseNumber(item['Discount']),
+          Profit: parseNumber(item['Profit']),
+          ProfitPerQuantity: parseNumber(item['Profit/Quantity']),
+        }
+        console.log(`Mapped record ${i + 1}:`, mappedItem)
+        mappedData.push(mappedItem)
+
+        processedRecords++
+      }
+
+      // Validasi setiap item dalam data yang sudah di map
+      for (let item of mappedData) {
+        const { error } = superstoreValidationSchema.validate(item)
+        if (error) {
+          throw new Error(`Validation error: ${error.details[0].message}`)
+        }
+      }
+
+      await Superstore.insertMany(mappedData)
+      res.json({ message: 'Dataset uploaded successfully.' })
+    } catch (error) {
+      console.error('Error uploading dataset:', error)
+      if (
+        error.message.startsWith('Validation error') ||
+        error.message.startsWith('Invalid date format')
+      ) {
+        return res.status(400).json({ error: error.message })
+      }
+      res.status(500).json({ error: 'Internal server error' })
     }
-    res.status(500).json({ error: 'Internal server error' })
   }
-})
+)
 
 // API Endpoint untuk Mengupload GeoJSON
-app.post('/api/upload-geojson', upload.single('file'), async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ error: 'No file uploaded' })
-    }
+app.post(
+  '/api/upload-geojson',
+  auth,
+  upload.single('file'),
+  async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded' })
+      }
 
-    if (
-      req.file.mimetype !== 'application/vnd.geo+json' &&
-      req.file.mimetype !== 'application/json'
-    ) {
-      return res.status(400).json({ error: 'Only GeoJSON files are allowed' })
-    }
+      if (
+        req.file.mimetype !== 'application/vnd.geo+json' &&
+        req.file.mimetype !== 'application/json'
+      ) {
+        return res.status(400).json({ error: 'Only GeoJSON files are allowed' })
+      }
 
-    // Parse GeoJSON
-    const geoJsonData = JSON.parse(req.file.buffer.toString())
-    const geoData = new GeoData(geoJsonData)
-    await geoData.save()
-    res.json({ message: 'GeoJSON data uploaded successfully.' })
-  } catch (error) {
-    console.error('Error uploading GeoJSON:', error)
-    res.status(500).json({ error: 'Internal server error' })
+      // Parse GeoJSON
+      const geoJsonData = JSON.parse(req.file.buffer.toString())
+      const geoData = new GeoData(geoJsonData)
+      await geoData.save()
+      res.json({ message: 'GeoJSON data uploaded successfully.' })
+    } catch (error) {
+      console.error('Error uploading GeoJSON:', error)
+      res.status(500).json({ error: 'Internal server error' })
+    }
   }
-})
+)
 
 // API Endpoint untuk Mendapatkan GeoJSON Data dari MongoDB
-app.get('/api/geo-data', async (req, res) => {
+app.get('/api/geo-data', auth, async (req, res) => {
   try {
     const geoData = await GeoData.find({})
     res.json(geoData)

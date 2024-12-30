@@ -184,36 +184,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Tampilkan Animasi Loading
       uploadDatasetLoading.style.display = 'flex'
-      uploadDatasetProgress.textContent = '0%'
+      uploadDatasetProgress.textContent = 'Uploading...'
 
-      let lastProgress = 0
+      // Reset progress
+      uploadDatasetStatus.textContent = ''
+
+      // Kirim permintaan upload dengan Axios dan monitor progress
       const response = await axios.post('/api/upload-dataset', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-        onUploadProgress: (progressEvent) => {
-          if (progressEvent.lengthComputable) {
-            const percentCompleted = Math.round(
-              (progressEvent.loaded * 100) / progressEvent.total
-            )
-            if (percentCompleted > lastProgress) {
-              uploadDatasetProgress.textContent = `${percentCompleted}%`
-              lastProgress = percentCompleted
-            }
-          } else {
-            uploadDatasetProgress.textContent = 'Uploading...'
-          }
-        },
       })
 
       if (response.status === 200) {
-        // Pastikan progres mencapai 100%
-        if (lastProgress < 100) {
-          uploadDatasetProgress.textContent = '99%'
-        }
-
         uploadDatasetStatus.textContent = 'Dataset uploaded successfully.'
         uploadDatasetStatus.style.color = 'green'
+        uploadDatasetProgress.textContent = 'Upload completed.'
         previewDatasetTableContainer.style.display = 'none'
         uploadDatasetForm.reset()
         parsedDatasetData = []
@@ -221,6 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         uploadDatasetStatus.textContent = `Error: ${response.data.error}`
         uploadDatasetStatus.style.color = 'red'
+        uploadDatasetProgress.textContent = 'Upload failed.'
       }
     } catch (error) {
       console.error('Error uploading dataset:', error)
@@ -230,6 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
         uploadDatasetStatus.textContent = 'Error uploading dataset.'
       }
       uploadDatasetStatus.style.color = 'red'
+      uploadDatasetProgress.textContent = 'Upload failed.'
     } finally {
       // Sembunyikan Animasi Loading setelah sedikit delay
       setTimeout(() => {
@@ -323,36 +311,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Tampilkan Animasi Loading
       uploadGeojsonLoading.style.display = 'flex'
-      uploadGeojsonProgress.textContent = '0%'
+      uploadGeojsonProgress.textContent = 'Uploading...'
 
-      let lastProgress = 0
+      // Reset progress
+      uploadGeojsonStatus.textContent = ''
+
+      // Kirim permintaan upload dengan Axios dan monitor progress
       const response = await axios.post('/api/upload-geojson', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-        onUploadProgress: (progressEvent) => {
-          if (progressEvent.lengthComputable) {
-            const percentCompleted = Math.round(
-              (progressEvent.loaded * 100) / progressEvent.total
-            )
-            if (percentCompleted > lastProgress) {
-              uploadGeojsonProgress.textContent = `${percentCompleted}%`
-              lastProgress = percentCompleted
-            }
-          } else {
-            uploadGeojsonProgress.textContent = 'Uploading...'
-          }
-        },
       })
 
       if (response.status === 200) {
-        // Pastikan progres mencapai 100%
-        if (lastProgress < 100) {
-          uploadGeojsonProgress.textContent = '100%'
-        }
-
         uploadGeojsonStatus.textContent = 'GeoJSON uploaded successfully.'
         uploadGeojsonStatus.style.color = 'green'
+        uploadGeojsonProgress.textContent = 'Upload completed.'
         previewGeojsonContainer.style.display = 'none'
         uploadGeojsonForm.reset()
         parsedGeojsonData = null
@@ -360,6 +334,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         uploadGeojsonStatus.textContent = `Error: ${response.data.error}`
         uploadGeojsonStatus.style.color = 'red'
+        uploadGeojsonProgress.textContent = 'Upload failed.'
       }
     } catch (error) {
       console.error('Error uploading GeoJSON:', error)
@@ -369,6 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
         uploadGeojsonStatus.textContent = 'Error uploading GeoJSON.'
       }
       uploadGeojsonStatus.style.color = 'red'
+      uploadGeojsonProgress.textContent = 'Upload failed.'
     } finally {
       // Sembunyikan Animasi Loading setelah sedikit delay
       setTimeout(() => {

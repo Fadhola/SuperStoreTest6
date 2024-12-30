@@ -1,4 +1,7 @@
-/* Global Styles */
+/* style.css */
+/* ============================
+   1. GLOBAL STYLES
+   ============================ */
 @import url('https://fonts.googleapis.com/css2?family=Anton&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
@@ -35,9 +38,23 @@ body {
   --neutral-light: #eeeeee;
   --neutral-dark: #000;
   --transition-speed: 0.3s;
+  --color-primary: #00adb5;
+  --color-secondary: #f4ce14;
+  --color-dark: #222831;
+  --color-light: #f9f9f9;
+  --color-white: #ffffff;
+  --color-gray-dark: #393e46;
+  --color-gray: #555555;
+  --color-gray-light: #f4f4f4;
+  --color-hover-primary: #018786;
+  --color-hover-secondary: #d3a114;
+  --font-primary: 'Poppins', sans-serif;
+  --transition-speed: 0.3s;
 }
 
-/* Gaya untuk layar loading */
+/* ============================
+   2. LOADING SCREEN STYLES
+   ============================ */
 #loadingScreen {
   position: fixed;
   width: 100%;
@@ -92,7 +109,9 @@ body {
   transition: all 0.5s ease-in-out;
 }
 
-/* Navbar Styling */
+/* ============================
+   3. NAVBAR STYLES
+   ============================ */
 .navbar {
   position: fixed;
   top: 0;
@@ -102,15 +121,34 @@ body {
   height: 60px;
   background-color: var(--neutral-light);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  z-index: 1500; /* Pastikan navbar berada di atas sidebar dan konten lainnya */
+  z-index: 1500;
 }
 
 .navbar-top {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
 }
+
+/* Nav Icons */
+.nav-icons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.plus-icon i {
+  font-size: 34px;
+  color: var(--primary-color);
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.plus-icon i:hover {
+  color: var(--accent-color);
+}
+
 .logov {
   display: none;
 }
@@ -162,20 +200,13 @@ body {
   cursor: grab; /* Mengubah cursor saat tidak sedang di-drag */
 }
 
-.nav-link.active {
-  color: var(--primary-color); /* Ubah warna teks saat aktif */
-  font-weight: bold; /* Tebalkan teks saat aktif */
-  border-bottom: 2px solid var(--thirdly-color); /* Tambahkan garis bawah */
-  cursor: grabbing;
-}
-
 .nav-links::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
 
 .nav-links li {
-  margin-right: 30px; /* Jarak antar menu */
-  white-space: nowrap; /* Mencegah teks terpotong */
+  margin-right: 30px; /* Spacing between menu items */
+  white-space: nowrap; /* Prevent text wrapping */
 }
 
 .nav-link {
@@ -187,10 +218,18 @@ body {
 }
 
 .nav-link:hover {
-  color: var(--accent-color);
+  color: var(--dark-color);
 }
 
-/* Fade Overlays */
+/* Active Navigation Link */
+.nav-link.active {
+  color: var(--primary-color);
+  font-weight: bold;
+  border-bottom: 2px solid var(--color-secondary);
+  cursor: grabbing;
+}
+
+/* Fade Overlays for Navigation */
 .fade-overlay {
   position: absolute;
   top: 0;
@@ -224,62 +263,70 @@ body {
   position: relative;
 }
 
-.dropdown-toggle {
+.dropdown-toggle.nav-link {
   display: flex;
   align-items: center;
   cursor: pointer;
+  color: var(--dark-color);
+  text-decoration: none;
+  font-size: 1rem;
+  padding: 0 16px; /* Added padding to prevent closeness */
+  border-bottom: none; /* Remove underline */
 }
 
-.dropdown-toggle i {
-  margin-left: 5px;
-  transition: transform 0.3s;
+.dropdown-toggle.nav-link:hover,
+.dropdown-toggle.nav-link:focus {
+  text-decoration: none;
+  border-bottom: none;
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  border-radius: 5px;
 }
 
 .dropdown-menu {
   display: none;
   position: absolute;
   top: 100%;
-  left: 0;
-  background-color: white;
+  right: 0;
+  background-color: var(--neutral-light);
   border: 1px solid #ddd;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
-  padding: 10px 0;
   list-style: none;
-  min-width: 200px;
+  padding: 10px 0;
+  min-width: 150px;
+  z-index: 1000;
 }
 
 .dropdown-menu .dropdown-item {
-  padding: 8px 20px;
-  text-decoration: none;
-  color: #333;
   display: block;
-  transition: background-color 0.3s, color 0.3s;
+  width: 100%;
+  padding: 10px 20px; /* Adequate horizontal padding */
+  color: var(--gray-dark);
+  text-decoration: none;
+  transition: background-color var(--transition-speed),
+    color var(--transition-speed);
 }
 
 .dropdown-menu .dropdown-item:hover {
   background-color: var(--primary-color);
-  color: white;
+  color: var(--color-white);
 }
 
-/* Tampilkan dropdown saat hover pada desktop */
-.dropdown:hover .dropdown-menu {
-  display: block;
-}
-
+/* Show Dropdown on Hover */
+.dropdown:hover .dropdown-menu,
 .dropdown.active .dropdown-menu {
   display: block;
 }
 
+/* Rotate Caret Icon when Active */
 .dropdown.active .dropdown-toggle i {
   transform: rotate(180deg);
 }
 
-.mobile-nav-links {
-  display: none;
-}
-
-/* Hamburger Menu Styling */
+/* ============================
+   4. HAMBURGER MENU STYLES
+   ============================ */
 .hamburger {
   display: none; /* Tampilkan hanya pada mobile */
   flex-direction: column;
@@ -293,48 +340,26 @@ body {
   width: 25px;
   height: 3px;
   background-color: var(--primary-color);
-  transition: all 0.3s;
+  border-radius: 5px;
+  transition: all var(--transition-speed);
 }
 
-/* Nav Icons */
-.nav-icons {
-  display: flex;
-  align-items: center;
-  gap: 15px;
+/* Hamburger Active State */
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
 }
 
-.plus-icon i {
-  font-size: 34px;
-  color: var(--primary-color);
-  cursor: pointer;
-  transition: color 0.3s;
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
 }
 
-.plus-icon i:hover {
-  color: var(--accent-color);
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
 }
 
-/* Dropdown Indikator Panah */
-.dropdown .dropdown-toggle i {
-  transition: transform 0.3s;
-}
-
-.dropdown.active .dropdown-toggle i {
-  transform: rotate(180deg);
-}
-
-.mobile-nav-links {
-  display: none;
-}
-
-/* Mobile Dropdown Indikator Panah */
-.mobile-nav-links .dropdown .dropdown-toggle i {
-  transition: transform 0.3s;
-}
-
-.mobile-nav-links .dropdown.active .dropdown-toggle i {
-  transform: rotate(180deg);
-}
+/* ============================
+   5. SIDEBAR STYLES
+   ============================ */
 
 /* Sidebar Header */
 #logo {
@@ -354,17 +379,6 @@ body {
   font-family: 'Anton', sans-serif;
   font-weight: 400;
   font-style: normal;
-}
-
-/* Footer */
-footer {
-  text-align: center;
-  margin-top: 40px;
-  color: var(--neutral-dark);
-}
-
-footer p {
-  font-size: 14px;
 }
 
 /* Main Container Adjustments */
@@ -470,15 +484,6 @@ body.no-sidebar .container {
 /* .exit-button:hover {
   background-color: #222831;
 } */
-
-.content {
-  flex: 1;
-  /* padding: 20px; */
-  box-sizing: border-box;
-  margin-top: 72px;
-  max-width: 100%;
-  width: calc(100% - 250px);
-}
 
 /* Filters Section */
 .filters {
@@ -627,6 +632,18 @@ body.no-sidebar .container {
 /* Ensure the filters still align correctly when some are removed */
 .filters .filter-item:not(:empty) {
   flex-grow: 1; /* Allow filter items to expand to fill available space */
+}
+
+/* ============================
+   6. CONTENT STYLES
+   ============================ */
+.content {
+  flex: 1;
+  /* padding: 20px; */
+  box-sizing: border-box;
+  margin-top: 72px;
+  max-width: 100%;
+  width: calc(100% - 250px);
 }
 
 /* Summary Section */
@@ -803,7 +820,9 @@ table.display tr:hover {
   font-weight: 500;
 }
 
-/* Map Section */
+/* ============================
+   7. MAP SECTION STYLES
+   ============================ */
 #map {
   width: 100%;
   height: 400px;
@@ -864,7 +883,9 @@ table.display tr:hover {
 }
 /* map end */
 
-/* Footer */
+/* ============================
+   8. FOOTER STYLES
+   ============================ */
 footer {
   text-align: center;
   margin-top: 40px;
@@ -875,7 +896,9 @@ footer p {
   font-size: 14px;
 }
 
-/* Manage Dataset */
+/* ============================
+   9. MANAGE DATASET STYLES
+   ============================ */
 .container-md {
   max-width: 1200px; /* Menetapkan lebar maksimum */
   margin: 0 auto; /* Memusatkan container */
@@ -1018,6 +1041,9 @@ footer p {
   color: white;
 }
 
+/* ============================
+   10. RESPONSIVE STYLES
+   ============================ */
 /* Responsive Design */
 @media (max-width: 768px) {
   .navbar {

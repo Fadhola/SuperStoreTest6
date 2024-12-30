@@ -5,6 +5,18 @@ export function updateSummary(data) {
     return
   }
 
+  if (data.length === 0) {
+    console.warn('Data array is empty.')
+    // Atur nilai default atau tampilkan pesan kosong
+    document.getElementById('totalSales').textContent = '$0.00'
+    document.getElementById('totalProfit').textContent = '$0.00'
+    document.getElementById('averageDiscount').textContent = '0.00%'
+    document.getElementById('averageSales').textContent = '$0.00'
+    document.getElementById('mostFrequentCustomer').textContent = 'N/A'
+    document.getElementById('orderDateRange').textContent = 'N/A'
+    return
+  }
+
   // Hitung total sales
   const totalSales = data.reduce((sum, row) => sum + row.Sales, 0)
   document.getElementById('totalSales').textContent = `$${totalSales.toFixed(

@@ -166,7 +166,13 @@ export async function initMap(data) {
     mapLoading.style.display = 'flex'
     mapLoadingProgress.textContent = '0%'
 
+    const token = localStorage.getItem('token')
+    console.log('Fetching GeoJSON with token:', token)
+
     const response = await axios.get('/api/geo-data', {
+      headers: {
+        Authorization: `Bearer ${token}`, // Sertakan token di header
+      },
       onDownloadProgress: (progressEvent) => {
         if (progressEvent.lengthComputable) {
           const percentCompleted = Math.round(
@@ -211,6 +217,7 @@ export async function initMap(data) {
     }
   } catch (error) {
     console.error('Error loading GeoJSON data from database:', error)
+    alert('Tidak dapat memuat data GeoJSON. Pastikan Anda sudah login.')
   } finally {
     // Animasi Progress hingga 100% sebelum menyembunyikan loading
     const mapLoading = document.getElementById('mapLoading')

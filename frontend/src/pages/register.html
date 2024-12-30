@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Register - Superstore Dashboard</title>
+    <link rel="stylesheet" href="/src/auth.css" />
+    <!-- favicon -->
+    <link rel="icon" href="/icon512_rounded.png" />
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <div class="navbar-container">
+          <div class="logo">
+            <a href="/">
+              Super
+              <span>Store</span>
+            </a>
+          </div>
+          <ul class="nav-links">
+            <li><a href="/" class="nav-link">Home</a></li>
+            <li><a href="/src/pages/login.html" class="nav-link">Login</a></li>
+          </ul>
+          <div class="nav-icons">
+            <div class="hamburger" id="hamburger">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div>
+        <ul class="mobile-nav-links" id="mobile-nav-links">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="/src/pages/login.html" class="nav-link">Login</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="container-md">
+      <div class="register-container">
+        <h2 class="main-title">Register</h2>
+        <form id="registerForm" class="register-form">
+          <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required />
+          </div>
+          <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required />
+          </div>
+          <button type="submit" class="btn-primary">Register</button>
+        </form>
+        <p class="form-footer">
+          Sudah punya akun?
+          <a href="/src/pages/login.html">Login di sini</a>
+          .
+        </p>
+        <p id="registerStatus"></p>
+      </div>
+    </main>
+
+    <footer>
+      <p class="poppins-regular">&copy; 2024 Superstore Analytics Dashboard</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script
+      src="https://kit.fontawesome.com/5b600557da.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="/src/js/auth.js"></script>
+    <script>
+      // frontend/src/js/navigation.js
+
+      document.addEventListener('DOMContentLoaded', () => {
+        const hamburger = document.getElementById('hamburger')
+        const mobileNavLinks = document.getElementById('mobile-nav-links')
+
+        if (hamburger) {
+          hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active')
+            mobileNavLinks.classList.toggle('active')
+          })
+        }
+
+        // Dropdown Toggle untuk Semua Elemen .dropdown-toggle
+        const dropdownToggles = document.querySelectorAll('.dropdown-toggle')
+
+        dropdownToggles.forEach((toggle) => {
+          toggle.addEventListener('click', (e) => {
+            e.preventDefault()
+            const dropdownMenu = toggle.nextElementSibling
+            if (dropdownMenu) {
+              dropdownMenu.classList.toggle('active')
+            }
+          })
+        })
+      })
+    </script>
+  </body>
+</html>

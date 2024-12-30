@@ -1,0 +1,574 @@
+/* ============================
+   1. GLOBAL STYLES
+   ============================ */
+
+/* CSS Variables for Consistent Theming */
+:root {
+  --color-primary: #00adb5;
+  --color-secondary: #f4ce14;
+  --color-dark: #222831;
+  --color-light: #f9f9f9;
+  --color-white: #ffffff;
+  --color-gray-dark: #393e46;
+  --color-gray: #555555;
+  --color-gray-light: #f4f4f4;
+  --color-hover-primary: #018786;
+  --color-hover-secondary: #d3a114;
+  --font-primary: 'Poppins', sans-serif;
+  --transition-speed: 0.3s;
+  --error-color: #ff4d4d;
+  --success-color: #4caf50;
+}
+
+/* Reset Margin and Padding */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Global Styles */
+body {
+  font-family: var(--font-primary);
+  line-height: 1.6;
+  color: var(--color-gray);
+  background-color: var(--color-light);
+}
+
+/* Smooth Scroll Behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Animasi untuk Form Muncul */
+.login-form,
+.register-form {
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: fadeInUp 0.6s forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hover Animations for Dropdown */
+.navbar .dropdown-toggle i {
+  transition: transform var(--transition-speed);
+}
+
+.navbar .dropdown.active .dropdown-toggle i,
+.navbar .dropdown:hover .dropdown-toggle i {
+  transform: rotate(180deg);
+}
+
+/* Container */
+.container-md {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* ============================
+     2. NAVBAR STYLES
+     ============================ */
+
+header {
+  background-color: var(--color-dark);
+  padding: 20px 0;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.logo a {
+  color: var(--color-primary);
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.logo a span {
+  color: var(--color-secondary);
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links li {
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--color-white);
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color var(--transition-speed);
+}
+
+.nav-links a:hover {
+  color: var(--color-primary);
+}
+
+.nav-icons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Dropdown Menu Styling */
+.navbar .dropdown {
+  position: relative;
+}
+
+.navbar .dropdown-toggle {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--color-white);
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.navbar .dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: var(--color-white);
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  list-style: none;
+  padding: 10px 0;
+  min-width: 150px;
+  z-index: 1000;
+}
+
+.navbar .dropdown-menu .dropdown-item {
+  padding: 10px 20px;
+  color: var(--color-gray-dark);
+  text-decoration: none;
+  display: block;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.navbar .dropdown-menu .dropdown-item:hover {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+/* Tampilkan dropdown saat hover pada desktop */
+.navbar .dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+/* Navbar Dropdown Active State */
+.navbar .dropdown.active .dropdown-menu {
+  display: block;
+}
+
+.mobile-nav-links .dropdown.active .dropdown-menu {
+  display: block;
+}
+
+/* Optional: Rotate caret icon saat dropdown aktif */
+.navbar .dropdown.active .dropdown-toggle i {
+  transform: rotate(180deg);
+}
+
+.mobile-nav-links .dropdown.active .dropdown-toggle i {
+  transform: rotate(180deg);
+}
+
+/* Hamburger Menu */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.hamburger span {
+  height: 3px;
+  width: 25px;
+  background: var(--color-white);
+  margin-bottom: 4px;
+  border-radius: 5px;
+  transition: all var(--transition-speed);
+}
+
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Mobile Navigation Menu */
+.mobile-nav-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--color-gray-light);
+  position: fixed;
+  top: 98px;
+  right: -100%;
+  height: 100vh;
+  width: 250px;
+  padding-top: 80px;
+  transition: right var(--transition-speed) ease-in-out;
+  z-index: 999;
+}
+
+.mobile-nav-links.active {
+  right: 0;
+}
+
+.mobile-nav-links li {
+  list-style: none;
+}
+
+.mobile-nav-links .nav-link {
+  text-decoration: none;
+  margin: 20px 0;
+  font-size: 1.2rem;
+  color: var(--color-gray-dark);
+}
+
+.mobile-nav-links .nav-link:hover {
+  color: var(--color-primary);
+}
+
+/* ============================
+     3. LOGIN PAGE STYLES
+     ============================ */
+
+/* Login Container */
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120px 20px 60px; /* Adjusted for fixed navbar */
+  min-height: 100vh;
+}
+
+/* Main Title */
+.main-title {
+  margin-bottom: 30px;
+  font-size: 2.5rem;
+  color: var(--color-primary);
+  text-align: center;
+}
+
+/* Form Styles */
+.login-form {
+  width: 100%;
+  max-width: 400px;
+  background-color: var(--color-white);
+  padding: 40px 30px;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--color-gray-dark);
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid var(--color-gray);
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color var(--transition-speed);
+}
+
+.form-group input:focus {
+  border-color: var(--color-primary);
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 173, 181, 0.5);
+}
+
+/* Button Styles */
+.btn-primary {
+  width: 100%;
+  padding: 12px 0;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--transition-speed),
+    transform var(--transition-speed);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-hover-primary);
+  transform: translateY(-2px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Form Footer */
+.form-footer {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.form-footer a {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color var(--transition-speed);
+}
+
+.form-footer a:hover {
+  color: var(--color-hover-primary);
+}
+
+/* Status Messages */
+#loginStatus {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 1rem;
+  color: var(--error-color);
+  font-weight: 500;
+}
+
+/* ============================
+   4. REGISTER PAGE STYLES
+   ============================ */
+
+/* Register Container */
+.register-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120px 20px 60px; /* Adjusted for fixed navbar */
+  min-height: 100vh;
+}
+
+/* Main Title */
+.main-title {
+  margin-bottom: 30px;
+  font-size: 2.5rem;
+  color: var(--color-primary);
+  text-align: center;
+}
+
+/* Form Styles */
+.register-form {
+  width: 100%;
+  max-width: 400px;
+  background-color: var(--color-white);
+  padding: 40px 30px;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--color-gray-dark);
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid var(--color-gray);
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color var(--transition-speed);
+}
+
+.form-group input:focus {
+  border-color: var(--color-primary);
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 173, 181, 0.5);
+}
+
+/* Button Styles */
+.btn-primary {
+  width: 100%;
+  padding: 12px 0;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--transition-speed),
+    transform var(--transition-speed);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-hover-primary);
+  transform: translateY(-2px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Form Footer */
+.form-footer {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.form-footer a {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color var(--transition-speed);
+}
+
+.form-footer a:hover {
+  color: var(--color-hover-primary);
+}
+
+/* Status Messages */
+#registerStatus {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 1rem;
+  color: var(--error-color);
+  font-weight: 500;
+}
+
+/* ============================
+     5. FOOTER STYLES
+     ============================ */
+
+footer {
+  background-color: var(--color-dark);
+  color: var(--color-white);
+  padding: 20px;
+  text-align: center;
+  margin-top: 40px;
+}
+
+footer p {
+  font-size: 0.9rem;
+}
+
+/* ============================
+     6. RESPONSIVE STYLES
+     ============================ */
+
+/* Tablet and Mobile Styles */
+
+@media (max-width: 768px) {
+  /* Display Hamburger Menu */
+  .hamburger {
+    display: flex;
+  }
+
+  /* Hide Nav Links */
+  .nav-links {
+    display: none;
+  }
+
+  /* Adjust Navbar Container Padding */
+  .navbar-container {
+    padding: 10px 20px;
+  }
+
+  /* Adjust Login Container Padding */
+  .login-container {
+    padding: 100px 20px 40px;
+  }
+
+  /* Adjust Main Title */
+  .main-title {
+    font-size: 2rem;
+  }
+
+  /* Adjust Form Padding */
+  .login-form {
+    padding: 30px 20px;
+  }
+
+  /* Adjust Button Padding */
+  .btn-primary {
+    padding: 10px 0;
+    font-size: 1rem;
+  }
+
+  /* Adjust Footer Padding */
+  footer {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 540px) {
+  .main-title {
+    font-size: 1.8rem;
+  }
+
+  .login-form {
+    padding: 25px 15px;
+  }
+
+  .form-group label {
+    font-size: 0.95rem;
+  }
+
+  .form-group input {
+    padding: 10px 12px;
+    font-size: 0.95rem;
+  }
+
+  .btn-primary {
+    padding: 10px 0;
+    font-size: 0.95rem;
+  }
+
+  .form-footer {
+    font-size: 0.9rem;
+  }
+}

@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="id">
   <head>
@@ -57,6 +58,28 @@
             <li><a href="#download" class="nav-link">Download</a></li>
             <li><a href="#use-cases" class="nav-link">Use Cases</a></li>
             <li><a href="#contact" class="nav-link">Contact</a></li>
+            <li>
+              <a
+                href="/src/pages/login.html"
+                class="nav-link"
+                id="loginNavLink"
+              >
+                Login
+              </a>
+            </li>
+            <!-- Username Dropdown -->
+            <li class="dropdown username-display" style="display: none">
+              <a href="#" class="dropdown-toggle nav-link">
+                Hi,
+                <span id="navUsername"></span>
+                <i class="fas fa-caret-down"></i>
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a href="#" class="dropdown-item" id="logoutButton">Logout</a>
+                </li>
+              </ul>
+            </li>
           </ul>
           <div class="nav-icons">
             <!-- Hamburger Menu Icon -->
@@ -75,6 +98,23 @@
           <li><a href="#download" class="nav-link">Download</a></li>
           <li><a href="#use-cases" class="nav-link">Use Cases</a></li>
           <li><a href="#contact" class="nav-link">Contact</a></li>
+          <!-- Username Dropdown untuk Mobile -->
+          <li><a href="/src/pages/login.html" class="nav-link">Login</a></li>
+          <!-- Username Dropdown untuk Mobile -->
+          <li class="dropdown username-display" style="display: none">
+            <a href="#" class="dropdown-toggle nav-link">
+              Hi,
+              <span id="mobileNavUsername"></span>
+              <i class="fas fa-caret-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="#" class="dropdown-item" id="mobileLogoutButton">
+                  Logout
+                </a>
+              </li>
+            </ul>
+          </li>
         </ul>
       </nav>
     </header>
@@ -546,5 +586,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <!-- Custom JS untuk Landing Page -->
     <script type="module" src="/src/js/landingPage.js" defer></script>
+    <script type="module" src="/src/js/auth.js" defer></script>
   </body>
 </html>
