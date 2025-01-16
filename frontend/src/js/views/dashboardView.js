@@ -1,35 +1,29 @@
-<!-- frontend/src/pages/dashboard.html -->
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Superstore Dashboard</title>
-    <!-- <link rel="stylesheet" href="/style.css" /> -->
-    <link
-      rel="preload"
-      href="/src/style.css"
-      as="style"
-      onload="this.rel='stylesheet'"
-    />
-    <noscript><link rel="stylesheet" href="/src/style.css" /></noscript>
-    <!-- favicon -->
-    <link rel="icon" href="/icon512_rounded.png" />
-    <!-- CDN Dependencies -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css"
-    />
-  </head>
-  <body>
-    <div id="loadingScreen" class="loading-overlay" style="display: none">
-      <div class="spinner"></div>
-      <p id="loadingProgress">0%</p>
-    </div>
+// frontend/src/js/views/dashboardView.js
+import { fetchData } from '../dataLoader.js'
+import {
+  initFilters,
+  filterData,
+  toggleDropdown,
+  updateSelectedFilters,
+} from '../filters.js'
+import { updateSummary } from '../summary.js'
+import { createCharts } from '../charts.js'
+import { initMap } from '../map.js'
+import { initProfitMarginTable, initCustomerAnalysisTable } from '../tables.js'
+import {
+  setupUI,
+  setupScrollButtons,
+  setActiveNavLink,
+  enableDragScroll,
+} from '../ui.js'
+import { setupAuthListeners } from '../auth2.js'
 
-    <!-- Navbar -->
+export function renderDashboardView(container) {
+  container.innerHTML = `
+    <!-- Navbar dan Sidebar -->
+    <!-- Gunakan komponen navbar dan sidebar yang sama dengan view lain -->
     <header>
-      <nav class="navbar">
+     <nav class="navbar">
         <!-- Top Bar: Logo, Sidebar Toggle, and + Icon -->
         <div class="navbar-top">
           <!-- Hamburger Toggle Button -->
@@ -56,15 +50,15 @@
             </ul>
           </div>
           <div class="logov">
-            <a href="/src/pages/landingPage.html">
+            <a href="/dashboard">
               Super
               <span>Store</span>
             </a>
           </div>
-          <div class="nav-icons">
+          <div class="navbar-icons">
             <!-- Icon Plus untuk Mengelola Dataset -->
-            <div class="nav-item plus-icon">
-              <a href="/src/pages/manage-dataset.html">
+            <div class="navbar-item plus-icon">
+              <a href="/manage-dataset">
                 <i class="fa-solid fa-square-plus"></i>
               </a>
             </div>
@@ -81,47 +75,28 @@
           <!-- Menu Navigasi -->
           <ul class="nav-links">
             <li>
-              <a
-                href="/src/pages/dashboard.html"
-                data-target="all"
-                class="nav-link active"
-              >
-                Dashboard
-              </a>
+              <a href="/dashboard" class="nav-link">Dashboard</a>
             </li>
             <li>
-              <a
-                href="#"
-                class="nav-link"
-                data-target="salesProfitAnalysisSection"
-              >
+              <a href="/salesProfitAnalysis" class="nav-link">
                 Detailed Sales and Profit Analysis
               </a>
             </li>
             <li>
               <a
-                href="#"
+                href="/discountSalesRelationship"
                 class="nav-link"
-                data-target="discountSalesRelationshipSection"
               >
                 Discount and Sales Relationship
               </a>
             </li>
             <li>
-              <a
-                href="#"
-                class="nav-link"
-                data-target="customerAnalysisSection"
-              >
+              <a href="/customerAnalysis" class="nav-link">
                 Customer Analysis
               </a>
             </li>
             <li>
-              <a
-                href="#"
-                class="nav-link"
-                data-target="cityRegionPerformanceSection"
-              >
+              <a href="/cityRegionPerformance" class="nav-link">
                 City or Region Performance
               </a>
             </li>
@@ -136,8 +111,7 @@
         </div>
       </nav>
     </header>
-
-    <main class="container">
+     <main class="container">
       <aside class="sidebar">
         <a id="logo" class="logo">
           Super
@@ -250,36 +224,30 @@
           </div>
         </div>
 
-        <section id="dashboardSection" class="analysis-section">
-          <!-- Tambahkan Elemen Loading untuk Peta -->
-          <div id="mapLoading" class="loading-overlay" style="display: none">
-            <div class="spinner"></div>
-            <p id="mapLoadingProgress">0%</p>
-          </div>
+        <!-- Tambahkan Elemen Loading untuk Peta -->
+        <div id="mapLoading" class="loading-overlay" style="display: none">
+          <div class="spinner"></div>
+          <p id="mapLoadingProgress">0%</p>
+        </div>
 
-          <!-- Map Section -->
-          <div id="map"></div>
+        <!-- Map Section -->
+        <div id="map"></div>
 
-          <!-- Charts Section -->
-          <div class="chart-container">
-            <div class="chart-wrapper">
-              <canvas data-aos="zoom-in" id="salesTrendChart"></canvas>
-            </div>
-            <div class="chart-wrapper">
-              <canvas data-aos="zoom-in" id="salesByCategoryChart"></canvas>
-            </div>
-            <div class="chart-wrapper">
-              <canvas data-aos="zoom-in" id="shipModeChart"></canvas>
-            </div>
+        <!-- Charts Section -->
+        <div class="chart-container">
+          <div class="chart-wrapper">
+            <canvas data-aos="zoom-in" id="salesTrendChart"></canvas>
           </div>
-        </section>
+          <div class="chart-wrapper">
+            <canvas data-aos="zoom-in" id="salesByCategoryChart"></canvas>
+          </div>
+          <div class="chart-wrapper">
+            <canvas data-aos="zoom-in" id="shipModeChart"></canvas>
+          </div>
+        </div>
 
         <!-- Analysis Sections -->
-        <section
-          id="salesProfitAnalysisSection"
-          class="analysis-section"
-          style="display: none"
-        >
+        <section class="analysis-section">
           <h2>Detailed Sales and Profit Analysis</h2>
           <div class="chart-container">
             <div class="chart-wrapper">
@@ -308,11 +276,7 @@
         </section>
 
         <!-- Discount and Sales Relationship -->
-        <section
-          id="discountSalesRelationshipSection"
-          class="analysis-section"
-          style="display: none"
-        >
+        <section class="analysis-section">
           <h2>Discount and Sales Relationship</h2>
           <div class="chart-container">
             <div class="chart-wrapper">
@@ -331,11 +295,7 @@
         </section>
 
         <!-- Customer Analysis -->
-        <section
-          id="customerAnalysisSection"
-          class="analysis-section"
-          style="display: none"
-        >
+        <section class="analysis-section">
           <h2>Customer Analysis</h2>
           <div class="chart-container">
             <div class="chart-wrapper">
@@ -361,11 +321,7 @@
         </section>
 
         <!-- City or Region Performance -->
-        <section
-          id="cityRegionPerformanceSection"
-          class="analysis-section"
-          style="display: none"
-        >
+        <section class="analysis-section">
           <h2>City or Region Performance</h2>
           <div class="chart-container">
             <div class="chart-wrapper">
@@ -376,19 +332,149 @@
             </div>
           </div>
         </section>
+
+        <!-- Link to Detailed Analytics -->
+        <div class="analytics-link">
+          <a href="/src/pages/analytics.html" class="poppins-medium">
+            Explore Detailed Analytics
+          </a>
+        </div>
       </div>
     </main>
-
     <footer>
       <p class="poppins-regular">&copy; 2024 Superstore Analytics Dashboard</p>
     </footer>
-    <script
-      src="https://kit.fontawesome.com/5b600557da.js"
-      crossorigin="anonymous"
-    ></script>
+  `
 
-    <!-- Main JS Module -->
-    <script type="module" src="/src/main.js"></script>
-    <script type="module" src="/src/js/auth.js"></script>
-  </body>
-</html>
+  // Inisialisasi ulang setup UI dan event listeners
+  // setupUI()
+  // setupScrollButtons()
+  // setActiveNavLink()
+  // enableDragScroll()
+
+  // Inisialisasi Dashboard
+  // initDashboard()
+
+  // Inisialisasi Auth Listeners
+  setupAuthListeners()
+
+  // Inisialisasi UI
+  setupUI()
+
+  // inisialisasi horizontal nav menu Scroll button
+  setupScrollButtons()
+
+  // Inisialisasi Active Nav Link
+  setActiveNavLink()
+
+  // Inisialisasi Drag Scroll
+  enableDragScroll()
+
+  // // Fungsi untuk memeriksa autentikasi
+  // function isAuthenticated() {
+  //   const token = localStorage.getItem('token')
+  //   return !!token
+  // }
+
+  // // Redirect ke login jika tidak autentikasi
+  // if (window.location.pathname === '/dashboard') {
+  //   if (!isAuthenticated()) {
+  //     window.location.href = '/login'
+  //   }
+  // }
+
+  // Fungsi untuk memeriksa autentikasi dan menginisialisasi dashboard
+  async function initDashboard() {
+    try {
+      const data = await fetchData()
+      if (!data || data.length === 0) {
+        alert(
+          'No data received for dashboard initialization. Please upload dataset'
+        )
+        return
+      }
+      initFilters(data)
+      updateSummary(data)
+      initMap(data)
+      createCharts(data)
+      initProfitMarginTable(data)
+      initCustomerAnalysisTable(data)
+    } catch (error) {
+      console.error('Error initializing dashboard:', error)
+    }
+  }
+
+  initDashboard()
+
+  // Add event listener to the filter button
+  const filterButton = document.getElementById('filterButton')
+  if (filterButton) {
+    filterButton.addEventListener('click', async () => {
+      try {
+        const token = localStorage.getItem('token')
+        const response = await fetch('/api/superstore-data', {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch data')
+        }
+
+        const data = await response.json()
+        const filteredData = filterData(data)
+        updateSummary(filteredData)
+        initMap(filteredData)
+        createCharts(filteredData)
+        initProfitMarginTable(filteredData)
+        initCustomerAnalysisTable(filteredData)
+        updateSelectedFilters()
+      } catch (error) {
+        console.error('Error applying filters:', error)
+      }
+    })
+  }
+
+  // Event listener for the reset filters button
+  const resetFiltersButton = document.getElementById('resetFilters')
+  if (resetFiltersButton) {
+    resetFiltersButton.addEventListener('click', async () => {
+      // Reset all checkboxes
+      document.querySelectorAll('.filter-checkbox').forEach((checkbox) => {
+        checkbox.checked = false
+      })
+      // Clear selected filters display
+      updateSelectedFilters()
+      // Reapply filters (with empty selections)
+      await initDashboard()
+    })
+  }
+
+  // Event listeners for dropdown buttons
+  const yearDropdown = document.getElementById('yearDropdown')
+  const cityDropdown = document.getElementById('cityDropdown')
+  const stateDropdown = document.getElementById('stateDropdown')
+  const categoryDropdown = document.getElementById('categoryDropdown')
+
+  if (yearDropdown) {
+    yearDropdown.addEventListener('click', () => toggleDropdown('yearFilter'))
+  }
+  if (cityDropdown) {
+    cityDropdown.addEventListener('click', () => toggleDropdown('cityFilter'))
+  }
+  if (stateDropdown) {
+    stateDropdown.addEventListener('click', () => toggleDropdown('stateFilter'))
+  }
+  if (categoryDropdown) {
+    categoryDropdown.addEventListener('click', () =>
+      toggleDropdown('categoryFilter')
+    )
+  }
+
+  // // Call the initDashboard function jika berada di dashboard.html
+  // if (window.location.pathname === '/dashboard') {
+  //   initDashboard()
+  // }
+}

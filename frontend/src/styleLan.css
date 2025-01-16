@@ -1063,7 +1063,7 @@ table.display tbody tr:hover {
 
   /* Hero Section */
   .hero {
-    padding: 140px 40px 100px; /* Menyesuaikan padding untuk ruang ekstra */
+    padding: 140px 150px 100px;
   }
 
   .hero-content {

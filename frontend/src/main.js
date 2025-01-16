@@ -1,5 +1,6 @@
 // frontend/src/main.js
-import './style.css'
+
+// import './style.css'
 import { fetchData } from './js/dataLoader.js'
 import {
   initFilters,
@@ -13,7 +14,7 @@ import { initMap } from './js/map.js'
 import {
   setupUI,
   setupScrollButtons,
-  setActiveNavLink,
+  // setActiveNavLink,
   enableDragScroll,
 } from './js/ui.js'
 import {
@@ -38,10 +39,63 @@ setupUI()
 setupScrollButtons()
 
 // Inisialisasi Active Nav Link
-setActiveNavLink()
+// setActiveNavLink()
 
 // Inisialisasi Drag Scroll
 enableDragScroll()
+
+// Fungsi untuk menampilkan semua section (Dashboard)
+function showAllSections() {
+  const sections = document.querySelectorAll('.analysis-section')
+  sections.forEach((section) => {
+    section.style.display = 'block'
+  })
+}
+
+// Fungsi untuk menampilkan section tertentu
+function showSection(targetId) {
+  const sections = document.querySelectorAll('.analysis-section')
+  sections.forEach((section) => {
+    if (targetId === 'all') {
+      section.style.display = 'block'
+    } else if (section.id === targetId) {
+      section.style.display = 'block'
+    } else {
+      section.style.display = 'none'
+    }
+  })
+}
+
+// Fungsi untuk menghapus kelas 'active' dari semua nav-link
+function clearActiveNavLinks() {
+  const navLinks = document.querySelectorAll('.nav-link')
+  navLinks.forEach((link) => {
+    link.classList.remove('active')
+  })
+}
+
+// Fungsi untuk menandai nav-link sebagai aktif
+function setActiveNavLink(link) {
+  if (link) {
+    link.classList.add('active')
+  }
+}
+
+// Fungsi untuk mengatur event listeners pada nav-link
+function setupNavLinks() {
+  const navLinks = document.querySelectorAll('.nav-link')
+  navLinks.forEach((link) => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault() // Mencegah navigasi halaman
+      const target = link.getAttribute('data-target')
+
+      clearActiveNavLinks()
+      setActiveNavLink(link)
+
+      showSection(target)
+    })
+  })
+}
 
 // Fungsi untuk memeriksa autentikasi
 function isAuthenticated() {
@@ -73,6 +127,10 @@ async function initDashboard() {
     createCharts(data)
     initProfitMarginTable(data)
     initCustomerAnalysisTable(data)
+    setupNavLinks() // Inisialisasi event listeners untuk nav links
+
+    // Tampilkan semua section secara default
+    showAllSections()
   } catch (error) {
     console.error('Error initializing dashboard:', error)
   }
@@ -83,6 +141,10 @@ const filterButton = document.getElementById('filterButton')
 if (filterButton) {
   filterButton.addEventListener('click', async () => {
     try {
+      // Tambahkan efek loading dan disable tombol
+      filterButton.disabled = true
+      filterButton.textContent = 'Filtering...' // Ubah teks tombol
+
       const token = localStorage.getItem('token')
       const response = await fetch('/api/superstore-data', {
         headers: {
@@ -97,6 +159,8 @@ if (filterButton) {
 
       const data = await response.json()
       const filteredData = filterData(data)
+
+      // Update UI dengan data yang sudah difilter
       updateSummary(filteredData)
       initMap(filteredData)
       createCharts(filteredData)
@@ -105,6 +169,10 @@ if (filterButton) {
       updateSelectedFilters()
     } catch (error) {
       console.error('Error applying filters:', error)
+    } finally {
+      // Hapus efek loading dan enable tombol
+      filterButton.disabled = false
+      filterButton.textContent = 'Apply Filters' // Kembalikan teks tombol
     }
   })
 }

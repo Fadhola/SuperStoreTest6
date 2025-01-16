@@ -9,16 +9,254 @@
     <!-- favicon -->
     <link rel="icon" href="/icon512_rounded.png" />
     <!-- CSS DataTables diimpor melalui JavaScript -->
+    <style>
+      .navbarMD .dropdown-toggle i {
+        transition: transform var(--transition-speed);
+      }
+
+      .navbarMD .dropdown.active .dropdown-toggle i,
+      .navbarMD .dropdown:hover .dropdown-toggle i {
+        transform: rotate(180deg);
+      }
+      /* ============================
+     2. NAVBAR STYLES
+     ============================ */
+
+      header {
+        background-color: var(--color-dark);
+        padding: 20px 0;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .navbar-containerMD {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .logoMD a {
+        color: var(--color-primary);
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-decoration: none;
+      }
+
+      .logoMD a span {
+        color: var(--color-secondary);
+      }
+
+      .nav-linksMD {
+        display: flex;
+        gap: 20px;
+      }
+
+      .nav-linksMD li {
+        list-style: none;
+      }
+
+      .nav-linksMD a {
+        color: var(--color-white);
+        text-decoration: none;
+        font-size: 1rem;
+        transition: color var(--transition-speed);
+      }
+
+      .nav-linksMD a:hover {
+        color: var(--color-primary);
+      }
+
+      .nav-iconsMD {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      /* Dropdown Menu Styling */
+      .navbarMD .dropdown {
+        position: relative;
+      }
+
+      .navbarMD .dropdown-toggle {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        color: var(--color-white);
+        text-decoration: none;
+        font-size: 1rem;
+      }
+
+      .navbarMD .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: var(--color-white);
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        list-style: none;
+        padding: 10px 0;
+        min-width: 150px;
+        z-index: 1000;
+      }
+
+      .navbarMD .dropdown-menu .dropdown-item {
+        padding: 10px 20px;
+        color: var(--color-gray-dark);
+        text-decoration: none;
+        display: block;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      .navbarMD .dropdown-menu .dropdown-item:hover {
+        background-color: var(--color-primary);
+        color: var(--color-white);
+      }
+
+      /* Tampilkan dropdown saat hover pada desktop */
+      .navbarMD .dropdown:hover .dropdown-menu {
+        display: block;
+      }
+
+      /* Navbar Dropdown Active State */
+      .navbarMD .dropdown.active .dropdown-menu {
+        display: block;
+      }
+
+      .mobile-nav-linksMD .dropdown.active .dropdown-menu {
+        display: block;
+      }
+
+      /* Optional: Rotate caret icon saat dropdown aktif */
+      .navbarMD .dropdown.active .dropdown-toggle i {
+        transform: rotate(180deg);
+      }
+
+      .mobile-nav-linksMD .dropdown.active .dropdown-toggle i {
+        transform: rotate(180deg);
+      }
+
+      /* Hamburger Menu */
+      .hamburgerMD {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+      }
+
+      .hamburgerMD span {
+        height: 3px;
+        width: 25px;
+        background: var(--color-white);
+        margin-bottom: 4px;
+        border-radius: 5px;
+        transition: all var(--transition-speed);
+      }
+
+      .hamburgerMD.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+
+      .hamburgerMD.active span:nth-child(2) {
+        opacity: 0;
+      }
+
+      .hamburgerMD.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+      }
+
+      /* Mobile Navigation Menu */
+      .mobile-nav-linksMD {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: var(--color-gray-light);
+        position: fixed;
+        top: 98px;
+        right: -100%;
+        height: 100vh;
+        width: 250px;
+        padding-top: 80px;
+        transition: right var(--transition-speed) ease-in-out;
+        z-index: 999;
+      }
+
+      .mobile-nav-linksMD.active {
+        right: 0;
+      }
+
+      .mobile-nav-linksMD li {
+        list-style: none;
+      }
+
+      .mobile-nav-linksMD .nav-linkMD {
+        text-decoration: none;
+        margin: 20px 0;
+        font-size: 1.2rem;
+        color: var(--color-gray-dark);
+      }
+
+      .mobile-MDsMD .nav-linkMD:hover {
+        color: var(--color-primary);
+      }
+      @media (max-width: 768px) {
+        /* Display Hamburger Menu */
+        .hamburgerMD {
+          display: flex;
+        }
+
+        /* Hide Nav Links */
+        .nav-linksMD {
+          display: none;
+        }
+      }
+    </style>
   </head>
   <body class="no-sidebar">
     <header>
-      <nav>
-        <!-- Navigasi Menu -->
+      <!-- <nav>
         <div class="nav-links">
           <a href="/src/pages/dashboard.html" class="nav-link">Dashboard</a>
           <a href="/src/pages/analytics.html" class="nav-link">Analytics</a>
           <a href="/" class="nav-link">Landing Page</a>
         </div>
+      </nav> -->
+      <nav class="navbarMD">
+        <div class="navbar-containerMD">
+          <div class="logoMD">
+            <a href="/">
+              Super
+              <span>Store</span>
+            </a>
+          </div>
+          <ul class="nav-linksMD">
+            <li><a href="/" class="nav-linkMD">Home</a></li>
+            <li>
+              <a href="/src/pages/dashboard.html" class="nav-linkMD">
+                Dashboard
+              </a>
+            </li>
+          </ul>
+          <div class="nav-iconsMD">
+            <div class="hamburgerMD" id="hamburgerMD">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div>
+        <ul class="mobile-nav-linksMD" id="mobile-nav-linksMD">
+          <li><a href="/" class="nav-linkMD">Home</a></li>
+          <li>
+            <a href="/src/pages/dashboard.html" class="nav-linkMD">Dashboard</a>
+          </li>
+        </ul>
       </nav>
     </header>
 
@@ -111,13 +349,416 @@
           </div>
         </section>
       </div>
+
+      <!-- Section untuk CRUD Operasi -->
+      <section class="upload-section">
+        <h2>CRUD Operations</h2>
+        <!-- Form untuk Menambahkan Data Secara Manual -->
+        <form id="addDataForm">
+          <h3>Add New Record</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="OrderID">Order ID:</label>
+              <input type="text" id="OrderID" name="OrderID" required />
+            </div>
+            <div class="form-group">
+              <label for="OrderDate">Order Date:</label>
+              <input type="date" id="OrderDate" name="OrderDate" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="ShipDate">Ship Date:</label>
+              <input type="date" id="ShipDate" name="ShipDate" required />
+            </div>
+            <div class="form-group">
+              <label for="ShipMode">Ship Mode:</label>
+              <input type="text" id="ShipMode" name="ShipMode" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="CustomerID">Customer ID:</label>
+              <input type="text" id="CustomerID" name="CustomerID" required />
+            </div>
+            <div class="form-group">
+              <label for="CustomerName">Customer Name:</label>
+              <input
+                type="text"
+                id="CustomerName"
+                name="CustomerName"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="Segment">Segment:</label>
+              <select id="Segment" name="Segment" required>
+                <option value="">Select Segment</option>
+                <option value="Consumer">Consumer</option>
+                <option value="Corporate">Corporate</option>
+                <option value="Home Office">Home Office</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="Country">Country:</label>
+              <input type="text" id="Country" name="Country" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="City">City:</label>
+              <input type="text" id="City" name="City" required />
+            </div>
+            <div class="form-group">
+              <label for="State">State:</label>
+              <input type="text" id="State" name="State" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="PostalCode">Postal Code:</label>
+              <input type="number" id="PostalCode" name="PostalCode" required />
+            </div>
+            <div class="form-group">
+              <label for="Region">Region:</label>
+              <select id="Region" name="Region" required>
+                <option value="">Select Region</option>
+                <option value="East">East</option>
+                <option value="West">West</option>
+                <option value="Central">Central</option>
+                <option value="South">South</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="ProductID">Product ID:</label>
+              <input type="text" id="ProductID" name="ProductID" required />
+            </div>
+            <div class="form-group">
+              <label for="Category">Category:</label>
+              <input type="text" id="Category" name="Category" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="SubCategory">Sub-Category:</label>
+              <input type="text" id="SubCategory" name="SubCategory" required />
+            </div>
+            <div class="form-group">
+              <label for="ProductName">Product Name:</label>
+              <input type="text" id="ProductName" name="ProductName" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="Sales">Sales:</label>
+              <input
+                type="number"
+                step="0.01"
+                id="Sales"
+                name="Sales"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="Quantity">Quantity:</label>
+              <input type="number" id="Quantity" name="Quantity" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="Discount">Discount:</label>
+              <input
+                type="number"
+                step="0.01"
+                id="Discount"
+                name="Discount"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="Profit">Profit:</label>
+              <input
+                type="number"
+                step="0.01"
+                id="Profit"
+                name="Profit"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="ProfitPerQuantity">Profit Per Quantity:</label>
+              <input
+                type="number"
+                step="0.01"
+                id="ProfitPerQuantity"
+                name="ProfitPerQuantity"
+                required
+              />
+            </div>
+          </div>
+          <button type="submit">Add Record</button>
+        </form>
+        <div id="addDataStatus"></div>
+
+        <!-- Tabel untuk Menampilkan Data Superstore dengan Tombol Edit dan Hapus -->
+        <h3>Existing Records</h3>
+        <div class="table-container">
+          <!-- Overlay Loading untuk Superstore Table -->
+          <div
+            id="superstoreLoading"
+            class="loading-overlay"
+            style="display: none"
+          >
+            <div class="spinner"></div>
+          </div>
+
+          <table id="superstoreTable" class="display" style="width: 100%">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Order Date</th>
+                <th>Ship Date</th>
+                <th>Customer Name</th>
+                <th>Product Name</th>
+                <th>Sales</th>
+                <th>Profit</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Data akan diisi oleh JavaScript -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Section untuk Manage Uploads -->
+        <h3>Manage Uploads</h3>
+        <div class="table-container">
+          <!-- Overlay Loading untuk Uploads Table -->
+          <div
+            id="uploadsLoading"
+            class="loading-overlay"
+            style="display: none"
+          >
+            <div class="spinner"></div>
+          </div>
+          <table id="uploadsTable" class="display" style="width: 100%">
+            <thead>
+              <tr>
+                <th>Upload ID</th>
+                <th>Upload Date</th>
+                <th>Number of Records</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Data akan diisi oleh JavaScript -->
+            </tbody>
+          </table>
+          <button
+            id="deleteAllUploads"
+            class="poppins-medium"
+            style="margin-top: 10px"
+          >
+            Delete All Uploads
+          </button>
+        </div>
+
+        <!-- Modal untuk Edit Record -->
+        <!-- ...modal edit... -->
+      </section>
     </main>
 
     <footer>
       <p class="poppins-regular">&copy; 2024 Superstore Analytics Dashboard</p>
     </footer>
 
+    <!-- Modal untuk Edit Record -->
+    <div id="editModal" class="modal">
+      <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h3>Edit Record</h3>
+        <form id="editDataForm">
+          <!-- Form fields sama seperti Add Data -->
+          <input type="hidden" id="editRecordId" name="id" />
+          <div class="form-group">
+            <label for="editOrderID">Order ID:</label>
+            <input type="text" id="editOrderID" name="OrderID" required />
+          </div>
+          <div class="form-group">
+            <label for="editOrderDate">Order Date:</label>
+            <input type="date" id="editOrderDate" name="OrderDate" required />
+          </div>
+          <div class="form-group">
+            <label for="editShipDate">Ship Date:</label>
+            <input type="date" id="editShipDate" name="ShipDate" required />
+          </div>
+          <div class="form-group">
+            <label for="editShipMode">Ship Mode:</label>
+            <input type="text" id="editShipMode" name="ShipMode" required />
+          </div>
+          <div class="form-group">
+            <label for="editCustomerID">Customer ID:</label>
+            <input type="text" id="editCustomerID" name="CustomerID" required />
+          </div>
+          <div class="form-group">
+            <label for="editCustomerName">Customer Name:</label>
+            <input
+              type="text"
+              id="editCustomerName"
+              name="CustomerName"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="editSegment">Segment:</label>
+            <select id="editSegment" name="Segment" required>
+              <option value="">Select Segment</option>
+              <option value="Consumer">Consumer</option>
+              <option value="Corporate">Corporate</option>
+              <option value="Home Office">Home Office</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="editCountry">Country:</label>
+            <input type="text" id="editCountry" name="Country" required />
+          </div>
+          <div class="form-group">
+            <label for="editCity">City:</label>
+            <input type="text" id="editCity" name="City" required />
+          </div>
+          <div class="form-group">
+            <label for="editState">State:</label>
+            <input type="text" id="editState" name="State" required />
+          </div>
+          <div class="form-group">
+            <label for="editPostalCode">Postal Code:</label>
+            <input
+              type="number"
+              id="editPostalCode"
+              name="PostalCode"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="editRegion">Region:</label>
+            <select id="editRegion" name="Region" required>
+              <option value="">Select Region</option>
+              <option value="East">East</option>
+              <option value="West">West</option>
+              <option value="Central">Central</option>
+              <option value="South">South</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="editProductID">Product ID:</label>
+            <input type="text" id="editProductID" name="ProductID" required />
+          </div>
+          <div class="form-group">
+            <label for="editCategory">Category:</label>
+            <input type="text" id="editCategory" name="Category" required />
+          </div>
+          <div class="form-group">
+            <label for="editSubCategory">Sub-Category:</label>
+            <input
+              type="text"
+              id="editSubCategory"
+              name="SubCategory"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="editProductName">Product Name:</label>
+            <input
+              type="text"
+              id="editProductName"
+              name="ProductName"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="editSales">Sales:</label>
+            <input
+              type="number"
+              step="0.01"
+              id="editSales"
+              name="Sales"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="editQuantity">Quantity:</label>
+            <input type="number" id="editQuantity" name="Quantity" required />
+          </div>
+          <div class="form-group">
+            <label for="editDiscount">Discount:</label>
+            <input
+              type="number"
+              step="0.01"
+              id="editDiscount"
+              name="Discount"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="editProfit">Profit:</label>
+            <input
+              type="number"
+              step="0.01"
+              id="editProfit"
+              name="Profit"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="editProfitPerQuantity">Profit Per Quantity:</label>
+            <input
+              type="number"
+              step="0.01"
+              id="editProfitPerQuantity"
+              name="ProfitPerQuantity"
+              required
+            />
+          </div>
+          <button type="submit">Update Record</button>
+        </form>
+        <div id="editDataStatus"></div>
+      </div>
+    </div>
+
     <!-- Main JS Module -->
     <script type="module" src="/src/js/manage-dataset.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const hamburger = document.getElementById('hamburgerMD')
+        const mobileNavLinks = document.getElementById('mobile-nav-linksMD')
+
+        if (hamburger) {
+          hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active')
+            mobileNavLinks.classList.toggle('active')
+          })
+        }
+
+        // Dropdown Toggle untuk Semua Elemen .dropdown-toggle
+        const dropdownToggles = document.querySelectorAll('.dropdown-toggle')
+
+        dropdownToggles.forEach((toggle) => {
+          toggle.addEventListener('click', (e) => {
+            e.preventDefault()
+            const dropdownMenu = toggle.nextElementSibling
+            if (dropdownMenu) {
+              dropdownMenu.classList.toggle('active')
+            }
+          })
+        })
+      })
+    </script>
   </body>
 </html>

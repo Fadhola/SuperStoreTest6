@@ -697,53 +697,147 @@ export function createTopCitiesChart(data) {
   return window.topCitiesChartInstance
 }
 
-// **8. Ship Mode Chart**
+// // **8. Ship Mode Chart**
+// export function createShipModeChart(data) {
+//   // Mengelompokkan data berdasarkan tahun
+//   const salesByYear = {}
+
+//   data.forEach((row) => {
+//     const year = new Date(row.OrderDate).getFullYear()
+//     const shipMode = row.ShipMode
+//     const sales = row.Sales
+
+//     if (!salesByYear[year]) {
+//       salesByYear[year] = {}
+//     }
+
+//     if (!salesByYear[year][shipMode]) {
+//       salesByYear[year][shipMode] = 0
+//     }
+
+//     salesByYear[year][shipMode] += sales
+//   })
+
+//   // Menyiapkan data untuk chart
+//   const years = Object.keys(salesByYear).sort()
+//   const shipModes = [
+//     'Same Day',
+//     'Second Class',
+//     'Standard Class',
+//     'First Class',
+//   ] // Semua Ship Mode yang ada
+//   const salesData = shipModes.map((shipMode) =>
+//     years.map((year) => salesByYear[year][shipMode] || 0)
+//   )
+
+//   // Warna untuk masing-masing Ship Mode
+//   const colors = [
+//     'rgba(255, 99, 132, 0.2)', // Same Day
+//     'rgba(54, 162, 235, 0.2)', // Second Class
+//     'rgba(255, 206, 86, 0.2)', // Standard Class
+//     'rgba(75, 192, 192, 0.2)', // First Class
+//   ]
+
+//   const borderColors = [
+//     'rgba(255, 99, 132, 1)', // Same Day
+//     'rgba(54, 162, 235, 1)', // Second Class
+//     'rgba(255, 206, 86, 1)', // Standard Class
+//     'rgba(75, 192, 192, 1)', // First Class
+//   ]
+
+//   // Membuat chart
+//   if (window.shipModeChartInstance) {
+//     window.shipModeChartInstance.destroy()
+//   }
+
+//   const ctx = document.getElementById('shipModeChart').getContext('2d')
+
+//   window.shipModeChartInstance = new Chart(ctx, {
+//     type: 'bar',
+//     data: {
+//       labels: years, // Label adalah tahun
+//       datasets: shipModes.map((shipMode, index) => ({
+//         label: `Sales by ${shipMode}`, // Label untuk setiap Ship Mode
+//         data: salesData[index],
+//         backgroundColor: colors[index % colors.length], // Warna background
+//         borderColor: borderColors[index % borderColors.length], // Warna border
+//         borderWidth: 1,
+//       })),
+//     },
+//     options: {
+//       responsive: true,
+//       aspectRatio: 1.5,
+//       scales: {
+//         y: {
+//           beginAtZero: true,
+//           title: {
+//             display: true,
+//             text: 'Sales Amount',
+//           },
+//         },
+//         x: {
+//           title: {
+//             display: true,
+//             text: 'Year',
+//           },
+//         },
+//       },
+//       hover: {
+//         mode: 'nearest',
+//         intersect: false,
+//       },
+//     },
+//   })
+
+//   return window.shipModeChartInstance
+// }
+// **8. Ship Mode Chart (Dinamis)**
 export function createShipModeChart(data) {
-  // Mengelompokkan data berdasarkan tahun
-  const salesByYear = {}
+  // Mengelompokkan data berdasarkan tahun dan ship mode
+  const salesByYearAndShipMode = {}
 
   data.forEach((row) => {
     const year = new Date(row.OrderDate).getFullYear()
     const shipMode = row.ShipMode
     const sales = row.Sales
 
-    if (!salesByYear[year]) {
-      salesByYear[year] = {}
+    if (!salesByYearAndShipMode[year]) {
+      salesByYearAndShipMode[year] = {}
     }
 
-    if (!salesByYear[year][shipMode]) {
-      salesByYear[year][shipMode] = 0
+    if (!salesByYearAndShipMode[year][shipMode]) {
+      salesByYearAndShipMode[year][shipMode] = 0
     }
 
-    salesByYear[year][shipMode] += sales
+    salesByYearAndShipMode[year][shipMode] += sales
   })
 
   // Menyiapkan data untuk chart
-  const years = Object.keys(salesByYear).sort()
-  const shipModes = [
-    'Same Day',
-    'Second Class',
-    'Standard Class',
-    'First Class',
-  ] // Semua Ship Mode yang ada
+  const years = Object.keys(salesByYearAndShipMode).sort()
+
+  // Mendapatkan semua Ship Modes unik dari data
+  const shipModeSet = new Set()
+  data.forEach((row) => shipModeSet.add(row.ShipMode))
+  const shipModes = Array.from(shipModeSet).sort()
+
+  // Menghasilkan warna dinamis untuk setiap Ship Mode
+  const generateColors = (num) => {
+    const colors = []
+    const borderColors = []
+    for (let i = 0; i < num; i++) {
+      const hue = (i * 360) / num
+      colors.push(`hsla(${hue}, 70%, 80%, 0.6)`)
+      borderColors.push(`hsla(${hue}, 70%, 50%, 1)`)
+    }
+    return { colors, borderColors }
+  }
+
+  const { colors, borderColors } = generateColors(shipModes.length)
+
+  // Menyiapkan data penjualan untuk setiap Ship Mode
   const salesData = shipModes.map((shipMode) =>
-    years.map((year) => salesByYear[year][shipMode] || 0)
+    years.map((year) => salesByYearAndShipMode[year][shipMode] || 0)
   )
-
-  // Warna untuk masing-masing Ship Mode
-  const colors = [
-    'rgba(255, 99, 132, 0.2)', // Same Day
-    'rgba(54, 162, 235, 0.2)', // Second Class
-    'rgba(255, 206, 86, 0.2)', // Standard Class
-    'rgba(75, 192, 192, 0.2)', // First Class
-  ]
-
-  const borderColors = [
-    'rgba(255, 99, 132, 1)', // Same Day
-    'rgba(54, 162, 235, 1)', // Second Class
-    'rgba(255, 206, 86, 1)', // Standard Class
-    'rgba(75, 192, 192, 1)', // First Class
-  ]
 
   // Membuat chart
   if (window.shipModeChartInstance) {
@@ -785,6 +879,15 @@ export function createShipModeChart(data) {
       hover: {
         mode: 'nearest',
         intersect: false,
+      },
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        tooltip: {
+          mode: 'index',
+          intersect: false,
+        },
       },
     },
   })

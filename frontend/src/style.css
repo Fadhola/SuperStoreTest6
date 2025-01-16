@@ -228,6 +228,16 @@ body {
   border-bottom: 2px solid var(--color-secondary);
   cursor: grabbing;
 }
+.analysis-section {
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+  opacity: 1;
+  visibility: visible;
+}
+
+/* .analysis-section.hidden {
+  opacity: 0;
+  visibility: hidden;
+} */
 
 /* Fade Overlays for Navigation */
 .fade-overlay {
@@ -899,9 +909,31 @@ footer p {
 /* ============================
    9. MANAGE DATASET STYLES
    ============================ */
+
+/* Loading Overlay */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10; /* Pastikan overlay berada di atas elemen tabel */
+}
+
+/* Posisi Relative untuk Container Tabel */
+.table-container {
+  position: relative;
+  margin-bottom: 30px; /* Spasi bawah antara tabel */
+}
+
 .container-md {
   max-width: 1200px; /* Menetapkan lebar maksimum */
   margin: 0 auto; /* Memusatkan container */
+  margin-top: 70px;
   padding: 20px;
 }
 
@@ -930,6 +962,15 @@ footer p {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   max-width: 100%;
 }
+/* .upload-section {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+} */
 
 /* Gaya untuk jumlah data */
 #datasetCount,
@@ -951,43 +992,74 @@ footer p {
 }
 
 .container-md section h2 {
-  font-size: 20px;
+  font-size: 24px;
   color: var(--primary-color);
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 /* Form Styling */
-.container-md section form {
+.upload-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 15px;
+  gap: 20px;
 }
 
-.container-md section form input[type='file'] {
-  flex: 1 1 200px;
-  padding: 8px;
+.form-group {
+  flex: 1 1 45%; /* Mengatur agar dua form-group dalam satu row */
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.form-group input,
+.form-group select {
+  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  font-size: 16px;
 }
 
-.container-md section form button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 5px;
+.form-group input:focus,
+.form-group select:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+}
+
+/* Responsif untuk layar kecil */
+
+/* Style Tombol */
+form button {
+  padding: 12px 20px;
   background-color: var(--primary-color);
   color: white;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
+  font-size: 16px;
+  align-self: flex-start;
   transition: background-color 0.3s;
 }
 
-.container-md section form button:hover {
+form button:hover {
   background-color: var(--accent-color);
 }
 
 /* Gaya untuk status upload */
 #uploadDatasetStatus,
-#uploadGeojsonStatus {
+#uploadGeojsonStatus,
+#addDataStatus {
   margin-top: 10px;
   font-size: 14px;
   color: green;
@@ -1008,6 +1080,7 @@ footer p {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch; /* Smooth scrolling pada perangkat iOS */
 }
+
 /* Membatasi Maksimal Lebar Tabel */
 .table-responsive table.display {
   max-width: 100%;
@@ -1027,18 +1100,235 @@ footer p {
   text-overflow: ellipsis;
 }
 
+/* Tabel Preview Dataset */
 #previewDatasetTable th,
-#previewDatasetTable td,
+#previewDatasetTable td {
+  padding: 10px;
+  text-align: left;
+}
+
+#previewDatasetTable th {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* Tabel Preview GeoJSON */
 #previewGeojsonTable th,
 #previewGeojsonTable td {
   padding: 10px;
   text-align: left;
 }
 
-#previewDatasetTable th,
 #previewGeojsonTable th {
   background-color: var(--primary-color);
   color: white;
+}
+
+/* Style Tombol di CRUD Table */
+.edit-button,
+.delete-button,
+.delete-batch-button {
+  padding: 8px 12px;
+  margin: 2px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  color: white;
+  font-size: 14px;
+}
+
+.edit-button {
+  background-color: #4caf50; /* Hijau */
+}
+
+.edit-button:hover {
+  background-color: #45a049;
+}
+
+.delete-button,
+.delete-batch-button {
+  background-color: #f44336; /* Merah */
+}
+
+.delete-button:hover,
+.delete-batch-button:hover {
+  background-color: #da190b;
+}
+
+#deleteAllUploads {
+  padding: 10px 20px;
+  background-color: #f44336; /* Merah */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#deleteAllUploads:hover {
+  background-color: #da190b;
+}
+
+/* Modal Styling */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 2000; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 90%;
+  max-width: 600px;
+  border-radius: 8px;
+}
+
+/* The Close Button */
+.close-button {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+  color: black;
+  text-decoration: none;
+}
+
+/* Edit Modal Form Group */
+#editDataForm .form-group {
+  margin-bottom: 15px;
+}
+
+#editDataForm .form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+#editDataForm .form-group input,
+#editDataForm .form-group select {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Edit Modal Button */
+#editDataForm button {
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#editDataForm button:hover {
+  background-color: var(--accent-color);
+}
+
+/* Tabel CRUD Superstore */
+table.display {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+/* Table Header */
+table.display th {
+  background-color: var(--primary-color); /* Primary color for header */
+  color: white; /* White font color */
+  font-weight: bold;
+  padding: 12px 15px;
+  text-align: center;
+  font-size: 16px;
+}
+
+/* Table Cells */
+table.display td {
+  text-align: center;
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd; /* Separator between rows */
+  font-size: 14px;
+}
+
+/* Alternating Row Colors */
+table.display tr:nth-child(even) {
+  background-color: #f9f9f9; /* Background color for even rows */
+}
+
+table.display tr:nth-child(odd) {
+  background-color: #ffffff; /* Background color for odd rows */
+}
+
+/* Hover Effects for Rows */
+table.display tr:hover {
+  background-color: #f1f1f1; /* Background color on hover */
+}
+
+/* Pagination and Search Controls */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  background-color: var(--primary-color); /* Pagination button color */
+  border: none;
+  padding: 8px 16px;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+  background-color: var(
+    --secondary-color
+  ); /* Hover color for pagination buttons */
+}
+
+.dataTables_wrapper .dataTables_length select,
+.dataTables_wrapper .dataTables_filter input {
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_length select {
+  margin-right: 20px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+  margin-left: 20px;
+}
+
+/* Style for Table Wrapper */
+.table-wrapper {
+  margin-top: 20px;
+}
+
+.table-wrapper h2 {
+  font-size: 22px;
+  color: var(--primary-color);
+  margin-bottom: 15px;
+  font-weight: 500;
 }
 
 /* ============================
