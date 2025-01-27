@@ -1,12 +1,6 @@
 // src/js/charts.js
 import Chart from 'chart.js/auto'
-import {
-  getSelectedCategory,
-  getSelectedYear,
-  getSelectedCity,
-  getSelectedState,
-  getSelectedValues,
-} from './filters.js'
+import { getSelectedCategory, getSelectedValues } from './filters.js'
 
 // Inisialisasi variabel untuk menyimpan instance chart
 let discountSalesChartInstance,
@@ -869,100 +863,6 @@ export function createTopCitiesChart(data) {
   return window.topCitiesChartInstance
 }
 
-// // **8. Ship Mode Chart**
-// export function createShipModeChart(data) {
-//   // Mengelompokkan data berdasarkan tahun
-//   const salesByYear = {}
-
-//   data.forEach((row) => {
-//     const year = new Date(row.OrderDate).getFullYear()
-//     const shipMode = row.ShipMode
-//     const sales = row.Sales
-
-//     if (!salesByYear[year]) {
-//       salesByYear[year] = {}
-//     }
-
-//     if (!salesByYear[year][shipMode]) {
-//       salesByYear[year][shipMode] = 0
-//     }
-
-//     salesByYear[year][shipMode] += sales
-//   })
-
-//   // Menyiapkan data untuk chart
-//   const years = Object.keys(salesByYear).sort()
-//   const shipModes = [
-//     'Same Day',
-//     'Second Class',
-//     'Standard Class',
-//     'First Class',
-//   ] // Semua Ship Mode yang ada
-//   const salesData = shipModes.map((shipMode) =>
-//     years.map((year) => salesByYear[year][shipMode] || 0)
-//   )
-
-//   // Warna untuk masing-masing Ship Mode
-//   const colors = [
-//     'rgba(255, 99, 132, 0.2)', // Same Day
-//     'rgba(54, 162, 235, 0.2)', // Second Class
-//     'rgba(255, 206, 86, 0.2)', // Standard Class
-//     'rgba(75, 192, 192, 0.2)', // First Class
-//   ]
-
-//   const borderColors = [
-//     'rgba(255, 99, 132, 1)', // Same Day
-//     'rgba(54, 162, 235, 1)', // Second Class
-//     'rgba(255, 206, 86, 1)', // Standard Class
-//     'rgba(75, 192, 192, 1)', // First Class
-//   ]
-
-//   // Membuat chart
-//   if (window.shipModeChartInstance) {
-//     window.shipModeChartInstance.destroy()
-//   }
-
-//   const ctx = document.getElementById('shipModeChart').getContext('2d')
-
-//   window.shipModeChartInstance = new Chart(ctx, {
-//     type: 'bar',
-//     data: {
-//       labels: years, // Label adalah tahun
-//       datasets: shipModes.map((shipMode, index) => ({
-//         label: `Sales by ${shipMode}`, // Label untuk setiap Ship Mode
-//         data: salesData[index],
-//         backgroundColor: colors[index % colors.length], // Warna background
-//         borderColor: borderColors[index % borderColors.length], // Warna border
-//         borderWidth: 1,
-//       })),
-//     },
-//     options: {
-//       responsive: true,
-//       aspectRatio: 1.5,
-//       scales: {
-//         y: {
-//           beginAtZero: true,
-//           title: {
-//             display: true,
-//             text: 'Sales Amount',
-//           },
-//         },
-//         x: {
-//           title: {
-//             display: true,
-//             text: 'Year',
-//           },
-//         },
-//       },
-//       hover: {
-//         mode: 'nearest',
-//         intersect: false,
-//       },
-//     },
-//   })
-
-//   return window.shipModeChartInstance
-// }
 // **8. Ship Mode Chart (Dinamis)**
 export function createShipModeChart(data) {
   // Mengelompokkan data berdasarkan tahun dan ship mode

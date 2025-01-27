@@ -7,55 +7,82 @@ document.addEventListener('DOMContentLoaded', () => {
   const loginStatus = document.getElementById('loginStatus')
 
   if (registerForm) {
-    registerForm.addEventListener('submit', async (e) => {
+    registerForm.addEventListener('submit', (e) => {
       e.preventDefault()
-      registerStatus.textContent = ''
+      registerStatus.textContent = '' // Kosongkan status sebelumnya
 
       const username = document.getElementById('username').value.trim()
       const email = document.getElementById('email').value.trim()
       const password = document.getElementById('password').value.trim()
 
-      try {
-        const response = await fetch('/api/register', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ username, email, password }),
-        })
-
-        const data = await response.json()
-
-        if (response.ok) {
-          // Simpan token dan username ke localStorage
-          localStorage.setItem('token', data.token)
-          localStorage.setItem('username', data.username)
-          // Redirect ke dashboard atau landing page
-          window.location.href = '/src/pages/login.html'
-        } else {
-          if (data.errors) {
-            registerStatus.innerHTML = data.errors
-              .map((err) => `<p>${err.msg}</p>`)
-              .join('')
-          } else if (data.error) {
-            registerStatus.textContent = data.error
-          }
-        }
-      } catch (error) {
-        console.error('Error during registration:', error)
+      // Validasi Frontend
+      if (username.length < 3 || username.length > 30) {
         registerStatus.textContent =
-          'Terjadi kesalahan. Silakan coba lagi nanti.'
+          'Username harus antara 3 hingga 30 karakter.'
+        registerStatus.style.color = 'red'
+        return
       }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (!emailRegex.test(email)) {
+        registerStatus.textContent = 'Email tidak valid.'
+        registerStatus.style.color = 'red'
+        return
+      }
+
+      if (password.length < 6) {
+        registerStatus.textContent = 'Password harus minimal 6 karakter.'
+        registerStatus.style.color = 'red'
+        return
+      }
+
+      // Jika validasi frontend lolos, lanjutkan ke backend
+      fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, email, password }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (response.ok) {
+            localStorage.setItem('token', data.token)
+            localStorage.setItem('username', data.username)
+            window.location.href = '/src/pages/login.html'
+          } else {
+            registerStatus.textContent = data.error || 'Registrasi gagal.'
+            registerStatus.style.color = 'red'
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error)
+          registerStatus.textContent = 'Terjadi kesalahan. Silakan coba lagi.'
+          registerStatus.style.color = 'red'
+        })
     })
   }
 
   if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault()
-      loginStatus.textContent = ''
+      loginStatus.textContent = '' // Kosongkan status sebelumnya
 
       const username = document.getElementById('username').value.trim()
       const password = document.getElementById('password').value.trim()
+
+      // Validasi Frontend
+      if (!username) {
+        loginStatus.textContent = 'Username diperlukan.'
+        loginStatus.style.color = 'red'
+        return
+      }
+
+      if (!password) {
+        loginStatus.textContent = 'Password diperlukan.'
+        loginStatus.style.color = 'red'
+        return
+      }
 
       try {
         const response = await fetch('/api/login', {
@@ -72,20 +99,22 @@ document.addEventListener('DOMContentLoaded', () => {
           // Simpan token dan username ke localStorage
           localStorage.setItem('token', data.token)
           localStorage.setItem('username', data.username)
-          // Redirect ke dashboard atau landing page
-          window.location.href = '/'
+          window.location.href = '/' // Redirect ke halaman utama
         } else {
-          if (data.errors) {
-            loginStatus.innerHTML = data.errors
-              .map((err) => `<p>${err.msg}</p>`)
-              .join('')
-          } else if (data.error) {
-            loginStatus.textContent = data.error
+          // Tampilkan error jika username atau password tidak sesuai
+          if (data.error) {
+            loginStatus.textContent = 'Username atau password tidak sesuai.'
+            loginStatus.style.color = 'red'
+          } else {
+            loginStatus.textContent =
+              'Terjadi kesalahan. Silakan coba lagi nanti.'
+            loginStatus.style.color = 'red'
           }
         }
       } catch (error) {
         console.error('Error during login:', error)
         loginStatus.textContent = 'Terjadi kesalahan. Silakan coba lagi nanti.'
+        loginStatus.style.color = 'red'
       }
     })
   }

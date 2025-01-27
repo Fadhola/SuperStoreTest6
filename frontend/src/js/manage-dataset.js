@@ -812,7 +812,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <td>${upload.recordCount}</td>
           <td>
             <button class="delete-batch-button" data-upload-id="${upload.uploadId}">
-              Delete This Upload
+              Delete
             </button>
           </td>
         </tr>
@@ -823,9 +823,24 @@ document.addEventListener('DOMContentLoaded', () => {
       if ($.fn.DataTable.isDataTable('#uploadsTable')) {
         $('#uploadsTable').DataTable().clear().destroy()
       }
+
+      // Inisialisasi ulang DataTables
       $('#uploadsTable').DataTable({
-        responsive: true,
-        autoWidth: true,
+        responsive: {
+          details: {
+            // Tergantung mode penampilan responsive yang Anda inginkan
+            display: $.fn.dataTable.Responsive.display.childRow,
+            type: 'inline',
+          },
+        },
+        autoWidth: false,
+        columnDefs: [
+          {
+            targets: 3, // Indeks kolom untuk tombol Delete
+            className: 'dt-body-nowrap all', // agar tombol selalu tampil
+            responsivePriority: 1,
+          },
+        ],
       })
     } catch (error) {
       console.error('Error fetching uploads data:', error)
