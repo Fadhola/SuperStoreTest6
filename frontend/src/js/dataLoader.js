@@ -73,7 +73,7 @@ export async function fetchData() {
   } catch (error) {
     console.error('Failed to fetch data:', error)
     loadingScreen.style.display = 'none'
-    alert('Failed to fetch data. Please try again.')
+    alert('Failed to fetch data. Please Re-login.')
     throw error // Lanjutkan error jika perlu ditangani lebih lanjut
   }
 }

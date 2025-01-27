@@ -102,20 +102,20 @@ export function initCustomerAnalysisTable(data) {
 
 // Fungsi untuk menginisialisasi Top Selling Products Table
 export function initTopSellingProductsTable(data) {
-  // Kelompokkan data berdasarkan ProductID
+  // Kelompokkan data berdasarkan Product ID
   const productMap = {}
 
   data.forEach((row) => {
-    const productID = row.ProductID
+    const productID = row['Product ID'] // Sesuaikan dengan JSON
     if (!productMap[productID]) {
       productMap[productID] = {
         ProductID: productID,
-        ProductName: row.ProductName,
-        Category: row.Category,
+        ProductName: row['Product Name'], // Sesuaikan dengan JSON
+        Category: row['Category'], // Sesuaikan dengan JSON
         TotalSales: 0,
       }
     }
-    productMap[productID].TotalSales += row.Sales
+    productMap[productID].TotalSales += row['Sales'] // Sesuaikan dengan JSON
   })
 
   // Konversi map ke array
@@ -141,10 +141,10 @@ export function initTopSellingProductsTable(data) {
   $('#topSellingProductsTable').DataTable({
     data: topProducts,
     columns: [
-      { data: 'ProductID' },
-      { data: 'ProductName' },
-      { data: 'Category' },
-      { data: 'TotalSales' },
+      { data: 'ProductID', title: 'Product ID' }, // Tambahkan title untuk header tabel
+      { data: 'ProductName', title: 'Product Name' },
+      { data: 'Category', title: 'Category' },
+      { data: 'TotalSales', title: 'Total Sales ($)' },
     ],
     paging: false,
     searching: false,

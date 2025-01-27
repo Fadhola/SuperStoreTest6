@@ -102,6 +102,32 @@ export function createDiscountSalesChart(data) {
     options: {
       responsive: true,
       aspectRatio: 1.5,
+      plugins: {
+        title: {
+          display: true, // Menampilkan judul
+          text: 'Discount vs Sales by City', // Teks judul
+          font: {
+            size: 12, // Ukuran font judul
+          },
+          padding: {
+            top: 5,
+            bottom: 5, // Tambahkan jarak antara judul dan chart
+          },
+        },
+        tooltip: {
+          backgroundColor: '#00ADB5', // Teal tooltip background
+          bodyColor: '#FFFFFF', // White text color
+          titleColor: '#FFFFFF', // White title
+        },
+        legend: {
+          position: 'top', // Menampilkan legenda di atas chart
+          labels: {
+            font: {
+              size: 14, // Ukuran font untuk label legenda
+            },
+          },
+        },
+      },
       animations: {
         tension: {
           duration: 1000,
@@ -109,13 +135,6 @@ export function createDiscountSalesChart(data) {
           from: 1,
           to: 0,
           loop: true,
-        },
-      },
-      plugins: {
-        tooltip: {
-          backgroundColor: '#00ADB5', // Teal tooltip background
-          bodyColor: '#FFFFFF', // White text color
-          titleColor: '#FFFFFF', // White title
         },
       },
       scales: {
@@ -134,7 +153,7 @@ export function createDiscountSalesChart(data) {
       },
       hover: {
         mode: 'nearest',
-        intersect: false, // Makes the hover effect more forgiving
+        intersect: false, // Membuat efek hover lebih fleksibel
       },
     },
   })
@@ -188,6 +207,27 @@ export function createSalesProfitQuantityChart(data) {
     options: {
       responsive: true,
       aspectRatio: 1.5,
+      plugins: {
+        title: {
+          display: true, // Menampilkan judul
+          text: 'Sales and Profit per Quantity by City', // Teks judul
+          font: {
+            size: 12, // Ukuran font judul
+          },
+          padding: {
+            top: 5,
+            bottom: 5, // Tambahkan jarak antara judul dan chart
+          },
+        },
+        legend: {
+          position: 'top', // Menampilkan legenda di atas chart
+          labels: {
+            font: {
+              size: 14, // Ukuran font untuk label legenda
+            },
+          },
+        },
+      },
       animations: {
         tension: {
           duration: 1000,
@@ -224,17 +264,18 @@ export function createSalesProfitQuantityChart(data) {
 // **3. Avg Discount per Year Chart**
 export function createAvgDiscountPerYearChart(data) {
   const selectedCategory = getSelectedCategory()
-  const selectedYear = getSelectedYear()
+  const selectedYears = getSelectedValues('yearFilter') // Mendukung array tahun
 
-  // Filter data sesuai dengan kategori dan tahun
+  // Filter data sesuai dengan kategori dan tahun yang dipilih
   const filteredData = data.filter((item) => {
     const itemYear = new Date(item.OrderDate).getFullYear().toString()
     return (
       (!selectedCategory || item.Category === selectedCategory) &&
-      (!selectedYear || itemYear === selectedYear)
+      (selectedYears.length === 0 || selectedYears.includes(itemYear))
     )
   })
 
+  // Mengelompokkan data berdasarkan tahun
   const avgDiscountPerYear = {}
   filteredData.forEach((row) => {
     const year = new Date(row.OrderDate).getFullYear()
@@ -245,32 +286,44 @@ export function createAvgDiscountPerYearChart(data) {
     avgDiscountPerYear[year].count++
   })
 
-  const years = Object.keys(avgDiscountPerYear)
+  // Siapkan data untuk chart
+  const years = Object.keys(avgDiscountPerYear).sort()
   const avgDiscounts = years.map(
     (year) =>
       (avgDiscountPerYear[year].totalDiscount /
         avgDiscountPerYear[year].count) *
-      100 // Mengalikan dengan 100 untuk persentase
+      100 // Mengubah menjadi persentase
   )
 
+  // Warna untuk setiap tahun (warna dinamis menggunakan HSL)
+  const colors = years.map(
+    (_, index) => `hsla(${(index * 360) / years.length}, 70%, 70%, 0.8)`
+  )
+  const borderColors = years.map(
+    (_, index) => `hsla(${(index * 360) / years.length}, 70%, 50%, 1)`
+  )
+
+  // Ambil elemen canvas untuk chart
   const ctx = document
     .getElementById('avgDiscountPerYearChart')
     .getContext('2d')
 
+  // Hapus chart sebelumnya jika ada
   if (window.avgDiscountPerYearChartInstance) {
     window.avgDiscountPerYearChartInstance.destroy()
   }
 
+  // Buat pie chart baru dengan judul
   window.avgDiscountPerYearChartInstance = new Chart(ctx, {
-    type: 'bar',
+    type: 'pie', // Mengubah tipe chart menjadi pie
     data: {
-      labels: years,
+      labels: years, // Tahun sebagai label
       datasets: [
         {
           label: 'Average Discount (%)',
-          data: avgDiscounts,
-          backgroundColor: 'rgba(255, 159, 64, 0.2)',
-          borderColor: 'rgba(255, 159, 64, 1)',
+          data: avgDiscounts, // Data diskon rata-rata
+          backgroundColor: colors, // Warna untuk setiap tahun
+          borderColor: borderColors, // Border warna untuk setiap tahun
           borderWidth: 1,
         },
       ],
@@ -278,24 +331,31 @@ export function createAvgDiscountPerYearChart(data) {
     options: {
       responsive: true,
       aspectRatio: 1.5,
-      scales: {
-        y: {
-          beginAtZero: true,
-          title: {
-            display: true,
-            text: 'Average Discount (%)',
+      plugins: {
+        title: {
+          display: true, // Tampilkan judul
+          text: 'Average Discount per Year Chart', // Teks judul
+          font: {
+            size: 12, // Ukuran font judul
+          },
+          padding: {
+            top: 5,
+            bottom: 5, // Tambahkan jarak antara judul dan chart
           },
         },
-        x: {
-          title: {
-            display: true,
-            text: 'Year',
+        legend: {
+          position: 'top', // Menampilkan legenda di atas chart
+          labels: {
+            font: {
+              size: 14, // Ukuran font untuk label
+            },
           },
         },
-      },
-      hover: {
-        mode: 'nearest',
-        intersect: false, // Makes the hover effect more forgiving
+        tooltip: {
+          callbacks: {
+            label: (context) => `${context.label}: ${context.raw.toFixed(2)}%`, // Menampilkan persentase pada tooltip
+          },
+        },
       },
     },
   })
@@ -390,6 +450,27 @@ export function createProfitMarginChart(data) {
     options: {
       responsive: true,
       aspectRatio: 1.5,
+      plugins: {
+        title: {
+          display: true, // Menampilkan judul
+          text: 'Profit Margin by Year and Category', // Teks judul
+          font: {
+            size: 12, // Ukuran font judul
+          },
+          padding: {
+            top: 5,
+            bottom: 5, // Tambahkan jarak antara judul dan chart
+          },
+        },
+        legend: {
+          position: 'top', // Menampilkan legenda di atas chart
+          labels: {
+            font: {
+              size: 14, // Ukuran font untuk label
+            },
+          },
+        },
+      },
       scales: {
         y: {
           beginAtZero: true,
@@ -417,24 +498,23 @@ export function createProfitMarginChart(data) {
 
 // **5. Sales By Category Chart per Tahun**
 export function createSalesByCategoryChart(data) {
-  // Dapatkan elemen canvas untuk chart
   const ctx = document.getElementById('salesByCategoryChart').getContext('2d')
 
-  // Filter data berdasarkan tahun yang dipilih
-  const selectedYear = getSelectedYear()
-  const filteredData = selectedYear
-    ? data.filter(
-        (item) =>
-          new Date(item.OrderDate).getFullYear() === parseInt(selectedYear)
+  // Ambil tahun yang dipilih
+  const selectedYears = getSelectedValues('yearFilter') // Mendukung array tahun
+  const filteredData = selectedYears.length
+    ? data.filter((item) =>
+        selectedYears.includes(
+          new Date(item.OrderDate).getFullYear().toString()
+        )
       )
     : data
 
-  // Hitung total sales berdasarkan kategori per tahun
+  // Mengelompokkan data berdasarkan kategori dan tahun
   const categorySalesByYear = {}
-
   filteredData.forEach((row) => {
     const category = row.Category
-    const year = new Date(row.OrderDate).getFullYear()
+    const year = new Date(row.OrderDate).getFullYear().toString()
 
     if (!categorySalesByYear[year]) {
       categorySalesByYear[year] = {}
@@ -447,55 +527,73 @@ export function createSalesByCategoryChart(data) {
 
   // Menyiapkan data untuk chart
   const years = Object.keys(categorySalesByYear).sort()
-  const categories = Object.keys(
-    filteredData.reduce((acc, row) => {
-      acc[row.Category] = true
-      return acc
-    }, {})
+  const categories = Array.from(
+    new Set(filteredData.map((row) => row.Category))
   ).sort()
 
   const chartData = categories.map((category) =>
     years.map((year) => categorySalesByYear[year][category] || 0)
   )
 
-  // Menyiapkan warna untuk setiap kategori
+  // Warna untuk kategori
   const colors = [
-    'rgba(75, 192, 192, 0.2)', // Warna pertama
-    'rgba(153, 102, 255, 0.2)', // Warna kedua
-    'rgba(255, 159, 64, 0.2)', // Warna ketiga
-    'rgba(54, 162, 235, 0.2)', // Warna keempat
-    'rgba(255, 99, 132, 0.2)', // Warna kelima
+    'rgba(75, 192, 192, 0.2)',
+    'rgba(153, 102, 255, 0.2)',
+    'rgba(255, 159, 64, 0.2)',
+    'rgba(54, 162, 235, 0.2)',
+    'rgba(255, 99, 132, 0.2)',
   ]
 
   const borderColors = [
-    'rgba(75, 192, 192, 1)', // Border warna pertama
-    'rgba(153, 102, 255, 1)', // Border warna kedua
-    'rgba(255, 159, 64, 1)', // Border warna ketiga
-    'rgba(54, 162, 235, 1)', // Border warna keempat
-    'rgba(255, 99, 132, 1)', // Border warna kelima
+    'rgba(75, 192, 192, 1)',
+    'rgba(153, 102, 255, 1)',
+    'rgba(255, 159, 64, 1)',
+    'rgba(54, 162, 235, 1)',
+    'rgba(255, 99, 132, 1)',
   ]
 
-  // Hapus chart sebelumnya jika ada
+  // Hapus chart sebelumnya
   if (window.salesByCategoryChartInstance) {
     window.salesByCategoryChartInstance.destroy()
   }
 
-  // Buat chart baru dengan data yang difilter
+  // Buat chart
   window.salesByCategoryChartInstance = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: years, // Menampilkan label tahun
+      labels: years,
       datasets: categories.map((category, index) => ({
         label: category,
-        data: chartData[index], // Data per kategori dan tahun
-        backgroundColor: colors[index % colors.length], // Warna background untuk kategori
-        borderColor: borderColors[index % borderColors.length], // Warna border untuk kategori
+        data: chartData[index],
+        backgroundColor: colors[index % colors.length],
+        borderColor: borderColors[index % borderColors.length],
         borderWidth: 1,
       })),
     },
     options: {
       responsive: true,
       aspectRatio: 1.5,
+      plugins: {
+        title: {
+          display: true, // Menampilkan judul
+          text: 'Sales by Category and Year', // Teks judul
+          font: {
+            size: 12, // Ukuran font judul
+          },
+          padding: {
+            top: 5,
+            bottom: 5, // Tambahkan jarak antara judul dan chart
+          },
+        },
+        legend: {
+          position: 'top', // Menampilkan legenda di atas chart
+          labels: {
+            font: {
+              size: 14, // Ukuran font untuk label
+            },
+          },
+        },
+      },
       scales: {
         y: {
           beginAtZero: true,
@@ -513,7 +611,7 @@ export function createSalesByCategoryChart(data) {
       },
       hover: {
         mode: 'nearest',
-        intersect: false, // Membuat hover lebih fleksibel
+        intersect: false,
       },
     },
   })
@@ -542,7 +640,7 @@ export function createSalesTrendChart(data) {
   const labels = Object.keys(salesTrendData).sort()
   const datasets = labels.map((year) => salesTrendData[year])
 
-  // Menyiapkan data untuk chart
+  // Prepare data for the chart
   const chartData = datasets.map((data) => data)
 
   // Months labels
@@ -561,7 +659,7 @@ export function createSalesTrendChart(data) {
     'December',
   ]
 
-  // Warna untuk setiap tahun (gunakan lebih banyak warna jika ada lebih banyak tahun)
+  // Colors for every year
   const colors = [
     'rgba(255, 99, 132, 0.2)',
     'rgba(54, 162, 235, 0.2)',
@@ -601,13 +699,33 @@ export function createSalesTrendChart(data) {
         borderColor: borderColors[index % borderColors.length], // Border colors
         backgroundColor: colors[index % colors.length], // Background colors
         fill: true,
-        tension: 0.3, // Slightly smoothed line for better aesthetic
+        tension: 0.3,
       })),
     },
     options: {
       responsive: true,
       aspectRatio: 1.5,
-
+      plugins: {
+        title: {
+          display: true, // Menampilkan judul
+          text: 'Monthly Sales Trend by Year', // Teks judul
+          font: {
+            size: 12, // Ukuran font judul
+          },
+          padding: {
+            top: 5,
+            bottom: 5, // Tambahkan jarak antara judul dan chart
+          },
+        },
+        legend: {
+          position: 'top', // Menampilkan legenda di atas chart
+          labels: {
+            font: {
+              size: 14, // Ukuran font untuk label legenda
+            },
+          },
+        },
+      },
       scales: {
         y: {
           beginAtZero: true,
@@ -636,6 +754,8 @@ export function createSalesTrendChart(data) {
 // **7. Top Cities Chart**
 export function createTopCitiesChart(data) {
   const citySalesData = {}
+
+  // Menghitung total sales per kota
   data.forEach((row) => {
     const city = row.City
     if (!citySalesData[city]) {
@@ -644,16 +764,39 @@ export function createTopCitiesChart(data) {
     citySalesData[city] += row.Sales
   })
 
+  // Mengambil 10 kota dengan total sales tertinggi
   const sortedCities = Object.entries(citySalesData)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 10)
+
+  // Label dan data untuk chart
   const labels = sortedCities.map((entry) => entry[0])
   const salesData = sortedCities.map((entry) => entry[1])
 
+  // Warna dinamis untuk setiap bar
+  const backgroundColors = [
+    'rgba(255, 99, 132, 0.6)',
+    'rgba(54, 162, 235, 0.6)',
+    'rgba(255, 206, 86, 0.6)',
+    'rgba(75, 192, 192, 0.6)',
+    'rgba(153, 102, 255, 0.6)',
+    'rgba(255, 159, 64, 0.6)',
+    'rgba(199, 199, 199, 0.6)',
+    'rgba(83, 102, 255, 0.6)',
+    'rgba(255, 99, 71, 0.6)',
+    'rgba(46, 139, 87, 0.6)',
+  ]
+
+  const borderColors = backgroundColors.map((color) =>
+    color.replace('0.6', '1')
+  )
+
+  // Hapus instance chart sebelumnya jika ada
   if (window.topCitiesChartInstance) {
     window.topCitiesChartInstance.destroy()
   }
 
+  // Membuat chart baru
   const ctx = document.getElementById('topCitiesChart').getContext('2d')
   window.topCitiesChartInstance = new Chart(ctx, {
     type: 'bar',
@@ -663,8 +806,8 @@ export function createTopCitiesChart(data) {
         {
           label: 'Total Sales',
           data: salesData,
-          backgroundColor: 'rgba(153, 102, 255, 0.2)',
-          borderColor: 'rgba(153, 102, 255, 1)',
+          backgroundColor: backgroundColors,
+          borderColor: borderColors,
           borderWidth: 1,
         },
       ],
@@ -672,12 +815,41 @@ export function createTopCitiesChart(data) {
     options: {
       responsive: true,
       aspectRatio: 1.5,
+      plugins: {
+        title: {
+          display: true, // Menampilkan judul
+          text: 'Top 10 Cities by Total Sales', // Teks judul
+          font: {
+            size: 12, // Ukuran font judul
+            weight: 'bold',
+          },
+          padding: {
+            top: 5,
+            bottom: 5, // Jarak antara judul dan chart
+          },
+        },
+        legend: {
+          position: 'top', // Menampilkan legenda di atas chart
+          labels: {
+            font: {
+              size: 14, // Ukuran font untuk label legenda
+            },
+          },
+        },
+        tooltip: {
+          callbacks: {
+            label: (context) => {
+              return ` ${context.label}: $${context.raw.toLocaleString()}`
+            },
+          },
+        },
+      },
       scales: {
         y: {
           beginAtZero: true,
           title: {
             display: true,
-            text: 'Sales Amount',
+            text: 'Sales Amount ($)',
           },
         },
         x: {
@@ -689,7 +861,7 @@ export function createTopCitiesChart(data) {
       },
       hover: {
         mode: 'nearest',
-        intersect: false, // Makes the hover effect more forgiving
+        intersect: false, // Membuat efek hover lebih fleksibel
       },
     },
   })
@@ -881,8 +1053,24 @@ export function createShipModeChart(data) {
         intersect: false,
       },
       plugins: {
+        title: {
+          display: true, // Menampilkan judul
+          text: 'Sales by Ship Mode and Year', // Teks judul
+          font: {
+            size: 12, // Ukuran font judul
+          },
+          padding: {
+            top: 5,
+            bottom: 5, // Jarak antara judul dan chart
+          },
+        },
         legend: {
-          position: 'top',
+          position: 'top', // Menampilkan legenda di atas chart
+          labels: {
+            font: {
+              size: 14, // Ukuran font legenda
+            },
+          },
         },
         tooltip: {
           mode: 'index',
@@ -958,7 +1146,27 @@ export function createSegmentChart(data) {
     options: {
       responsive: true,
       aspectRatio: 1.5,
-
+      plugins: {
+        title: {
+          display: true, // Menampilkan judul
+          text: 'Sales by Segment and Year', // Teks judul
+          font: {
+            size: 12, // Ukuran font judul
+          },
+          padding: {
+            top: 5,
+            bottom: 5, // Tambahkan jarak antara judul dan chart
+          },
+        },
+        legend: {
+          position: 'top', // Menampilkan legenda di atas chart
+          labels: {
+            font: {
+              size: 14, // Ukuran font legenda
+            },
+          },
+        },
+      },
       scales: {
         y: {
           beginAtZero: true,
@@ -1042,14 +1250,12 @@ export function createAvgDiscountByCategoryChart(data) {
     'rgba(54, 162, 235, 0.2)', // Warna untuk kategori pertama
     'rgba(75, 192, 192, 0.2)', // Warna untuk kategori kedua
     'rgba(153, 102, 255, 0.2)', // Warna untuk kategori ketiga
-    // Tambahkan warna lain jika ada lebih banyak kategori
   ]
 
   const borderColors = [
     'rgba(54, 162, 235, 1)', // Border warna untuk kategori pertama
     'rgba(75, 192, 192, 1)', // Border warna untuk kategori kedua
     'rgba(153, 102, 255, 1)', // Border warna untuk kategori ketiga
-    // Tambahkan border warna lain jika ada lebih banyak kategori
   ]
 
   // Menghapus chart sebelumnya jika sudah ada
@@ -1073,6 +1279,27 @@ export function createAvgDiscountByCategoryChart(data) {
     options: {
       responsive: true,
       aspectRatio: 1.5,
+      plugins: {
+        title: {
+          display: true, // Menampilkan judul
+          text: 'Average Discount by Category and Year', // Teks judul
+          font: {
+            size: 12, // Ukuran font judul
+          },
+          padding: {
+            top: 5,
+            bottom: 5, // Jarak antara judul dan chart
+          },
+        },
+        legend: {
+          position: 'top', // Menampilkan legenda di atas chart
+          labels: {
+            font: {
+              size: 14, // Ukuran font legenda
+            },
+          },
+        },
+      },
       scales: {
         y: {
           beginAtZero: true,
@@ -1122,8 +1349,28 @@ export function createRegionalProfitChart(data) {
     regionalProfits[region] += row.Profit
   })
 
-  const labels = Object.keys(regionalProfits).sort()
-  const profits = Object.values(regionalProfits)
+  // Mengambil 10 region dengan profit tertinggi
+  const sortedRegions = Object.entries(regionalProfits)
+    .sort((a, b) => b[1] - a[1]) // Urutkan berdasarkan profit (descending)
+    .slice(0, 10) // Ambil hanya 10 region teratas
+
+  // Label dan data untuk chart
+  const labels = sortedRegions.map((entry) => entry[0]) // Nama region
+  const profits = sortedRegions.map((entry) => entry[1]) // Nilai profit
+
+  // Warna dinamis untuk setiap region
+  const generateColors = (num) => {
+    const colors = []
+    const borderColors = []
+    for (let i = 0; i < num; i++) {
+      const hue = (i * 360) / num // Warna dengan variasi hue
+      colors.push(`hsla(${hue}, 70%, 80%, 0.6)`) // Background color
+      borderColors.push(`hsla(${hue}, 70%, 50%, 1)`) // Border color
+    }
+    return { colors, borderColors }
+  }
+
+  const { colors, borderColors } = generateColors(labels.length)
 
   // Menghancurkan chart yang ada jika ada chart sebelumnya
   if (window.regionalProfitChartInstance) {
@@ -1139,8 +1386,8 @@ export function createRegionalProfitChart(data) {
         {
           label: 'Profit by Region', // Judul chart
           data: profits,
-          backgroundColor: 'rgba(255, 206, 86, 0.2)', // Warna background bar
-          borderColor: 'rgba(255, 206, 86, 1)', // Warna border bar
+          backgroundColor: colors, // Warna background dinamis
+          borderColor: borderColors, // Warna border dinamis
           borderWidth: 1,
         },
       ],
@@ -1148,6 +1395,27 @@ export function createRegionalProfitChart(data) {
     options: {
       responsive: true,
       aspectRatio: 1.5,
+      plugins: {
+        title: {
+          display: true, // Menampilkan judul
+          text: 'Top 10 Regions by Profit', // Teks judul
+          font: {
+            size: 12, // Ukuran font judul
+          },
+          padding: {
+            top: 5,
+            bottom: 5, // Jarak antara judul dan chart
+          },
+        },
+        legend: {
+          position: 'top', // Menampilkan legenda di atas chart
+          labels: {
+            font: {
+              size: 14, // Ukuran font legenda
+            },
+          },
+        },
+      },
       scales: {
         y: {
           beginAtZero: true,

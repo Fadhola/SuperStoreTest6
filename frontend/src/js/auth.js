@@ -113,6 +113,30 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   }
 
+  const dashboardLink = document.querySelector(
+    'a[href="/src/pages/dashboard.html"]'
+  )
+  const uploadDatasetLink = document.querySelector(
+    'a[href="/src/pages/manage-dataset.html"]'
+  )
+
+  function requireAuth(event) {
+    const token = localStorage.getItem('token') // Ambil token dari localStorage
+    if (!token) {
+      event.preventDefault() // Mencegah navigasi
+      alert('You must log in to access this page.') // Pesan peringatan
+      window.location.href = '/src/pages/login.html' // Redirect ke halaman login
+    }
+  }
+
+  if (dashboardLink) {
+    dashboardLink.addEventListener('click', requireAuth)
+  }
+
+  if (uploadDatasetLink) {
+    uploadDatasetLink.addEventListener('click', requireAuth)
+  }
+
   // Update UI berdasarkan status login
   updateUI()
 })

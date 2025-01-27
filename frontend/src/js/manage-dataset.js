@@ -327,7 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } catch (error) {
       console.error('Error fetching Superstore data:', error)
-      alert('Failed to fetch Superstore data.')
+      alert('Failed to fetch Superstore data, Please Re-login.')
     } finally {
       // Sembunyikan overlay loading
       superstoreLoading.style.display = 'none'
@@ -792,19 +792,31 @@ document.addEventListener('DOMContentLoaded', () => {
       uploadsTableBody.empty()
 
       uploads.forEach((upload) => {
-        const uploadDate = new Date(upload.uploadDate).toLocaleString()
+        // Pastikan uploadDate diproses dengan benar
+        const uploadDate = upload.uploadDate
+          ? new Date(upload.uploadDate).toLocaleString('en-US', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+            })
+          : 'Unknown Date' // Default jika tidak ada uploadDate
+
+        // Tambahkan baris ke tabel
         uploadsTableBody.append(`
-          <tr>
-            <td>${upload.uploadId}</td>
-            <td>${uploadDate}</td>
-            <td>${upload.recordCount}</td>
-            <td>
-              <button class="delete-batch-button" data-upload-id="${upload.uploadId}">
-                Delete This Upload
-              </button>
-            </td>
-          </tr>
-        `)
+        <tr>
+          <td>${upload.uploadId}</td>
+          <td>${uploadDate}</td>
+          <td>${upload.recordCount}</td>
+          <td>
+            <button class="delete-batch-button" data-upload-id="${upload.uploadId}">
+              Delete This Upload
+            </button>
+          </td>
+        </tr>
+      `)
       })
 
       // Initialize atau Refresh DataTable

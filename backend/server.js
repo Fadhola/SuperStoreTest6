@@ -75,6 +75,7 @@ process.on('SIGINT', async () => {
 // 4. Definisi Model
 const superstoreSchema = new mongoose.Schema({
   uploadId: { type: String, required: true, index: true, default: 'manual' },
+  uploadDate: { type: Date, default: Date.now },
   OrderID: String,
   OrderDate: Date,
   ShipDate: Date,
@@ -108,6 +109,7 @@ const Superstore = mongoose.model('Superstore', superstoreSchema)
 // Definisikan skema validasi menggunakan Joi
 const superstoreValidationSchema = Joi.object({
   uploadId: Joi.string().optional(),
+  uploadDate: Joi.date().optional(),
   OrderID: Joi.string().required(),
   OrderDate: Joi.date().required(),
   ShipDate: Joi.date().required(),
@@ -381,6 +383,7 @@ app.post(
       }
 
       const uploadId = uuidv4()
+      const uploadDate = new Date() // Tanggal saat ini
       let processedRecords = 0
 
       // Map data sesuai skema dengan emit progress
@@ -404,7 +407,8 @@ app.post(
         }
 
         const mappedItem = {
-          uploadId, // Tambahkan uploadId
+          uploadId,
+          uploadDate,
           OrderID: item['Order ID'],
           OrderDate: orderDate,
           ShipDate: shipDate,
@@ -442,7 +446,11 @@ app.post(
       }
 
       await Superstore.insertMany(mappedData)
-      res.json({ message: 'Dataset uploaded successfully.', uploadId })
+      res.json({
+        message: 'Dataset uploaded successfully.',
+        uploadId,
+        uploadDate,
+      })
     } catch (error) {
       console.error('Error uploading dataset:', error)
       if (
@@ -661,7 +669,7 @@ app.get('/api/uploads', auth, async (req, res) => {
         $group: {
           _id: '$uploadId',
           recordCount: { $sum: 1 },
-          uploadDate: { $first: '$OrderDate' }, // Asumsi OrderDate adalah tanggal upload
+          uploadDate: { $first: '$uploadDate' }, // Asumsi OrderDate adalah tanggal upload
         },
       },
       {

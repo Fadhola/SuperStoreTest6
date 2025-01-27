@@ -899,12 +899,6 @@ header {
   background-color: var(--color-hover-secondary);
 }
 
-.usage-policy {
-  text-align: center;
-  font-size: 0.9rem;
-  color: var(--color-gray);
-}
-
 /* Use Cases Section */
 .use-cases-section {
   padding: 60px 20px;

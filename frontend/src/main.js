@@ -1,6 +1,5 @@
 // frontend/src/main.js
 
-// import './style.css'
 import { fetchData } from './js/dataLoader.js'
 import {
   initFilters,
@@ -11,12 +10,7 @@ import {
 import { updateSummary } from './js/summary.js'
 import { createCharts } from './js/charts.js'
 import { initMap } from './js/map.js'
-import {
-  setupUI,
-  setupScrollButtons,
-  // setActiveNavLink,
-  enableDragScroll,
-} from './js/ui.js'
+import { setupUI, setupScrollButtons } from './js/ui.js'
 import {
   initProfitMarginTable,
   initCustomerAnalysisTable,
@@ -37,12 +31,6 @@ setupUI()
 
 // inisialisasi horizontal nav menu Scroll button
 setupScrollButtons()
-
-// Inisialisasi Active Nav Link
-// setActiveNavLink()
-
-// Inisialisasi Drag Scroll
-enableDragScroll()
 
 // Fungsi untuk menampilkan semua section (Dashboard)
 function showAllSections() {
@@ -116,7 +104,7 @@ async function initDashboard() {
     const data = await fetchData()
     if (!data || data.length === 0) {
       alert(
-        'No data received for dashboard initialization. Please upload dataset'
+        'No data received for dashboard initialization. Please upload dataset or add new record'
       )
       // Tampilkan pesan atau atur UI sesuai kebutuhan
       return
@@ -133,6 +121,7 @@ async function initDashboard() {
     showAllSections()
   } catch (error) {
     console.error('Error initializing dashboard:', error)
+    alert('Failed to fetch data. Please Re-login.')
   }
 }
 

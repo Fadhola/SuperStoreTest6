@@ -6,11 +6,12 @@ import Chart from 'chart.js/auto'
 export function createTotalSalesChart(data) {
   // Mengelompokkan data berdasarkan tahun
   const salesByYear = data.reduce((acc, row) => {
-    const year = new Date(row.OrderDate).getFullYear()
-    acc[year] = (acc[year] || 0) + row.Sales
+    const year = new Date(row['Order Date']).getFullYear() // Sesuaikan dengan JSON
+    acc[year] = (acc[year] || 0) + row['Sales'] // Sesuaikan dengan JSON
     return acc
   }, {})
 
+  // Mengurutkan tahun secara ascending
   const years = Object.keys(salesByYear).sort()
   const sales = years.map((year) => salesByYear[year].toFixed(2))
 
@@ -21,6 +22,7 @@ export function createTotalSalesChart(data) {
     window.totalSalesChartInstance.destroy()
   }
 
+  // Membuat chart baru
   window.totalSalesChartInstance = new Chart(ctx, {
     type: 'line',
     data: {

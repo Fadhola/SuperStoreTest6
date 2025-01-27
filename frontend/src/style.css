@@ -195,9 +195,8 @@ body {
   -webkit-overflow-scrolling: touch; /* Smooth scrolling pada perangkat iOS */
   scrollbar-width: none; /* Firefox */
   flex: 1; /* Agar ul.nav-links mengambil ruang yang tersedia */
-  padding: 0; /* Menghapus padding default */
+  padding: 2px; /* Menghapus padding default */
   margin: 0; /* Menghapus margin default */
-  cursor: grab; /* Mengubah cursor saat tidak sedang di-drag */
 }
 
 .nav-links::-webkit-scrollbar {
