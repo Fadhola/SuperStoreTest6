@@ -44,9 +44,10 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         body: JSON.stringify({ username, email, password }),
       })
-        .then((response) => response.json())
-        .then((data) => {
+        .then(async (response) => {
+          const data = await response.json() // Simpan data hasil parsing JSON
           if (response.ok) {
+            // Sekarang kita bisa mengakses response.ok
             localStorage.setItem('token', data.token)
             localStorage.setItem('username', data.username)
             window.location.href = '/src/pages/login.html'
