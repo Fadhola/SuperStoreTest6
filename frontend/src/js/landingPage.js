@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   try {
     // Fetch data dari file JSON lokal di folder public
-    const response = await fetch('/datasets/example.json') // Pastikan file JSON ada di folder public/data
+    const response = await fetch('/datasets/example.json')
     const data = await response.json()
 
     // Menampilkan charts dan tabel
@@ -30,6 +30,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   hamburger.addEventListener('click', () => {
     hamburger.classList.toggle('active')
     mobileNavLinks.classList.toggle('active')
+  })
+
+  $(document).ready(function () {
+    // Inisialisasi DataTable untuk metadata table
+    $('#metadataTable').DataTable({
+      paging: true,
+      searching: false,
+      info: true,
+      autoWidth: false,
+      responsive: true,
+    })
   })
 
   // Menutup mobile menu saat tautan diklik

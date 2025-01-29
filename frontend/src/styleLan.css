@@ -620,72 +620,6 @@ header {
   color: var(--color-gray);
 }
 
-/* Products Section */
-.products-section {
-  padding: 60px 20px;
-  background-color: var(--color-white);
-}
-
-.products-section h2 {
-  font-size: 2rem;
-  color: var(--color-primary);
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.products-carousel {
-  position: relative;
-  overflow: hidden;
-}
-
-.products-content {
-  display: flex;
-  gap: 30px;
-  transition: transform 0.5s ease-in-out;
-}
-
-.product-card {
-  background-color: var(--color-gray-light);
-  border-radius: 8px;
-  overflow: hidden;
-  width: 300px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform var(--transition-speed),
-    box-shadow var(--transition-speed);
-  text-align: center;
-  flex-shrink: 0;
-}
-
-.product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-.product-card img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-
-.product-card h3 {
-  font-size: 1.2rem;
-  color: var(--color-gray-dark);
-  margin: 15px 0 10px 0;
-  padding: 0 10px;
-}
-
-.product-card .category {
-  font-size: 0.9rem;
-  color: var(--color-gray);
-  margin-bottom: 5px;
-}
-
-.product-card .price {
-  font-size: 1rem;
-  color: var(--color-primary);
-  margin-bottom: 15px;
-}
-
 /* Carousel Controls */
 .carousel-control {
   position: absolute;
@@ -800,47 +734,6 @@ header {
 .metadata-section .table-responsive {
   overflow-x: auto;
   margin-bottom: 20px;
-}
-
-.metadata-section table.display {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.metadata-section table.display th,
-.metadata-section table.display td {
-  padding: 12px 15px;
-  border: 1px solid #dddddd;
-  text-align: left;
-}
-
-.metadata-section table.display th {
-  background-color: var(--color-primary);
-  color: var(--color-white);
-}
-
-.metadata-section table.display tbody tr:nth-child(even) {
-  background-color: var(--color-gray-light);
-}
-
-.metadata-section table.display tbody tr:hover {
-  background-color: #f1f1f1;
-}
-
-.metadata-section .btn-secondary {
-  display: inline-block;
-  margin-top: 20px;
-  padding: 12px 24px;
-  border-radius: 5px;
-  background-color: var(--color-secondary);
-  color: var(--color-gray-dark);
-  text-decoration: none;
-  transition: background-color var(--transition-speed),
-    color var(--transition-speed);
-}
-
-.metadata-section .btn-secondary:hover {
-  background-color: var(--color-hover-secondary);
 }
 
 /* Download Section */
@@ -1045,6 +938,22 @@ table.display tbody tr:hover {
   background-color: #f1f1f1;
 }
 
+/* DataTables Styles */
+table.display.responsive {
+  width: 100%;
+}
+
+table.display.responsive td {
+  text-align: left;
+  padding: 10px;
+}
+
+/* DataTable pagination buttons and other UI tweaks */
+.dataTables_wrapper .dataTables_paginate {
+  text-align: center;
+  margin-top: 10px;
+}
+
 /* Responsive Styles for Large Screens (1440px and above) */
 @media (min-width: 1440px) {
   .logo a {
@@ -1165,41 +1074,15 @@ table.display tbody tr:hover {
     gap: 10px;
   }
 
-  /* Adjust Tables */
-  table.display thead tr {
-    display: none;
+  table.display {
+    font-size: 0.9rem;
   }
 
-  table.display,
-  table.display tbody,
-  table.display tr,
+  table.display th,
   table.display td {
-    display: block;
-    width: 100%;
+    padding: 8px 10px;
   }
 
-  table.display tr {
-    margin-bottom: 15px;
-    border: 1px solid #dddddd;
-    padding: 10px;
-  }
-
-  table.display td {
-    text-align: right;
-    padding-left: 50%;
-    position: relative;
-  }
-
-  table.display td::before {
-    content: attr(data-label);
-    position: absolute;
-    left: 15px;
-    width: 45%;
-    padding-right: 10px;
-    white-space: nowrap;
-    text-align: left;
-    font-weight: bold;
-  }
   .business-insights ul {
     flex-direction: column;
     align-items: center;
@@ -1264,5 +1147,8 @@ table.display tbody tr:hover {
   .use-cases-content,
   .statistics-content {
     gap: 20px;
+  }
+  table.display td {
+    font-size: 0.8rem;
   }
 }

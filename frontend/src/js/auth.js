@@ -148,6 +148,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const uploadDatasetLink = document.querySelector(
     'a[href="/src/pages/manage-dataset.html"]'
   )
+  const datasetdownload = document.querySelector(
+    'a[href="/datasets/superstore_2021_2024.csv"]'
+  )
+  const olddatasetdownload = document.querySelector(
+    'a[href="/datasets/superstore_2014_2017.csv"]'
+  )
 
   function requireAuth(event) {
     const token = localStorage.getItem('token') // Ambil token dari localStorage
@@ -164,6 +170,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (uploadDatasetLink) {
     uploadDatasetLink.addEventListener('click', requireAuth)
+  }
+  if (datasetdownload) {
+    datasetdownload.addEventListener('click', requireAuth)
+  }
+
+  if (olddatasetdownload) {
+    olddatasetdownload.addEventListener('click', requireAuth)
   }
 
   // Update UI berdasarkan status login

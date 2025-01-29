@@ -217,9 +217,9 @@
             </div>
           </div>
 
-          <!-- Dashboard Highlights -->
+          <!-- Charts Example -->
           <div class="feature-item" data-aos="fade-up">
-            <h3>Dashboard Highlights</h3>
+            <h3>Charts Example</h3>
             <div class="charts-preview">
               <canvas id="totalSalesChart"></canvas>
               <canvas id="profitMarginChart"></canvas>
@@ -251,133 +251,128 @@
 
        
 
-    <!-- Metadata & Data Dictionary -->
-    <section id="metadata" class="metadata-section">
-      <div class="container-md">
-        <h2>Metadata & Data Dictionary</h2>
-        <div class="table-responsive">
-          <table class="display">
-            <thead>
-              <tr>
-                <th>Field</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td data-label="Field">Row ID</td>
-                <td data-label="Description">Unique ID for each row.</td>
-              </tr>
-              <tr>
-                <td data-label="Field">Order ID</td>
-                <td data-label="Description">
-                  Unique Order ID for each Customer.
-                </td>
-              </tr>
-              <tr>
-                <td data-label="Field">Order Date</td>
-                <td data-label="Description">
-                  Date when the order was placed.
-                </td>
-              </tr>
-              <tr>
-                <td data-label="Field">Ship Date</td>
-                <td data-label="Description">Shipping Date of the Product.</td>
-              </tr>
-              <tr>
-                <td data-label="Field">Ship Mode</td>
-                <td data-label="Description">
-                  Shipping Mode specified by the Customer.
-                </td>
-              </tr>
-              <tr>
-                <td data-label="Field">Customer ID</td>
-                <td data-label="Description">
-                  Unique ID to identify each Customer.
-                </td>
-              </tr>
-              <tr>
-                <td data-label="Field">Customer Name</td>
-                <td data-label="Description">Name of the Customer.</td>
-              </tr>
-              <tr>
-                <td data-label="Field">Segment</td>
-                <td data-label="Description">
-                  The segment where the Customer belongs.
-                </td>
-              </tr>
-              <tr>
-                <td data-label="Field">Country</td>
-                <td data-label="Description">
-                  Country of residence of the Customer.
-                </td>
-              </tr>
-              <tr>
-                <td data-label="Field">City</td>
-                <td data-label="Description">
-                  City of residence of the Customer.
-                </td>
-              </tr>
-              <tr>
-                <td data-label="Field">State</td>
-                <td data-label="Description">
-                  State of residence of the Customer.
-                </td>
-              </tr>
-              <tr>
-                <td data-label="Field">Postal Code</td>
-                <td data-label="Description">Postal Code of every Customer.</td>
-              </tr>
-              <tr>
-                <td data-label="Field">Region</td>
-                <td data-label="Description">
-                  Region where the Customer belongs.
-                </td>
-              </tr>
-              <tr>
-                <td data-label="Field">Product ID</td>
-                <td data-label="Description">Unique ID of the Product.</td>
-              </tr>
-              <tr>
-                <td data-label="Field">Category</td>
-                <td data-label="Description">
-                  Category of the product ordered.
-                </td>
-              </tr>
-              <tr>
-                <td data-label="Field">Sub-Category</td>
-                <td data-label="Description">
-                  Sub-Category of the product ordered.
-                </td>
-              </tr>
-              <tr>
-                <td data-label="Field">Product Name</td>
-                <td data-label="Description">Name of the Product.</td>
-              </tr>
-              <tr>
-                <td data-label="Field">Sales</td>
-                <td data-label="Description">Sales of the Product.</td>
-              </tr>
-              <tr>
-                <td data-label="Field">Quantity</td>
-                <td data-label="Description">Quantity of the Product.</td>
-              </tr>
-              <tr>
-                <td data-label="Field">Discount</td>
-                <td data-label="Description">Discount provided.</td>
-              </tr>
-              <tr>
-                <td data-label="Field">Profit</td>
-                <td data-label="Description">Profit/Loss incurred.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <a href="/src/pages/manage-dataset.html" class="btn-secondary">
-          Download Metadata (CSV)
-        </a>
+   <!-- Metadata & Data Dictionary -->
+   <section id="metadata" class="metadata-section">
+    <div class="container-md">
+      <h2>Metadata & Data Dictionary</h2>
+      <div class="table-responsive">
+        <table id="metadataTable" class="display responsive nowrap">
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Row ID</td>
+              <td>Unique ID for each row of data in the table.</td>
+            </tr>
+            <tr>
+              <td>Order ID</td>
+              <td>Unique identifier for each order placed by the customer.</td>
+            </tr>
+            <tr>
+              <td>Order Date</td>
+              <td>The date the order was placed by the customer.</td>
+            </tr>
+            <tr>
+              <td>Category</td>
+              <td>The product category of the order.</td>
+            </tr>
+            <tr>
+              <td>Profit</td>
+              <td>The profit earned from the sale of the order.</td>
+            </tr>
+            <tr>
+              <td>Quantity</td>
+              <td>The number of items ordered.</td>
+            </tr>
+            <tr>
+              <td>Sales</td>
+              <td>The total sales amount for the order.</td>
+            </tr>
+            <tr>
+              <td>Profit Margin</td>
+              <td>The percentage of profit relative to the sales.</td>
+            </tr>
+            <tr>
+              <td>Ship Date</td>
+              <td>Shipping Date of the Product.</td>
+            </tr>
+            <tr>
+              <td>Ship Mode</td>
+              <td>Shipping Mode specified by the Customer.</td>
+            </tr>
+            <tr>
+              <td>Customer ID</td>
+              <td>Unique ID to identify each Customer.</td>
+            </tr>
+            <tr>
+              <td>Customer Name</td>
+              <td>Name of the Customer.</td>
+            </tr>
+            <tr>
+              <td>Segment</td>
+              <td>The segment where the Customer belongs.</td>
+            </tr>
+            <tr>
+              <td>Country</td>
+              <td>Country of residence of the Customer.</td>
+            </tr>
+            <tr>
+              <td>City</td>
+              <td>City of residence of the Customer.</td>
+            </tr>
+            <tr>
+              <td>State</td>
+              <td>State of residence of the Customer.</td>
+            </tr>
+            <tr>
+              <td>Postal Code</td>
+              <td>Postal Code of every Customer.</td>
+            </tr>
+            <tr>
+              <td>Region</td>
+              <td>Region where the Customer belongs.</td>
+            </tr>
+            <tr>
+              <td>Product ID</td>
+              <td>Unique ID of the Product.</td>
+            </tr>
+            <tr>
+              <td>Product Name</td>
+              <td>Name of the Product.</td>
+            </tr>
+            <tr>
+              <td>Sub-Category</td>
+              <td>Sub-Category of the product ordered.</td>
+            </tr>
+            <tr>
+              <td>Sales</td>
+              <td>Sales of the Product.</td>
+            </tr>
+            <tr>
+              <td>Quantity</td>
+              <td>Quantity of the Product ordered.</td>
+            </tr>
+            <tr>
+              <td>Discount</td>
+              <td>Discount provided on the Product.</td>
+            </tr>
+            <tr>
+              <td>Profit</td>
+              <td>Profit or Loss incurred from the product.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    </section>
+      <!-- <a href="/src/pages/manage-dataset.html" class="btn-secondary">
+        Download Metadata (CSV)
+      </a> -->
+    </div>
+  </section>
+  
 
     <!-- Download & Access -->
     <section id="download" class="download-section">
