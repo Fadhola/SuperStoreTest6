@@ -1334,6 +1334,20 @@ table.display tr:hover {
    10. RESPONSIVE STYLES
    ============================ */
 /* Responsive Design */
+@media (max-width: 1080px) {
+  .chart-container {
+    flex-direction: column; /* Keeps the charts in one column */
+  }
+  .chart-wrapper {
+    width: 100%;
+    padding: 5px;
+  }
+
+  .chart-container canvas {
+    max-width: 100%; /* Ensure it takes full width on small screens */
+    height: 200px;
+  }
+}
 @media (max-width: 768px) {
   .navbar {
     margin-left: 0;

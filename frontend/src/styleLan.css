@@ -718,7 +718,7 @@ header {
   background-color: var(--color-gray-light);
 }
 
-/* Metadata Section */
+/* Styling Metadata Section */
 .metadata-section {
   padding: 60px 20px;
   background-color: var(--color-white);
@@ -734,6 +734,94 @@ header {
 .metadata-section .table-responsive {
   overflow-x: auto;
   margin-bottom: 20px;
+}
+
+.metadata-section p {
+  font-size: 1.1rem;
+  color: var(--color-gray);
+  line-height: 1.6;
+  margin-bottom: 20px;
+  padding: 0 20px;
+}
+
+/* Table Styling for Metadata */
+table.display {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table.display thead tr {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+table.display th,
+table.display td {
+  padding: 12px 15px;
+  border: 1px solid #dddddd;
+  text-align: left;
+}
+
+table.display tbody tr:nth-child(even) {
+  background-color: var(--color-gray-light);
+}
+
+table.display tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Table responsive styling */
+table.display.responsive {
+  width: 100%;
+}
+
+table.display.responsive td {
+  text-align: left;
+  padding: 10px;
+}
+
+/* Adding additional spacing for metadata content */
+.metadata-section p {
+  margin-top: 10px;
+  padding: 10px 0;
+}
+
+/* Styling for CSV Example */
+/* Styling untuk contoh yang benar dan salah */
+pre.correct {
+  background-color: #e8f5e9; /* Warna hijau muda untuk menunjukkan benar */
+  padding: 15px;
+  border-radius: 5px;
+  color: #2e7d32; /* Warna teks hijau gelap */
+  font-size: 1rem;
+  font-family: 'Courier New', monospace;
+  overflow-x: auto;
+}
+
+pre.invalid {
+  background-color: #fbe9e7; /* Warna merah muda untuk menunjukkan salah */
+  padding: 15px;
+  border-radius: 5px;
+  color: #c62828; /* Warna teks merah */
+  font-size: 1rem;
+  font-family: 'Courier New', monospace;
+  overflow-x: auto;
+}
+
+/* Styling the "Invalid File Example" */
+.invalid-file-example {
+  margin-top: 20px;
+  background-color: var(--color-light);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.highlight-missing {
+  background-color: #ffcccc; /* Warna latar belakang merah muda */
+  color: #d32f2f; /* Warna teks merah untuk menunjukkan kesalahan */
+  font-weight: bold;
+  padding: 0 5px;
+  border-radius: 3px;
 }
 
 /* Download Section */
@@ -1028,7 +1116,33 @@ table.display.responsive td {
   .hero .hero-cta a {
     margin: 5px;
   }
+  .metadata-section {
+    padding: 30px 20px;
+  }
+
+  .metadata-section h2 {
+    font-size: 1.8rem;
+  }
+
+  .metadata-section p {
+    font-size: 1rem;
+  }
+
+  table.display th,
+  table.display td {
+    padding: 10px 8px;
+  }
+
+  table.display {
+    font-size: 0.9rem;
+  }
+
+  pre {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
 }
+
 @media (max-width: 768px) {
   /* Display Hamburger Menu */
   .hamburger {
@@ -1074,13 +1188,22 @@ table.display.responsive td {
     gap: 10px;
   }
 
-  table.display {
-    font-size: 0.9rem;
+  /* Adjust metadata section padding and font sizes on smaller screens */
+  .metadata-section h2 {
+    font-size: 1.6rem;
   }
 
   table.display th,
   table.display td {
-    padding: 8px 10px;
+    padding: 8px 6px;
+  }
+
+  table.display {
+    font-size: 0.8rem;
+  }
+
+  pre {
+    font-size: 0.85rem;
   }
 
   .business-insights ul {

@@ -56,7 +56,7 @@
             <li><a href="#about" class="nav-link">About</a></li>
             <li><a href="#features" class="nav-link">Features</a></li>
             <li><a href="#download" class="nav-link">Download</a></li>
-            <li><a href="#use-cases" class="nav-link">Use Cases</a></li>
+            <li><a href="#metadata" class="nav-link">Metadata</a></li>
             <li><a href="#contact" class="nav-link">Contact</a></li>
             <li>
               <a
@@ -96,7 +96,7 @@
           <li><a href="#about" class="nav-link">About</a></li>
           <li><a href="#features" class="nav-link">Features</a></li>
           <li><a href="#download" class="nav-link">Download</a></li>
-          <li><a href="#use-cases" class="nav-link">Use Cases</a></li>
+          <li><a href="#metadata" class="nav-link">Metadata</a></li>
           <li><a href="#contact" class="nav-link">Contact</a></li>
           <!-- Username Dropdown untuk Mobile -->
           <li><a href="/src/pages/login.html" class="nav-link">Login</a></li>
@@ -255,6 +255,28 @@
     <section id="metadata" class="metadata-section">
       <div class="container-md">
         <h2>Metadata & Data Dictionary</h2>
+        <p>
+          Please ensure your CSV or JSON file follows the structure outlined
+          below to successfully upload and validate your dataset. Fields are
+          case-sensitive and must match exactly as shown. Each row in your
+          dataset must contain data for all required fields.
+        </p>
+        <h3>Correct Format for CSV:</h3>
+        <p>
+          The dataset must have the following columns in the order listed below.
+          Make sure there are no missing fields in any row. Here is an example
+          of the first row in your CSV:
+        </p>
+        <pre class="correct">
+          Row ID,Order ID,Order Date,Ship Date,Ship Mode,Customer ID,Customer Name,Segment,Country,City,State,Postal Code,Region,Product ID,Category,Sub-Category,Product Name,Sales,Quantity,Discount,Profit,Profit/Quantity
+          1,US-2021-103800,1/3/2021,1/7/2021,Standard Class,DP-13000,Darren Powers,Consumer,United States,Houston,Texas,77095,Central,OFF-PA-10000174,Office Supplies,Paper,"Message Book, Wirebound, Four 5 1/2"" X 4"" Forms/Pg., 200 Dupl. Sets/Book",16.448,2,0.2,5.5512,2.7756
+        </pre>
+        <p>
+          Make sure your data matches the following structure, and each row
+          contains values for all required fields. If any required fields are
+          missing, the file will not pass validation.
+        </p>
+        <h3>Fields and Description</h3>
         <div class="table-responsive">
           <table id="metadataTable" class="display responsive nowrap">
             <thead>
@@ -266,112 +288,176 @@
             <tbody>
               <tr>
                 <td>Row ID</td>
-                <td>Unique ID for each row of data in the table.</td>
+                <td>
+                  Unique ID for each row of data in the table. This field is
+                  used only for internal purposes in the CSV file to uniquely
+                  identify each row. However, it is not required and will be
+                  automatically removed during the upload process as it is not
+                  needed in the database schema.
+                </td>
               </tr>
               <tr>
                 <td>Order ID</td>
                 <td>
-                  Unique identifier for each order placed by the customer.
+                  Unique identifier for each order placed by the customer. Must
+                  be a non-empty string.
                 </td>
               </tr>
               <tr>
                 <td>Order Date</td>
-                <td>The date the order was placed by the customer.</td>
-              </tr>
-              <tr>
-                <td>Category</td>
-                <td>The product category of the order.</td>
-              </tr>
-              <tr>
-                <td>Profit</td>
-                <td>The profit earned from the sale of the order.</td>
-              </tr>
-              <tr>
-                <td>Quantity</td>
-                <td>The number of items ordered.</td>
-              </tr>
-              <tr>
-                <td>Sales</td>
-                <td>The total sales amount for the order.</td>
-              </tr>
-              <tr>
-                <td>Profit Margin</td>
-                <td>The percentage of profit relative to the sales.</td>
+                <td>
+                  Date the order was placed (format: D/M/YYYY, MM/DD/YYYY,
+                  etc.). Must be a valid date.
+                </td>
               </tr>
               <tr>
                 <td>Ship Date</td>
-                <td>Shipping Date of the Product.</td>
+                <td>
+                  Date the product was shipped (must be in valid date format and
+                  should be later than the order date).
+                </td>
               </tr>
               <tr>
                 <td>Ship Mode</td>
-                <td>Shipping Mode specified by the Customer.</td>
+                <td>
+                  The mode of shipping selected (e.g., Standard Class,
+                  Expedited).
+                </td>
               </tr>
               <tr>
                 <td>Customer ID</td>
-                <td>Unique ID to identify each Customer.</td>
+                <td>Unique identifier for the customer (non-empty string).</td>
               </tr>
               <tr>
                 <td>Customer Name</td>
-                <td>Name of the Customer.</td>
+                <td>Name of the customer (non-empty string).</td>
               </tr>
               <tr>
                 <td>Segment</td>
-                <td>The segment where the Customer belongs.</td>
+                <td>
+                  Customer segment (must be one of: Consumer, Corporate, Home
+                  Office).
+                </td>
               </tr>
               <tr>
                 <td>Country</td>
-                <td>Country of residence of the Customer.</td>
+                <td>The country of residence of the customer.</td>
               </tr>
               <tr>
                 <td>City</td>
-                <td>City of residence of the Customer.</td>
+                <td>The city of residence of the customer.</td>
               </tr>
               <tr>
                 <td>State</td>
-                <td>State of residence of the Customer.</td>
+                <td>The state of residence of the customer.</td>
               </tr>
               <tr>
                 <td>Postal Code</td>
-                <td>Postal Code of every Customer.</td>
+                <td>Postal code of the customer (must be a valid number).</td>
               </tr>
               <tr>
                 <td>Region</td>
-                <td>Region where the Customer belongs.</td>
+                <td>
+                  The region where the customer belongs (e.g., East, West,
+                  Central, South).
+                </td>
               </tr>
               <tr>
                 <td>Product ID</td>
-                <td>Unique ID of the Product.</td>
+                <td>Unique identifier for the product.</td>
               </tr>
               <tr>
                 <td>Product Name</td>
-                <td>Name of the Product.</td>
+                <td>
+                  Name of the product (e.g., Global Deluxe Stacking Chair).
+                </td>
+              </tr>
+              <tr>
+                <td>Category</td>
+                <td>
+                  Category of the product (e.g., Furniture, Office Supplies).
+                </td>
               </tr>
               <tr>
                 <td>Sub-Category</td>
-                <td>Sub-Category of the product ordered.</td>
+                <td>Sub-category of the product (e.g., Chairs, Paper).</td>
               </tr>
               <tr>
                 <td>Sales</td>
-                <td>Sales of the Product.</td>
+                <td>
+                  The total sales amount for the product (must be a valid
+                  number).
+                </td>
               </tr>
               <tr>
                 <td>Quantity</td>
-                <td>Quantity of the Product ordered.</td>
+                <td>
+                  The number of items ordered (must be an integer and greater
+                  than 0).
+                </td>
               </tr>
               <tr>
                 <td>Discount</td>
-                <td>Discount provided on the Product.</td>
+                <td>
+                  The discount on the product (should be between 0 and 1).
+                </td>
               </tr>
               <tr>
                 <td>Profit</td>
-                <td>Profit or Loss incurred from the product.</td>
+                <td>The profit earned from the sale of the product.</td>
+              </tr>
+              <tr>
+                <td>Profit/Quantity</td>
+                <td>The profit per quantity sold (must be a valid number).</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <!-- <a href="/src/pages/manage-dataset.html" class="btn-secondary">
-        Download Metadata (CSV)
-      </a> -->
+
+        <h3>File Validation</h3>
+        <p>
+          During the upload process, your CSV or JSON file will be validated
+          against the following criteria:
+        </p>
+        <ul>
+          <li>
+            <strong>Field Presence:</strong>
+            Each row must include all required fields (e.g., Order ID, Order
+            Date, Ship Date, etc.). If any required field is missing, an error
+            will occur.
+          </li>
+          <li>
+            <strong>Data Types:</strong>
+            Fields must match the expected data types (e.g., Sales must be a
+            number, Order Date must be a valid date).
+          </li>
+          <li>
+            <strong>Date Format:</strong>
+            Dates must be in one of the acceptable formats: D/M/YYYY,
+            MM/DD/YYYY, or M/D/YYYY. Invalid dates will trigger an error.
+          </li>
+          <li>
+            <strong>Field Length and Values:</strong>
+            Ensure fields like Discount (should be between 0 and 1), and
+            Category/Sub-Category contain valid options as listed.
+          </li>
+        </ul>
+
+        <h3>Invalid File Example:</h3>
+        <p>An invalid file might look like this:</p>
+        <pre class="invalid">
+          Row ID,Order ID,Order Date,Ship Date,Ship Mode,Customer ID,Customer Name,Segment,Country,City,State,Postal Code,Region,Product ID,Category,Sub-Category,Product Name,Sales,Quantity,Discount,Profit,Profit/Quantity
+          1,US-2021-103800,1/3/2021,<span class="highlight-missing">,</span>Standard Class,DP-13000,Darren Powers,Consumer,United States,Houston,Texas,77095,Central,OFF-PA-10000174,Office Supplies,Paper,"Message Book, Wirebound",16.448,2,0.2,5.5512,<span class="highlight-missing">,</span>
+          <span class="highlight-missing">2,,</span>2021-01-05,2021-01-08,Expedited,DP-13001,Jane Doe,Corporate,Canada,Toronto,Ontario,12345,East,FUR-PA-10002345,Furniture,Chairs,"Global Chair",200.123,5,0.1,50.123,
+        </pre>
+        <p>
+          In this example:
+          <ul>
+            <li>The first row is missing a <strong>Ship Date</strong>.</li>
+            <li>The second row is missing an <strong>Order ID</strong> and <strong>Row ID</strong>.</li>
+            <li>Fields marked in <span class="highlight-missing">red</span> are either missing or incorrect.</li>
+          </ul>
+        </p>
       </div>
     </section>
 
