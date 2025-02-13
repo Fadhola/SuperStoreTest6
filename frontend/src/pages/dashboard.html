@@ -92,6 +92,11 @@
               </a>
             </li>
             <li>
+              <a href="#" class="nav-link" data-target="productAnalysisSection">
+                Product Analysis
+              </a>
+            </li>
+            <li>
               <a
                 href="#"
                 class="nav-link"
@@ -255,13 +260,37 @@
 
           <!-- Charts Section -->
           <div class="chart-container">
+            <!-- Sales Trend -->
             <div class="chart-wrapper">
+              <button
+                id="insightBtn"
+                class="insight-btn"
+                data-chart-type="salesTrend"
+              >
+                <i class="fas fa-chart-line"></i>
+              </button>
               <canvas data-aos="zoom-in" id="salesTrendChart"></canvas>
             </div>
+            <!-- Sales by Category -->
             <div class="chart-wrapper">
+              <button
+                id="insightBtn"
+                class="insight-btn"
+                data-chart-type="salesByCategory"
+              >
+                <i class="fas fa-layer-group"></i>
+              </button>
               <canvas data-aos="zoom-in" id="salesByCategoryChart"></canvas>
             </div>
+            <!-- Ship Mode -->
             <div class="chart-wrapper">
+              <button
+                id="insightBtn"
+                class="insight-btn"
+                data-chart-type="shipMode"
+              >
+                <i class="fas fa-truck"></i>
+              </button>
               <canvas data-aos="zoom-in" id="shipModeChart"></canvas>
             </div>
           </div>
@@ -275,10 +304,26 @@
         >
           <h2>Detailed Sales and Profit Analysis</h2>
           <div class="chart-container">
+            <!-- Sales Profit Quantity -->
             <div class="chart-wrapper">
+              <button
+                id="insightBtn"
+                class="insight-btn"
+                data-chart-type="salesProfitQuantity"
+              >
+                <i class="fas fa-balance-scale"></i>
+              </button>
               <canvas data-aos="zoom-in" id="salesProfitQuantityChart"></canvas>
             </div>
+            <!-- Profit Margin -->
             <div class="chart-wrapper">
+              <button
+                id="insightBtn"
+                class="insight-btn"
+                data-chart-type="profitMargin"
+              >
+                <i class="fas fa-percentage"></i>
+              </button>
               <canvas data-aos="zoom-in" id="profitMarginChart"></canvas>
             </div>
           </div>
@@ -300,6 +345,48 @@
           </div>
         </section>
 
+        <!-- Product Analysis Section -->
+        <section
+          id="productAnalysisSection"
+          class="analysis-section"
+          style="display: none"
+        >
+          <h2>Product Analysis</h2>
+          <!-- Top Products -->
+          <div class="chart-container" id="chart-container-product">
+            <div class="chart-wrapper" id="chart-wrapper-product">
+              <button
+                id="insightBtn"
+                class="insight-btn"
+                data-chart-type="topProducts"
+              >
+                <i class="fas fa-star"></i>
+              </button>
+              <canvas id="topProductsChart"></canvas>
+            </div>
+          </div>
+          <!-- Product Sales Table -->
+          <div class="table-wrapper">
+            <h2>Top Selling Products</h2>
+            <table id="topProductsTable" class="display" style="width: 100%">
+              <thead>
+                <tr>
+                  <th>Product ID</th>
+                  <th>Product Name</th>
+                  <th>Category</th>
+                  <th>SubCategory</th>
+                  <th>Total Sales</th>
+                  <th>Quantity Sold</th>
+                  <th>Profit</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Product data will be filled by JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
         <!-- Discount and Sales Relationship -->
         <section
           id="discountSalesRelationshipSection"
@@ -308,13 +395,37 @@
         >
           <h2>Discount and Sales Relationship</h2>
           <div class="chart-container">
+            <!-- Discount Sales -->
             <div class="chart-wrapper">
+              <button
+                id="insightBtn"
+                class="insight-btn"
+                data-chart-type="discountSales"
+              >
+                <i class="fas fa-tags"></i>
+              </button>
               <canvas data-aos="zoom-in" id="discountSalesChart"></canvas>
             </div>
+            <!-- Avg Discount Per Year -->
             <div class="chart-wrapper">
+              <button
+                id="insightBtn"
+                class="insight-btn"
+                data-chart-type="avgDiscountPerYear"
+              >
+                <i class="fas fa-calendar-alt"></i>
+              </button>
               <canvas data-aos="zoom-in" id="avgDiscountPerYearChart"></canvas>
             </div>
+            <!-- Avg Discount By Category -->
             <div class="chart-wrapper">
+              <button
+                id="insightBtn"
+                class="insight-btn"
+                data-chart-type="avgDiscountByCategory"
+              >
+                <i class="fas fa-th"></i>
+              </button>
               <canvas
                 data-aos="zoom-in"
                 id="avgDiscountByCategoryChart"
@@ -331,7 +442,15 @@
         >
           <h2>Customer Analysis</h2>
           <div class="chart-container">
+            <!-- Segment -->
             <div class="chart-wrapper">
+              <button
+                id="insightBtn"
+                class="insight-btn"
+                data-chart-type="segment"
+              >
+                <i class="fas fa-users"></i>
+              </button>
               <canvas data-aos="zoom-in" id="segmentChart"></canvas>
             </div>
           </div>
@@ -362,14 +481,41 @@
         >
           <h2>City or Region Performance</h2>
           <div class="chart-container">
+            <!-- Top Cities -->
             <div class="chart-wrapper">
+              <button
+                id="insightBtn"
+                class="insight-btn"
+                data-chart-type="topCities"
+              >
+                <i class="fas fa-city"></i>
+              </button>
               <canvas data-aos="zoom-in" id="topCitiesChart"></canvas>
             </div>
+            <!-- Regional Profit -->
             <div class="chart-wrapper">
+              <button
+                id="insightBtn"
+                class="insight-btn"
+                data-chart-type="regionalProfit"
+              >
+                <i class="fas fa-map-marker-alt"></i>
+              </button>
               <canvas data-aos="zoom-in" id="regionalProfitChart"></canvas>
             </div>
           </div>
         </section>
+        <!-- Modal Popup untuk Menampilkan Insight -->
+        <div id="insightModal" class="modal" style="display: none">
+          <div class="modal-content">
+            <span id="closeModal" class="close">&times;</span>
+            <h2>Detail Insight Chart</h2>
+            <div id="insightContent">
+              <!-- Konten insight akan diisi secara dinamis -->
+              <p>Loading insight...</p>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
 

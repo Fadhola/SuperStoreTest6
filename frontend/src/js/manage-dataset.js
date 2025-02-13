@@ -113,42 +113,6 @@ document.addEventListener('DOMContentLoaded', () => {
           if (!Array.isArray(parsedDatasetData)) {
             throw new Error('JSON file must contain an array of objects.')
           }
-
-          // Validasi headers jika diperlukan
-          const requiredHeaders = [
-            'Order ID',
-            'Order Date',
-            'Ship Date',
-            'Ship Mode',
-            'Customer ID',
-            'Customer Name',
-            'Segment',
-            'Country',
-            'City',
-            'State',
-            'Postal Code',
-            'Region',
-            'Product ID',
-            'Category',
-            'Sub-Category',
-            'Product Name',
-            'Sales',
-            'Quantity',
-            'Discount',
-            'Profit',
-            'Profit/Quantity',
-          ]
-
-          const firstRecord = parsedDatasetData[0]
-          const missingHeaders = requiredHeaders.filter(
-            (header) => !(header in firstRecord)
-          )
-          if (missingHeaders.length > 0) {
-            throw new Error(
-              `Missing fields in JSON: ${missingHeaders.join(', ')}`
-            )
-          }
-
           displayDatasetPreview(parsedDatasetData)
         } catch (error) {
           console.error('Error parsing JSON file:', error)
@@ -170,40 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
           }
 
           parsedDatasetData = results.data
-
-          // Validasi headers CSV
-          const requiredHeaders = [
-            'Order ID',
-            'Order Date',
-            'Ship Date',
-            'Ship Mode',
-            'Customer ID',
-            'Customer Name',
-            'Segment',
-            'Country',
-            'City',
-            'State',
-            'Postal Code',
-            'Region',
-            'Product ID',
-            'Category',
-            'Sub-Category',
-            'Product Name',
-            'Sales',
-            'Quantity',
-            'Discount',
-            'Profit',
-            'Profit/Quantity',
-          ]
-
-          const headers = results.meta.fields
-          const missingHeaders = requiredHeaders.filter(
-            (header) => !headers.includes(header)
-          )
-          if (missingHeaders.length > 0) {
-            alert(`Missing headers in CSV: ${missingHeaders.join(', ')}`)
-            return
-          }
 
           displayDatasetPreview(parsedDatasetData)
         },
@@ -700,7 +630,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Validasi ekstensi file
     const validTypes = ['application/json', 'application/vnd.geo+json']
-    if (!validTypes.includes(file.type)) {
+    if (!validTypes.includes(file.type) && !file.name.endsWith('.geojson')) {
       alert('Invalid file type. Please upload a GeoJSON file.')
       return
     }
@@ -807,6 +737,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Tambahkan baris ke tabel
         uploadsTableBody.append(`
         <tr>
+          <td>${upload.username}</td>
           <td>${upload.uploadId}</td>
           <td>${uploadDate}</td>
           <td>${upload.recordCount}</td>
@@ -870,10 +801,20 @@ document.addEventListener('DOMContentLoaded', () => {
       fetchUploadsData()
     } catch (error) {
       console.error('Error deleting batch upload:', error)
-      if (error.response && error.response.data && error.response.data.error) {
-        alert(`Error: ${error.response.data.error}`)
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.status === 403
+      ) {
+        alert(
+          '❌ You are not allowed to delete this data. It does not belong to you.'
+        )
       } else {
-        alert('Failed to delete batch upload.')
+        alert(
+          `Error: ${
+            error.response?.data?.error || 'Failed to delete batch upload.'
+          }`
+        )
       }
     }
   }
@@ -882,7 +823,7 @@ document.addEventListener('DOMContentLoaded', () => {
   deleteAllUploadsButton.addEventListener('click', async () => {
     if (
       confirm(
-        'Are you sure you want to delete all records? This action cannot be undone.'
+        'WARNING: This will delete ALL records from ALL users permanently. This action CANNOT be undone. Are you sure?'
       )
     ) {
       try {
@@ -905,21 +846,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   })
-
-  // Modal Styling (Pastikan CSS modal sudah benar)
-  // ...
-
   // Format Date untuk Tabel
   function formatDate(date) {
     return new Date(date).toLocaleDateString()
   }
-
-  // Handle Edit Data Form Submission
-  // ... (Sudah ditangani di atas)
-
-  // Initial Fetch of Superstore Data dan Uploads Data
-  // ... (Sudah ditangani di atas)
-
-  // Handle Preview GeoJSON Button
-  // ... (Sudah ditangani di atas)
 })

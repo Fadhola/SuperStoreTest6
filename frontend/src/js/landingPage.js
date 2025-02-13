@@ -61,4 +61,50 @@ document.addEventListener('DOMContentLoaded', async () => {
       console.log(`Downloading: ${e.target.href}`)
     })
   })
+
+  // Event listener untuk tombol download dataset user
+  const downloadButton = document.getElementById('downloadUserDataset')
+
+  if (downloadButton) {
+    downloadButton.addEventListener('click', async () => {
+      try {
+        const token = localStorage.getItem('token') // Ambil token dari localStorage
+        if (!token) {
+          alert('Please log in to download your dataset.')
+          return
+        }
+
+        // Kirim request ke server
+        const response = await fetch('/api/download-dataset', {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+
+        if (!response.ok) {
+          const errorData = await response.json()
+          alert(`Error: ${errorData.error || 'Failed to download dataset'}`)
+          return
+        }
+
+        // Download file sebagai blob
+        const blob = await response.blob()
+        const url = window.URL.createObjectURL(blob)
+
+        // Buat link untuk mendownload file
+        const a = document.createElement('a')
+        a.href = url
+        a.download = 'your_dataset.csv'
+        document.body.appendChild(a)
+        a.click()
+
+        // Hapus URL setelah download
+        window.URL.revokeObjectURL(url)
+      } catch (error) {
+        console.error('Error downloading dataset:', error)
+        alert('Error downloading dataset.')
+      }
+    })
+  }
 })

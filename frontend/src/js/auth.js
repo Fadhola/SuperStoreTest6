@@ -100,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
           // Simpan token dan username ke localStorage
           localStorage.setItem('token', data.token)
           localStorage.setItem('username', data.username)
+          localStorage.setItem('userId', data.userId)
           window.location.href = '/' // Redirect ke halaman utama
         } else {
           // Tampilkan error jika username atau password tidak sesuai
@@ -149,12 +150,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const uploadDatasetLink = document.querySelector(
     'a[href="/src/pages/manage-dataset.html"]'
   )
-  const datasetdownload = document.querySelector(
-    'a[href="/datasets/superstore_2021_2024.csv"]'
-  )
-  const olddatasetdownload = document.querySelector(
-    'a[href="/datasets/superstore_2014_2017.csv"]'
-  )
 
   function requireAuth(event) {
     const token = localStorage.getItem('token') // Ambil token dari localStorage
@@ -171,13 +166,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (uploadDatasetLink) {
     uploadDatasetLink.addEventListener('click', requireAuth)
-  }
-  if (datasetdownload) {
-    datasetdownload.addEventListener('click', requireAuth)
-  }
-
-  if (olddatasetdownload) {
-    olddatasetdownload.addEventListener('click', requireAuth)
   }
 
   // Update UI berdasarkan status login

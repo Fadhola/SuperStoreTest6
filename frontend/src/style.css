@@ -702,15 +702,21 @@ body.no-sidebar .container {
   gap: 20px;
   margin-bottom: 40px;
 }
+#chart-container-product {
+  justify-content: center;
+}
 
 .chart-wrapper {
+  position: relative; /* Make the parent relative to position the button absolutely */
   width: calc(50% - 10px);
   padding: 20px;
   box-sizing: border-box;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  /* transition: transform 0.3s ease-in-out; */
+}
+#chart-wrapper-product {
+  width: 100%;
 }
 
 .chart-wrapper:hover {
@@ -725,6 +731,115 @@ body.no-sidebar .container {
   /* border-radius: 8px;
     background-color: white;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
+}
+
+/* ============================
+   1. CHART INSIGHT STYLES
+   ============================ */
+
+/* Insight Content Styling */
+.chart-insight {
+  background-color: var(--neutral-light);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: none;
+  margin-top: 15px;
+}
+
+.insight-btn {
+  position: absolute; /* Position the button absolutely */
+  top: 10px; /* Distance from the top */
+  right: 10px; /* Distance from the right */
+  width: 40px;
+  height: 40px;
+  border: none;
+  background-color: var(--color-primary);
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  z-index: 10;
+}
+
+.insight-btn:hover {
+  background-color: var(--color-hover-primary);
+  transform: scale(1.1); /* Efek zoom saat hover */
+}
+
+.insight-btn i {
+  font-size: 20px;
+}
+
+/* ============================
+   2. MODAL POPUP FOR INSIGHT
+   ============================ */
+
+/* Modal for displaying insights */
+#insightModal {
+  display: none;
+  position: fixed;
+  z-index: 2001;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Modal Content Styling */
+.modal-content {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 800px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Close button inside the modal */
+#closeModal {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+/* Modal open transition */
+#insightModal .modal-content {
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Insight Content */
+#insightContent h2 {
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+
+#insightContent p {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 10px;
+  text-align: justify;
 }
 
 /* Tooltip and Interactivity Enhancements */
@@ -1474,6 +1589,19 @@ table.display tr:hover {
     max-width: 160px;
     font-size: 12px;
     line-height: 18px;
+  }
+
+  .modal-content {
+    width: 90%;
+    padding: 15px;
+  }
+
+  #closeModal {
+    font-size: 18px;
+  }
+
+  #insightContent p {
+    font-size: 14px;
   }
 
   .chart-container {

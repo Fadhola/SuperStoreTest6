@@ -14,7 +14,9 @@ import { setupUI, setupScrollButtons } from './js/ui.js'
 import {
   initProfitMarginTable,
   initCustomerAnalysisTable,
+  initTopProductsTable,
 } from './js/tables.js'
+import { initInsightPopup } from './js/insights.js'
 
 // Import Dependensi Eksternal
 import AOS from 'aos'
@@ -113,12 +115,17 @@ async function initDashboard() {
     updateSummary(data)
     initMap(data)
     createCharts(data)
+    initTopProductsTable(data)
     initProfitMarginTable(data)
     initCustomerAnalysisTable(data)
     setupNavLinks() // Inisialisasi event listeners untuk nav links
 
+    window.filteredData = data // Data awal (belum difilter) atau setelah filter, sesuai kebutuhan
     // Tampilkan semua section secara default
     showAllSections()
+
+    // Inisialisasi popup insight
+    initInsightPopup()
   } catch (error) {
     console.error('Error initializing dashboard:', error)
     alert('Failed to fetch data. Please Re-login.')
@@ -148,11 +155,13 @@ if (filterButton) {
 
       const data = await response.json()
       const filteredData = filterData(data)
+      window.filteredData = filteredData
 
       // Update UI dengan data yang sudah difilter
       updateSummary(filteredData)
       initMap(filteredData)
       createCharts(filteredData)
+      initTopProductsTable(filteredData)
       initProfitMarginTable(filteredData)
       initCustomerAnalysisTable(filteredData)
       updateSelectedFilters()

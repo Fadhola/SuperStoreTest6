@@ -376,7 +376,13 @@
             </div>
             <div class="form-group">
               <label for="ShipMode">Ship Mode:</label>
-              <input type="text" id="ShipMode" name="ShipMode" required />
+              <select id="ShipMode" name="ShipMode" required>
+                <option value="">Select ShipMode</option>
+                <option value="Standard Class">Standard Class</option>
+                <option value="Second Class">Second Class</option>
+                <option value="First Class">First Class</option>
+                <option value="Same Day">Same Day</option>
+              </select>
             </div>
           </div>
           <div class="form-row">
@@ -442,7 +448,12 @@
             </div>
             <div class="form-group">
               <label for="Category">Category:</label>
-              <input type="text" id="Category" name="Category" required />
+              <select id="Category" name="Category" required>
+                <option value="">Select Category</option>
+                <option value="Furniture">Furniture</option>
+                <option value="Office Supplies">Office Supplies</option>
+                <option value="Technology">Technology</option>
+              </select>
             </div>
           </div>
           <div class="form-row">
@@ -510,7 +521,7 @@
         <div id="addDataStatus"></div>
 
         <!-- Tabel untuk Menampilkan Data Superstore dengan Tombol Edit dan Hapus -->
-        <h3>Existing Records</h3>
+        <h3>Superstore Data Table</h3>
         <div class="table-container">
           <!-- Overlay Loading untuk Superstore Table -->
           <div
@@ -541,7 +552,7 @@
         </div>
 
         <!-- Section untuk Manage Uploads -->
-        <h3>Manage Uploads</h3>
+        <h3>Dataset Management Table</h3>
         <div class="table-container">
           <!-- Overlay Loading untuk Uploads Table -->
           <div
@@ -554,6 +565,7 @@
           <table id="uploadsTable" class="display" style="width: 100%">
             <thead>
               <tr>
+                <th>Username</th>
                 <th>Upload ID</th>
                 <th>Upload Date</th>
                 <th>Number of Records</th>

@@ -18,6 +18,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { body, validationResult } = require('express-validator')
 const auth = require('./middleware/auth')
+const { Parser } = require('json2csv') // Library untuk convert JSON ke CSV
 const { v4: uuidv4 } = require('uuid')
 const {
   Types: { ObjectId },
@@ -74,6 +75,7 @@ process.on('SIGINT', async () => {
 
 // 4. Definisi Model
 const superstoreSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   uploadId: { type: String, required: true, index: true, default: 'manual' },
   uploadDate: { type: Date, default: Date.now },
   OrderID: String,
@@ -108,6 +110,7 @@ const Superstore = mongoose.model('Superstore', superstoreSchema)
 
 // Definisikan skema validasi menggunakan Joi
 const superstoreValidationSchema = Joi.object({
+  userId: Joi.string().required(),
   uploadId: Joi.string().optional(),
   uploadDate: Joi.date().optional(),
   OrderID: Joi.string().required(),
@@ -262,10 +265,13 @@ const storage = multer.memoryStorage()
 const upload = multer({
   storage: storage,
   fileFilter: (req, file, cb) => {
+    const fileExtension = file.originalname.split('.').pop().toLowerCase()
+
     if (
       file.mimetype === 'application/json' ||
       file.mimetype === 'text/csv' ||
-      file.mimetype === 'application/vnd.geo+json'
+      file.mimetype === 'application/vnd.geo+json' ||
+      fileExtension === 'geojson'
     ) {
       cb(null, true)
     } else {
@@ -323,6 +329,12 @@ app.post(
     try {
       if (!req.file) {
         return res.status(400).json({ error: 'No file uploaded' })
+      }
+
+      const { user } = req // <-- Make sure this is defined
+
+      if (!user || !user.id) {
+        return res.status(401).json({ error: 'Unauthorized: User not found' })
       }
 
       let parsedData = []
@@ -407,6 +419,7 @@ app.post(
         }
 
         const mappedItem = {
+          userId: user.id,
           uploadId,
           uploadDate,
           OrderID: item['Order ID'],
@@ -437,11 +450,15 @@ app.post(
         processedRecords++
       }
 
-      // Validasi setiap item dalam data yang sudah di map
-      for (let item of mappedData) {
+      // Validasi setiap item dalam data yang sudah di-map beserta nomor barisnya
+      for (let i = 0; i < mappedData.length; i++) {
+        const item = mappedData[i]
         const { error } = superstoreValidationSchema.validate(item)
         if (error) {
-          throw new Error(`Validation error: ${error.details[0].message}`)
+          // Menyertakan nomor record (baris) pada pesan error
+          throw new Error(
+            `Validation error on record ${i + 1}: ${error.details[0].message}`
+          )
         }
       }
 
@@ -464,7 +481,23 @@ app.post(
   }
 )
 
-// API Endpoint untuk Mengupload GeoJSON
+//mengubah nama properti dalam setiap fitur GeoJSON menjadi huruf kecil
+function convertKeysToLowerCase(geojson) {
+  // Iterasi pada setiap fitur
+  geojson.features.forEach((feature) => {
+    // Ubah properti dalam objek 'properties' ke huruf kecil
+    if (feature.properties) {
+      const newProperties = {}
+      Object.keys(feature.properties).forEach((key) => {
+        newProperties[key.toLowerCase()] = feature.properties[key]
+      })
+      feature.properties = newProperties
+    }
+  })
+  return geojson
+}
+
+//10. API Endpoint untuk Mengupload GeoJSON
 app.post(
   '/api/upload-geojson',
   auth,
@@ -477,14 +510,20 @@ app.post(
 
       if (
         req.file.mimetype !== 'application/vnd.geo+json' &&
-        req.file.mimetype !== 'application/json'
+        req.file.mimetype !== 'application/json' &&
+        !req.file.originalname.endsWith('.geojson')
       ) {
         return res.status(400).json({ error: 'Only GeoJSON files are allowed' })
       }
 
       // Parse GeoJSON
       const geoJsonData = JSON.parse(req.file.buffer.toString())
-      const geoData = new GeoData(geoJsonData)
+
+      // Ubah nama properti menjadi huruf kecil
+      const geoJsonDataWithLowerCaseKeys = convertKeysToLowerCase(geoJsonData)
+
+      // Simpan ke database
+      const geoData = new GeoData(geoJsonDataWithLowerCaseKeys)
       await geoData.save()
       res.json({ message: 'GeoJSON data uploaded successfully.' })
     } catch (error) {
@@ -494,7 +533,7 @@ app.post(
   }
 )
 
-// API Endpoint untuk Mendapatkan GeoJSON Data dari MongoDB
+//11. API Endpoint untuk Mendapatkan GeoJSON Data dari MongoDB
 app.get('/api/geo-data', auth, async (req, res) => {
   try {
     const geoData = await GeoData.find({})
@@ -505,10 +544,11 @@ app.get('/api/geo-data', auth, async (req, res) => {
   }
 })
 
-// API Endpoint untuk Mengambil Semua Data Superstore
+//12. API Endpoint untuk Mengambil Semua Data Superstore
 app.get('/api/superstore-data', auth, async (req, res) => {
   try {
-    const records = await Superstore.find({})
+    const { user } = req // Get the user from the auth middleware
+    const records = await Superstore.find({ userId: user.id }) // Filter by userId
     res.json(records)
   } catch (error) {
     console.error('Error fetching all Superstore data:', error)
@@ -516,10 +556,17 @@ app.get('/api/superstore-data', auth, async (req, res) => {
   }
 })
 
-// API Endpoint untuk Menambahkan Data Superstore Secara Manual
+//13. API Endpoint untuk Menambahkan Data Superstore Secara Manual
 app.post('/api/superstore-data', auth, async (req, res) => {
   try {
     const data = req.body
+    const { user } = req // Mendapatkan user dari middleware auth
+
+    // Menambahkan userId ke data yang diupload
+    const newRecord = new Superstore({
+      ...data,
+      userId: user.id, // Menambahkan userId ke data yang akan disimpan
+    })
 
     // Validasi Data Menggunakan Joi
     const { error } = superstoreValidationSchema.validate(data)
@@ -527,8 +574,6 @@ app.post('/api/superstore-data', auth, async (req, res) => {
       return res.status(400).json({ error: error.details[0].message })
     }
 
-    // Buat Dokumen Baru
-    const newRecord = new Superstore(data)
     await newRecord.save()
 
     res
@@ -540,19 +585,15 @@ app.post('/api/superstore-data', auth, async (req, res) => {
   }
 })
 
-// API Endpoint untuk Mengambil Data Superstore Berdasarkan ID
+//14. API Endpoint untuk Mengambil Data Superstore Berdasarkan ID
 app.get('/api/superstore-data/:id', auth, async (req, res) => {
   try {
     const { id } = req.params
+    const { user } = req // Get the user from the auth middleware
 
-    // Validasi ID
-    if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ error: 'Invalid ID format.' })
-    }
-
-    const record = await Superstore.findById(id)
+    const record = await Superstore.findOne({ _id: id, userId: user.id }) // Ensure the record belongs to the user
     if (!record) {
-      return res.status(404).json({ error: 'Data tidak ditemukan.' })
+      return res.status(404).json({ error: 'Data not found.' })
     }
 
     res.json(record)
@@ -562,11 +603,12 @@ app.get('/api/superstore-data/:id', auth, async (req, res) => {
   }
 })
 
-// API Endpoint untuk Memperbarui Data Superstore Berdasarkan ID
+//15. API Endpoint untuk Memperbarui Data Superstore Berdasarkan ID
 app.put('/api/superstore-data/:id', auth, async (req, res) => {
   try {
     const { id } = req.params
     const updatedData = req.body
+    const { user } = req // Mendapatkan user dari middleware auth
 
     // Validasi ID
     if (!ObjectId.isValid(id)) {
@@ -579,9 +621,13 @@ app.put('/api/superstore-data/:id', auth, async (req, res) => {
       return res.status(400).json({ error: error.details[0].message })
     }
 
-    const record = await Superstore.findByIdAndUpdate(id, updatedData, {
-      new: true,
-    })
+    // Memastikan hanya data milik user yang bisa diubah
+    const record = await Superstore.findOneAndUpdate(
+      { _id: id, userId: user.id }, // Filter berdasarkan userId
+      updatedData,
+      { new: true }
+    )
+
     if (!record) {
       return res.status(404).json({ error: 'Data tidak ditemukan.' })
     }
@@ -593,17 +639,17 @@ app.put('/api/superstore-data/:id', auth, async (req, res) => {
   }
 })
 
-// API Endpoint untuk Menghapus Data Superstore Berdasarkan ID
+//16. API Endpoint untuk Menghapus Data Superstore Berdasarkan ID
 app.delete('/api/superstore-data/:id', auth, async (req, res) => {
   try {
     const { id } = req.params
+    const { user } = req // Mendapatkan user dari middleware auth
 
-    // Validasi ID
-    if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ error: 'Invalid ID format.' })
-    }
-
-    const record = await Superstore.findByIdAndDelete(id)
+    // Memastikan data yang akan dihapus milik user yang sedang login
+    const record = await Superstore.findOneAndDelete({
+      _id: id,
+      userId: user.id,
+    })
     if (!record) {
       return res.status(404).json({ error: 'Data tidak ditemukan.' })
     }
@@ -615,23 +661,37 @@ app.delete('/api/superstore-data/:id', auth, async (req, res) => {
   }
 })
 
-// API Endpoint untuk Menghapus Data Superstore Berdasarkan uploadId (Penghapusan Massal)
+//17. API Endpoint untuk Menghapus Data Superstore Berdasarkan uploadId (Penghapusan Massal)
+// Endpoint untuk Menghapus Data Superstore Berdasarkan uploadId
 app.delete('/api/superstore-data/batch/:uploadId', auth, async (req, res) => {
   try {
     const { uploadId } = req.params
+    const { user } = req
 
-    // Validasi uploadId (format UUID jika diperlukan)
+    // Pastikan user sudah login
+    if (!user || !user.id) {
+      return res.status(401).json({ error: 'Unauthorized: User not found' })
+    }
+
+    // Pastikan uploadId diberikan
     if (!uploadId) {
-      return res.status(400).json({ error: 'uploadId is required.' })
+      return res.status(400).json({ error: 'Missing uploadId parameter.' })
     }
 
-    const result = await Superstore.deleteMany({ uploadId })
+    // Konversi userId ke ObjectId jika perlu
+    const userId = new mongoose.Types.ObjectId(user.id)
 
-    if (result.deletedCount === 0) {
+    // Cek apakah `uploadId` ini benar-benar milik user yang sedang login
+    const records = await Superstore.find({ uploadId, userId })
+
+    if (records.length === 0) {
       return res
-        .status(404)
-        .json({ error: 'No records found for the given uploadId.' })
+        .status(403) // 403 Forbidden: Tidak boleh menghapus data user lain
+        .json({ error: 'Unauthorized: You can only delete your own records.' })
     }
+
+    // Jika validasi lolos, hapus data
+    const result = await Superstore.deleteMany({ uploadId, userId })
 
     res.json({
       message: `${result.deletedCount} records deleted successfully.`,
@@ -642,7 +702,7 @@ app.delete('/api/superstore-data/batch/:uploadId', auth, async (req, res) => {
   }
 })
 
-// API Endpoint untuk Menghapus Semua Data Superstore
+//18. API Endpoint untuk Menghapus Semua Data Superstore
 app.delete('/api/superstore-data', auth, async (req, res) => {
   try {
     const result = await Superstore.deleteMany({})
@@ -660,7 +720,7 @@ app.delete('/api/superstore-data', auth, async (req, res) => {
   }
 })
 
-// API Endpoint untuk Mengambil Daftar Upload
+//19. API Endpoint untuk Mengambil Daftar Upload
 app.get('/api/uploads', auth, async (req, res) => {
   try {
     // Menggunakan aggregation untuk mendapatkan daftar uploadId dengan jumlah record dan tanggal upload
@@ -668,13 +728,29 @@ app.get('/api/uploads', auth, async (req, res) => {
       {
         $group: {
           _id: '$uploadId',
+          userId: { $first: '$userId' },
           recordCount: { $sum: 1 },
           uploadDate: { $first: '$uploadDate' }, // Asumsi OrderDate adalah tanggal upload
         },
       },
       {
+        $lookup: {
+          from: 'users', // Name of your User collection in MongoDB
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $unwind: {
+          path: '$user',
+          preserveNullAndEmptyArrays: true, // Preserve if no user is found (just in case)
+        },
+      },
+      {
         $project: {
           uploadId: '$_id',
+          username: '$user.username',
           recordCount: 1,
           uploadDate: 1,
           _id: 0,
@@ -692,7 +768,67 @@ app.get('/api/uploads', auth, async (req, res) => {
   }
 })
 
-// Jalankan Server
+//20. API Endpoint untuk Download Dataset User
+app.get('/api/download-dataset', auth, async (req, res) => {
+  try {
+    const { user } = req
+    console.log('🔍 User trying to download dataset:', user)
+
+    if (!user || !user.id) {
+      return res.status(401).json({ error: 'Unauthorized: User not found' })
+    }
+
+    const records = await Superstore.find({ userId: user.id }).lean()
+    console.log('📊 Records found:', records.length)
+
+    if (records.length === 0) {
+      return res.status(404).json({ error: 'No records found for this user.' })
+    }
+
+    // Konversi data ke CSV
+    const fields = [
+      'OrderID',
+      'OrderDate',
+      'ShipDate',
+      'ShipMode',
+      'CustomerID',
+      'CustomerName',
+      'Segment',
+      'Country',
+      'City',
+      'State',
+      'PostalCode',
+      'Region',
+      'ProductID',
+      'Category',
+      'SubCategory',
+      'ProductName',
+      'Sales',
+      'Quantity',
+      'Discount',
+      'Profit',
+      'ProfitPerQuantity',
+    ]
+
+    const json2csvParser = new Parser({ fields })
+    const csvData = json2csvParser.parse(records)
+
+    console.log('✅ CSV Data generated successfully')
+
+    // Kirim file sebagai response tanpa menyimpannya
+    res.setHeader('Content-Type', 'text/csv')
+    res.setHeader(
+      'Content-Disposition',
+      'attachment; filename=your_dataset.csv'
+    )
+    res.status(200).send(csvData)
+  } catch (error) {
+    console.error('❌ Error generating dataset:', error)
+    res.status(500).json({ error: 'Internal server error' })
+  }
+})
+
+//21. Jalankan Server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`)
 })

@@ -124,7 +124,7 @@
       <div class="hero-content" data-aos="fade-right">
         <h1>Superstore Dataset</h1>
         <p>
-          Komprehensif Data Penjualan & Profit untuk Insight Bisnis Strategis
+          Comprehensive Sales & Profit Data for Strategic Business Insights
         </p>
         <div class="hero-cta">
           <a href="#download" class="btn-primary">Download Dataset</a>
@@ -145,52 +145,42 @@
       </div>
     </section>
 
-    <!-- About the Dataset -->
+          <!-- About  -->
     <section id="about" class="about-section">
       <div class="container-md">
-        <h2>About the Dataset</h2>
-        <p>
-          Dataset Superstore berisi catatan rinci tentang penjualan dan profit
-          dari berbagai produk, wilayah, kategori, dan segmen pelanggan. Dataset
-          ini merupakan sumber daya berharga bagi bisnis yang ingin
-          mengoptimalkan strategi mereka dan meningkatkan profitabilitas.
-        </p>
-        <h3>Context</h3>
-        <p>
-          Dengan meningkatnya permintaan dan persaingan yang ketat di pasar,
-          sebuah Superstore Giant mencari wawasan untuk memahami produk,
-          wilayah, kategori, dan segmen pelanggan mana yang harus ditargetkan
-          atau dihindari. Selain itu, terdapat peluang untuk membangun model
-          prediksi untuk penjualan dan profit.
-        </p>
-      </div>
+    <h2>About the Dashboard Visualization</h2>
+    <p>
+      The Superstore Dashboard is designed to provide users with an interactive and comprehensive 
+      data visualization experience. Built using modern web technologies such as Vite, Express.js, 
+      and MongoDB, this dashboard allows businesses to analyze key sales and profit metrics 
+      efficiently.
+    </p>
+    <h2>About the Dataset</h2>
+    <p>
+      The Superstore dataset contains detailed records of sales and profits
+      across products, regions, categories and customer segments. Datasets
+      This is a valuable resource for aspiring businesses
+      optimize their strategies and increase profitability.
+    </p>
+    <h3>Features</h3>
+    <ul>
+      <li>Dynamic data visualization using <strong>Chart.js</strong> for insightful graphical representation</li>
+      <li>Interactive data tables with <strong>DataTables</strong> for seamless filtering and sorting</li>
+      <li>Geospatial data visualization powered by <strong>Leaflet</strong> for location-based insights</li>
+      <li>Full <strong>CRUD functionality</strong> allowing users to add, edit, and manage datasets securely</li>
+      <li>Multi-user data management ensuring each user’s dataset remains private and protected</li>
+      <li>Advanced filtering options for tailored data analysis based on region, product category, and time frame</li>
+      <li>Responsive design for optimal experience across desktop, tablet, and mobile devices</li>
+    </ul>
+    <h3>Purpose</h3>
+    <p>
+      The goal of this dashboard is to empower businesses with real-time insights, enabling 
+      better decision-making through data-driven strategies. With customizable filters, user-specific 
+      data management, and intuitive visual analytics, businesses can optimize their operations and 
+      enhance profitability.
+    </p>
+  </div>
     </section>
-
-    <!-- Statistics Section -->
-    <!-- <section class="statistics-section">
-      <div class="container-md">
-        <h2>Our Achievements</h2>
-        <div class="statistics-content" data-aos="fade-up">
-          <div class="stat-item">
-            <i class="fas fa-users fa-3x"></i>
-            <h3 id="totalCustomers">0</h3>
-            <p>Total Customers</p>
-          </div>
-          <div class="stat-item">
-            <i class="fas fa-box fa-3x"></i>
-            <h3 id="totalProducts">0</h3>
-            <p>Total Products</p>
-          </div>
-          <div class="stat-item">
-            <i class="fas fa-chart-bar fa-3x"></i>
-            <h3>Products Sold per Category</h3>
-            <ul id="productsPerCategoryList">
-          
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section> -->
 
     <!-- Key Features & Insights -->
     <section id="features" class="features-section">
@@ -230,26 +220,35 @@
       </div>
     </section>
 
-    <!-- Business Insights -->
-    <section class="business-insights" data-aos="fade-up">
-      <div class="container-md">
-        <h3>Business Insights</h3>
-        <ul>
-          <li>
-            <i class="fas fa-chart-line"></i>
-            <p>Top 5 Best-Selling Products by Revenue</p>
-          </li>
-          <li>
-            <i class="fas fa-chart-pie"></i>
-            <p>Profit Distribution Across Different Regions</p>
-          </li>
-          <li>
-            <i class="fas fa-percent"></i>
-            <p>Impact of Discounts on Overall Profitability</p>
-          </li>
-        </ul>
-      </div>
-    </section>
+ <!-- Business Insights -->
+<section class="business-insights" data-aos="fade-up">
+  <div class="container-md">
+    <h3>Business Insights</h3>
+    <ul>
+      <li>
+        <i class="fas fa-chart-line"></i>
+        <p>Sales and Profit Analysis</p>
+      </li>
+      <li>
+        <i class="fas fa-box-open"></i>
+        <p>Product Analysis</p>
+      </li>
+      <li>
+        <i class="fas fa-tags"></i>
+        <p>Discount and Sales Relationship</p>
+      </li>
+      <li>
+        <i class="fas fa-users"></i>
+        <p>Customer Analysis</p>
+      </li>
+      <li>
+        <i class="fas fa-map-marker-alt"></i>
+        <p>City or Region Performance</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
 
     <!-- Metadata & Data Dictionary -->
     <section id="metadata" class="metadata-section">
@@ -283,132 +282,119 @@
               <tr>
                 <th>Field</th>
                 <th>Description</th>
+                <th>Data Type</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>Row ID</td>
-                <td>
-                  Unique ID for each row of data in the table. This field is
-                  used only for internal purposes in the CSV file to uniquely
-                  identify each row. However, it is not required and will be
-                  automatically removed during the upload process as it is not
-                  needed in the database schema.
-                </td>
+                <td>Unique ID for each row of data in the table. This field is used only for internal purposes in the CSV file to uniquely identify each row. However, it is not required and will be automatically removed during the upload process as it is not needed in the database schema.</td>
+                <td>Integer (optional, will be removed)</td>
               </tr>
               <tr>
                 <td>Order ID</td>
-                <td>
-                  Unique identifier for each order placed by the customer. Must
-                  be a non-empty string.
-                </td>
+                <td>Unique identifier for each order placed by the customer.</td>
+                <td>String (non-empty)</td>
               </tr>
               <tr>
                 <td>Order Date</td>
-                <td>
-                  Date the order was placed (format: D/M/YYYY, MM/DD/YYYY,
-                  etc.). Must be a valid date.
-                </td>
+                <td>Date the order was placed.</td>
+                <td>Date (valid format: D/M/YYYY, MM/DD/YYYY, etc.)</td>
               </tr>
               <tr>
                 <td>Ship Date</td>
-                <td>
-                  Date the product was shipped (must be in valid date format and
-                  should be later than the order date).
-                </td>
+                <td>Date the product was shipped (must be later than the order date).</td>
+                <td>Date (valid format)</td>
               </tr>
               <tr>
                 <td>Ship Mode</td>
-                <td>
-                  The mode of shipping selected (e.g., Standard Class,
-                  Expedited).
-                </td>
+                <td>The mode of shipping selected (e.g., Standard Class, Expedited).</td>
+                <td>String (non-empty)</td>
               </tr>
               <tr>
                 <td>Customer ID</td>
-                <td>Unique identifier for the customer (non-empty string).</td>
+                <td>Unique identifier for the customer.</td>
+                <td>String (non-empty)</td>
               </tr>
               <tr>
                 <td>Customer Name</td>
-                <td>Name of the customer (non-empty string).</td>
+                <td>Name of the customer.</td>
+                <td>String (non-empty)</td>
               </tr>
               <tr>
                 <td>Segment</td>
-                <td>
-                  Customer segment (must be one of: Consumer, Corporate, Home
-                  Office).
-                </td>
+                <td>Customer segment (must be one of: Consumer, Corporate, Home Office).</td>
+                <td>String (must be one of: Consumer, Corporate, Home Office)</td>
               </tr>
               <tr>
                 <td>Country</td>
                 <td>The country of residence of the customer.</td>
+                <td>String (non-empty)</td>
               </tr>
               <tr>
                 <td>City</td>
                 <td>The city of residence of the customer.</td>
+                <td>String (non-empty)</td>
               </tr>
               <tr>
                 <td>State</td>
                 <td>The state of residence of the customer.</td>
+                <td>String (non-empty)</td>
               </tr>
               <tr>
                 <td>Postal Code</td>
-                <td>Postal code of the customer (must be a valid number).</td>
+                <td>Postal code of the customer.</td>
+                <td>Number (valid)</td>
               </tr>
               <tr>
                 <td>Region</td>
-                <td>
-                  The region where the customer belongs (e.g., East, West,
-                  Central, South).
-                </td>
+                <td>The region where the customer belongs (e.g., East, West, Central, South).</td>
+                <td>String (must be one of: East, West, Central, South)</td>
               </tr>
               <tr>
                 <td>Product ID</td>
                 <td>Unique identifier for the product.</td>
+                <td>String (non-empty)</td>
               </tr>
               <tr>
                 <td>Product Name</td>
-                <td>
-                  Name of the product (e.g., Global Deluxe Stacking Chair).
-                </td>
+                <td>Name of the product.</td>
+                <td>String (non-empty)</td>
               </tr>
               <tr>
                 <td>Category</td>
-                <td>
-                  Category of the product (e.g., Furniture, Office Supplies).
-                </td>
+                <td>Category of the product (e.g., Furniture, Office Supplies).</td>
+                <td>String (non-empty)</td>
               </tr>
               <tr>
                 <td>Sub-Category</td>
                 <td>Sub-category of the product (e.g., Chairs, Paper).</td>
+                <td>String (non-empty)</td>
               </tr>
               <tr>
                 <td>Sales</td>
-                <td>
-                  The total sales amount for the product (must be a valid
-                  number).
-                </td>
+                <td>The total sales amount for the product.</td>
+                <td>Number (valid)</td>
               </tr>
               <tr>
                 <td>Quantity</td>
-                <td>
-                  The number of items ordered (must be an integer and greater
-                  than 0).
-                </td>
+                <td>The number of items ordered.</td>
+                <td>Integer (greater than 0)</td>
               </tr>
               <tr>
                 <td>Discount</td>
-                <td>
-                  The discount on the product (should be between 0 and 1).
-                </td>
+                <td>The discount on the product (should be between 0 and 1).</td>
+                <td>Number (0 to 1)</td>
               </tr>
               <tr>
                 <td>Profit</td>
                 <td>The profit earned from the sale of the product.</td>
+                <td>Number (valid)</td>
               </tr>
               <tr>
                 <td>Profit/Quantity</td>
-                <td>The profit per quantity sold (must be a valid number).</td>
+                <td>The profit per quantity sold.</td>
+                <td>Number (valid)</td>
               </tr>
             </tbody>
           </table>
@@ -447,17 +433,17 @@
         <p>An invalid file might look like this:</p>
         <pre class="invalid">
           Row ID,Order ID,Order Date,Ship Date,Ship Mode,Customer ID,Customer Name,Segment,Country,City,State,Postal Code,Region,Product ID,Category,Sub-Category,Product Name,Sales,Quantity,Discount,Profit,Profit/Quantity
-          1,US-2021-103800,1/3/2021,<span class="highlight-missing">,</span>Standard Class,DP-13000,Darren Powers,Consumer,United States,Houston,Texas,77095,Central,OFF-PA-10000174,Office Supplies,Paper,"Message Book, Wirebound",16.448,2,0.2,5.5512,<span class="highlight-missing">,</span>
-          <span class="highlight-missing">2,,</span>2021-01-05,2021-01-08,Expedited,DP-13001,Jane Doe,Corporate,Canada,Toronto,Ontario,12345,East,FUR-PA-10002345,Furniture,Chairs,"Global Chair",200.123,5,0.1,50.123,
+          1,US-2021-103800,1/3/2021<span class="highlight-missing">,,</span>Standard Class,DP-13000,Darren Powers,Consumer,United States,Houston,Texas,77095,Central,OFF-PA-10000174,Office Supplies,Paper,"Message Book, Wirebound",16.448,2,0.2,5.5512<span class="highlight-missing">,,</span>
+          <span class="highlight-missing"> ,,</span>2021-01-05,2021-01-08,Expedited,DP-13001,Jane Doe,Corporate,Canada,Toronto,Ontario,12345,East,FUR-PA-10002345,Furniture,Chairs,"Global Chair",200.123,5,0.1,50.123,
         </pre>
-        <p>
-          In this example:
-          <ul>
-            <li>The first row is missing a <strong>Ship Date</strong>.</li>
-            <li>The second row is missing an <strong>Order ID</strong> and <strong>Row ID</strong>.</li>
-            <li>Fields marked in <span class="highlight-missing">red</span> are either missing or incorrect.</li>
-          </ul>
-        </p>
+          <p>
+            In this example:
+            <ul>
+              <li>The first row is missing a <strong>Ship Date</strong> and <strong>Profit/Quantity</strong>.</li>
+              <li>The second row is missing an <strong>Order ID</strong> and <strong>Row ID</strong> (Row ID will be automatically removed during upload as it is not required in the database schema).</li>
+              <li>Fields marked in <span class="highlight-missing">red</span> are either missing or incorrect.</li>
+            </ul>
+          </p>          
       </div>
     </section>
 
@@ -466,14 +452,19 @@
       <div class="container-md">
         <h2>Download & Access</h2>
         <div class="download-options" data-aos="fade-up">
+             <!-- Tombol Download Sesuai Data User -->
+          <a id="downloadUserDataset" class="btn-primary">
+            <i class="fas fa-download"></i>
+            Download Your Dataset
+          </a>
           <!-- Full Dataset -->
           <a
             href="/datasets/superstore_2021_2024.csv"
-            class="btn-primary"
+            class="btn-secondary"
             download
           >
             <i class="fas fa-download"></i>
-            Download Full Dataset (2021-2024)
+            Download Sample Dataset (2021-2024)
           </a>
           <!-- Sample Data -->
           <a
@@ -482,7 +473,7 @@
             download
           >
             <i class="fas fa-file-alt"></i>
-            Download Older Dataset (2014-2017)
+            Download Older Sample Dataset (2014-2017)
           </a>
         </div>
         <div class="access-tools" data-aos="fade-up">
@@ -507,21 +498,18 @@
             <h3>Potential Projects</h3>
             <ul>
               <li>
-                Membangun Model Regresi untuk Memprediksi Penjualan atau Profit
+                Building a machine learning Regression Model to Predict Sales or Profit
               </li>
-              <li>Menganalisis Performa Penjualan Regional</li>
-              <li>Strategi Segmentasi dan Targeting Pelanggan</li>
             </ul>
           </div>
           <div class="testimonials" data-aos="fade-up">
             <h3>Testimonials</h3>
             <blockquote>
-              “Dengan menggunakan Superstore Dataset, saya dapat
-              mengidentifikasi area kunci untuk meningkatkan profitabilitas
-              sebesar 15% dalam enam bulan.” –
+              “By using Superstore Dataset, I can
+              identify key areas to increase profitability
+              by 15% in six months.” –
               <em>Jane Doe, Data Analyst</em>
             </blockquote>
-            <!-- Tambahkan testimonial lainnya jika ada -->
           </div>
         </div>
       </div>
@@ -536,23 +524,6 @@
           komprehensif.
         </p>
         <a href="#download" class="btn-primary">Get Started</a>
-      </div>
-    </section>
-
-    <!-- Acknowledgements -->
-    <section id="acknowledgements" class="acknowledgements-section">
-      <div class="container-md">
-        <h2>Acknowledgements</h2>
-        <p>
-          Saya tidak memiliki data ini. Saya hanya menemukannya di situs
-          Tableau. Semua kredit diberikan kepada penulis/asli pembuat dataset.
-          Untuk keperluan pendidikan saja.
-        </p>
-        <h3>Licensing Information</h3>
-        <p>
-          Data ini digunakan untuk keperluan analisis dan pendidikan. Harap
-          mengikuti kebijakan penggunaan data yang berlaku.
-        </p>
       </div>
     </section>
 

@@ -419,8 +419,10 @@ header {
 /* About Section */
 .about-section {
   position: relative;
-  padding: 60px 20px;
+  padding: 80px 20px; /* Sedikit menambah padding untuk memberi ruang lebih */
   background-color: var(--color-white);
+  border-radius: 10px; /* Memberikan efek sudut melengkung */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Efek bayangan lembut */
 }
 
 .about-section .container-md {
@@ -436,87 +438,59 @@ header {
 }
 
 .about-section h3 {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   color: var(--color-gray-dark);
-  margin-top: 30px;
+  margin-top: 40px;
   margin-bottom: 15px;
 }
 
 .about-section p {
-  font-size: 1rem;
+  font-size: 1.1rem; /* Sedikit memperbesar untuk kenyamanan membaca */
   color: var(--color-gray);
-  line-height: 1.6;
+  line-height: 1.8;
   margin-bottom: 20px;
-  padding: 0 20px;
+  padding: 0 30px; /* Lebih lebar sedikit agar lebih rapi */
 }
 
-/* Optional: Adding an Icon or Image to Enhance the Section */
+.about-section ul {
+  text-align: left;
+  max-width: 800px;
+  margin: 20px auto;
+  padding-left: 0;
+}
+
+.about-section ul li {
+  font-size: 1rem;
+  color: var(--color-gray-dark);
+  padding: 10px 0;
+  list-style: none;
+  display: flex;
+  align-items: center;
+}
+
+.about-section ul li::before {
+  content: '✔'; /* Menambahkan ikon checklist */
+  font-weight: bold;
+  color: var(--color-primary);
+  margin-right: 10px;
+}
+
+/* Optional: Styling Icon or Image */
 .about-section::before {
-  content: '\f07a'; /* Unicode untuk fa-cart-shopping */
-  font-family: 'Font Awesome 6 Free'; /* Pastikan ini sesuai dengan versi Font Awesome yang digunakan */
-  font-weight: 900; /* 900 untuk ikon solid */
+  content: '\f0ce'; /* Unicode untuk fa-chart-bar */
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 80px;
   height: 80px;
   margin: 0 auto 20px;
-  color: #f4ce14; /* Warna ikon */
-  background-color: var(--color-gray-light); /* Warna latar belakang ikon */
-  border-radius: 50%;
-  font-size: 2rem; /* Ukuran ikon, sesuaikan jika perlu */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Opsional: Tambahkan bayangan untuk kedalaman */
-}
-
-/* Statistics Section */
-.statistics-section {
-  padding: 60px 20px;
-  background-color: var(--color-white);
-}
-
-.statistics-section h2 {
-  font-size: 2rem;
-  color: var(--color-primary);
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.statistics-content {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  flex-wrap: wrap;
-}
-
-.stat-item {
+  color: #f4ce14;
   background-color: var(--color-gray-light);
-  padding: 20px;
-  border-radius: 8px;
-  text-align: center;
-  width: 200px;
-  transition: transform var(--transition-speed),
-    background-color var(--transition-speed);
-}
-
-.stat-item:hover {
-  transform: translateY(-5px);
-  background-color: #e0f7fa;
-}
-
-.stat-item i {
-  color: var(--color-primary);
-  margin-bottom: 10px;
-}
-
-.stat-item h3 {
-  font-size: 1.8rem;
-  color: var(--color-gray-dark);
-  margin-bottom: 10px;
-}
-
-.stat-item p {
-  font-size: 1rem;
-  color: var(--color-gray);
+  border-radius: 50%;
+  font-size: 2rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Features Section */
@@ -861,10 +835,12 @@ pre.invalid {
   border-radius: 5px;
   font-size: 1rem;
   transition: background-color var(--transition-speed);
+  cursor: pointer;
 }
 
 .download-options a.btn-primary:hover {
   background-color: var(--color-hover-primary);
+  transform: scale(1.05);
 }
 
 .access-tools a.btn-secondary {
@@ -878,6 +854,7 @@ pre.invalid {
 
 .access-tools a.btn-secondary:hover {
   background-color: var(--color-hover-secondary);
+  transform: scale(1.05);
 }
 
 /* Use Cases Section */
@@ -940,34 +917,6 @@ pre.invalid {
   border-left: 4px solid var(--color-primary);
   padding-left: 15px;
   margin: 0;
-}
-
-/* Acknowledgements Section */
-.acknowledgements-section {
-  padding: 60px 20px;
-  background-color: var(--color-gray-light);
-}
-
-.acknowledgements-section h2 {
-  font-size: 2rem;
-  color: var(--color-primary);
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.acknowledgements-section h3 {
-  font-size: 1.5rem;
-  color: var(--color-gray-dark);
-  margin-top: 20px;
-}
-
-.acknowledgements-section p {
-  font-size: 1rem;
-  color: var(--color-gray);
-  line-height: 1.6;
-  max-width: 800px;
-  margin: 0 auto 20px auto;
-  text-align: center;
 }
 
 /* Footer Styles */

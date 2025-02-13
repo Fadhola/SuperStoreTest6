@@ -37,11 +37,13 @@ export async function fetchData() {
 
   try {
     const token = localStorage.getItem('token') // Ambil token dari localStorage
+    const userId = localStorage.getItem('userId')
     console.log('Token:', token) // Tambahkan log ini untuk memeriksa token
 
     const response = await axios.get('/api/superstore-data', {
       headers: {
         Authorization: `Bearer ${token}`, // Sertakan token di header
+        'user-id': userId,
       },
       onDownloadProgress: (progressEvent) => {
         if (progressEvent.lengthComputable) {

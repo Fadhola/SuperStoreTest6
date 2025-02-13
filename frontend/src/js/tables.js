@@ -41,7 +41,7 @@ export function initProfitMarginTable(data) {
     paging: true,
     searching: true,
     info: true,
-    autoWidth: false, // Prevent columns from being resized
+    autoWidth: true, // Prevent columns from being resized
     order: [[0, 'desc']], // Sort by Year (descending)
     responsive: true, // Aktifkan Responsive jika ekstensi diimpor
   })
@@ -100,6 +100,43 @@ export function initCustomerAnalysisTable(data) {
   })
 }
 
+export function initTopProductsTable(data) {
+  // Format data for the table
+  const tableData = data.map((product) => ({
+    ProductID: product.ProductID,
+    ProductName: product.ProductName,
+    Category: product.Category,
+    SubCategory: product.SubCategory, // Added SubCategory
+    Sales: product.Sales.toFixed(2), // Format with two decimal places
+    QuantitySold: product.Quantity,
+    Profit: product.Profit.toFixed(2), // Format with two decimal places
+  }))
+
+  // Destroy the existing DataTable before initializing the new one
+  if ($.fn.DataTable.isDataTable('#topProductsTable')) {
+    $('#topProductsTable').DataTable().clear().destroy()
+  }
+
+  // Initialize DataTable for the top products
+  $('#topProductsTable').DataTable({
+    data: tableData,
+    columns: [
+      { data: 'ProductID' },
+      { data: 'ProductName' },
+      { data: 'Category' },
+      { data: 'SubCategory' }, // Added SubCategory column
+      { data: 'Sales' },
+      { data: 'QuantitySold' },
+      { data: 'Profit' },
+    ],
+    paging: true,
+    searching: true,
+    info: true,
+    autoWidth: true,
+    responsive: true, // Enable responsive if the extension is imported
+  })
+}
+
 // Fungsi untuk menginisialisasi Top Selling Products Table
 export function initTopSellingProductsTable(data) {
   // Kelompokkan data berdasarkan Product ID
@@ -149,7 +186,7 @@ export function initTopSellingProductsTable(data) {
     paging: false,
     searching: false,
     info: false,
-    autoWidth: false,
+    autoWidth: true,
     responsive: true,
   })
 }
