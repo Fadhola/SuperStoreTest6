@@ -1,8 +1,4 @@
 // frontend/src/js/insights.js
-
-// Import helper dari filters (pastikan path-nya sesuai)
-import { getSelectedValues } from './filters.js'
-
 // Fungsi untuk mengenerate insight data dari data mentah yang sudah difilter
 export function generateInsightData(chartType) {
   const rawData = window.filteredData
@@ -1023,7 +1019,7 @@ function generateTopProductsInsight(data) {
 
 // --- L. Insight untuk Sales Profit/Quantity (by City) ---
 function generateSalesProfitQuantityInsight(data) {
-  // Mengelompokkan data berdasarkan city
+  // Mengelompokkan data berdasarkan city, sekaligus mengelompokkan produk di setiap city
   const cityData = {}
   data.forEach((row) => {
     const city = row.City
@@ -1033,17 +1029,34 @@ function generateSalesProfitQuantityInsight(data) {
         totalProfit: 0,
         totalQuantity: 0,
         count: 0,
+        products: {}, // untuk mengelompokkan data per ProductName
       }
     }
+    // Update data per city
     cityData[city].totalSales += row.Sales
     cityData[city].totalProfit += row.Profit
     cityData[city].totalQuantity += row.Quantity
     cityData[city].count++
+
+    // Update data per produk dalam city
+    const product = row.ProductName
+    if (!cityData[city].products[product]) {
+      cityData[city].products[product] = {
+        totalSales: 0,
+        totalProfit: 0,
+        totalQuantity: 0,
+        count: 0,
+      }
+    }
+    cityData[city].products[product].totalSales += row.Sales
+    cityData[city].products[product].totalProfit += row.Profit
+    cityData[city].products[product].totalQuantity += row.Quantity
+    cityData[city].products[product].count++
   })
 
   const cities = Object.keys(cityData)
 
-  // Inisialisasi variabel untuk akumulasi rata-rata per city
+  // Variabel untuk akumulasi metrik per city
   let overallSalesSum = 0,
     overallProfitSum = 0,
     overallProfitPerQuantitySum = 0
@@ -1052,16 +1065,14 @@ function generateSalesProfitQuantityInsight(data) {
   let highestProfitPerQuantity = -Infinity,
     lowestProfitPerQuantity = Infinity
 
+  // Perhitungan metrik untuk tiap city dan pencarian produk terlaris
   cities.forEach((city) => {
     const d = cityData[city]
-    // Rata-rata Sales dan Profit per transaksi di city (opsional)
     const avgSales = d.totalSales / d.count
     const avgProfit = d.totalProfit / d.count
-    // Profit per Quantity dihitung secara agregat: totalProfit dibagi totalQuantity (jika totalQuantity > 0)
     const profitPerQuantity =
       d.totalQuantity > 0 ? d.totalProfit / d.totalQuantity : 0
 
-    // Simpan nilai per city (opsional, untuk referensi)
     d.avgSales = avgSales
     d.avgProfit = avgProfit
     d.profitPerQuantity = profitPerQuantity
@@ -1078,6 +1089,19 @@ function generateSalesProfitQuantityInsight(data) {
       lowestProfitPerQuantity = profitPerQuantity
       lowestProfitPerQuantityCity = city
     }
+
+    // Cari produk dengan total quantity tertinggi di city ini
+    let topProduct = null
+    let topProductQuantity = -Infinity
+    for (const product in d.products) {
+      const prodData = d.products[product]
+      if (prodData.totalQuantity > topProductQuantity) {
+        topProductQuantity = prodData.totalQuantity
+        topProduct = product
+      }
+    }
+    d.topProduct = topProduct
+    d.topProductQuantity = topProductQuantity
   })
 
   const overallAvgSales = cities.length ? overallSalesSum / cities.length : 0
@@ -1086,8 +1110,8 @@ function generateSalesProfitQuantityInsight(data) {
     ? overallProfitPerQuantitySum / cities.length
     : 0
 
-  return {
-    message: `<p>Analisis Sales dan Profit per Quantity berdasarkan City:</p>
+  // Membangun pesan insight dengan menggabungkan informasi produk terlaris ke dalam baris kota dengan profit per quantity tertinggi/terendah
+  const message = `<p>Analisis Sales dan Profit per Quantity berdasarkan City:</p>
     <p>Rata-rata Penjualan per City: $<strong>${overallAvgSales.toFixed(
       2
     )}</strong></p>
@@ -1097,14 +1121,19 @@ function generateSalesProfitQuantityInsight(data) {
     <p>Rata-rata Profit per Quantity per City: $<strong>${overallAvgProfitPerQuantity.toFixed(
       2
     )}</strong></p>
-    <p>City dengan Profit per Quantity Tertinggi: <strong>${highestProfitPerQuantityCity}</strong> ($${highestProfitPerQuantity.toFixed(
-      2
-    )})</p>
-    <p>City dengan Profit per Quantity Terendah: <strong>${lowestProfitPerQuantityCity}</strong> ($${lowestProfitPerQuantity.toFixed(
-      2
-    )})</p>
-    <p><em>Penjelasan: Data di atas dihitung dengan mengelompokkan transaksi berdasarkan city. Profit per Quantity dihitung dengan membagi total profit dengan total quantity yang terjual di masing-masing city. Rata-rata per city serta nilai ekstrem (tertinggi dan terendah) memberikan gambaran profitabilitas per unit produk pada setiap kota, yang konsisten dengan nilai yang ditampilkan pada chart "Sales and Profit per Quantity by City".</em></p>`,
-  }
+    <p>City dengan Profit per Quantity Tertinggi: <strong>${highestProfitPerQuantityCity}</strong> - Produk terlaris: <strong>${
+    cityData[highestProfitPerQuantityCity].topProduct
+  }</strong> (Total Quantity: <strong>${
+    cityData[highestProfitPerQuantityCity].topProductQuantity
+  }</strong>) ($${highestProfitPerQuantity.toFixed(2)})</p>
+    <p>City dengan Profit per Quantity Terendah: <strong>${lowestProfitPerQuantityCity}</strong> - Produk terlaris: <strong>${
+    cityData[lowestProfitPerQuantityCity].topProduct
+  }</strong> (Total Quantity: <strong>${
+    cityData[lowestProfitPerQuantityCity].topProductQuantity
+  }</strong>) ($${lowestProfitPerQuantity.toFixed(2)})</p>
+    <p><em>Penjelasan: Data dihitung dengan mengelompokkan transaksi berdasarkan city. Profit per Quantity dihitung dengan membagi total profit dengan total quantity yang terjual di masing-masing city. Informasi produk terlaris di setiap city diperoleh dengan menentukan produk dengan total quantity tertinggi.</em></p>`
+
+  return { message }
 }
 
 // Fungsi untuk menginisialisasi event listener pada tombol popup insight
